@@ -1,0 +1,351 @@
+/* iFlytek 文本可见性修复 - WCAG 2.1 AA/AAA 标准 */
+/* 专门修复文字显示问题，确保所有文本在默认状态下清晰可见 */
+
+/* ===== 核心文本可见性修复 ===== */
+
+/* 产品卡片描述文本修复 */
+.product-description {
+  color: var(--text-secondary-aaa) !important;
+  font-size: 15px !important; /* 增大字体以提高可读性 */
+  line-height: 1.7 !important; /* 增加行高 */
+  margin-bottom: 24px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  font-weight: 400 !important;
+  /* 确保文本不被截断 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  /* 添加最小高度确保内容可见 */
+  min-height: 3em !important;
+  /* 优化中文字体渲染 */
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* 优势描述文本修复 */
+.advantage-description {
+  color: var(--text-secondary-aaa) !important;
+  font-size: 15px !important;
+  line-height: 1.7 !important;
+  margin-bottom: 24px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  font-weight: 400 !important;
+  /* 确保文本完整显示 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  min-height: 3em !important;
+  /* 中文字体优化 */
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* 功能列表文本修复 */
+.feature-list li {
+  color: var(--text-secondary-aaa) !important;
+  font-size: 14px !important;
+  line-height: 1.6 !important;
+  padding: 10px 0 !important; /* 增加内边距 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  font-weight: 400 !important;
+  /* 确保列表项完整显示 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  min-height: 1.6em !important;
+  /* 中文字体优化 */
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* 产品标题文本修复 */
+.product-title {
+  color: var(--text-primary-aaa) !important;
+  font-size: 1.5rem !important;
+  font-weight: 600 !important;
+  margin: 0 0 16px 0 !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  /* 确保标题完整显示 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  line-height: 1.4 !important;
+}
+
+/* 优势标题文本修复 */
+.advantage-title {
+  color: var(--text-primary-aaa) !important;
+  font-size: 1.25rem !important;
+  font-weight: 600 !important;
+  margin-bottom: 16px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  /* 确保标题完整显示 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+  line-height: 1.4 !important;
+}
+
+/* ===== 按钮文字可见性修复 ===== */
+
+/* 主要按钮文字修复 */
+.learn-more-btn,
+.start-btn,
+.demo-btn,
+.report-btn {
+  color: var(--text-inverse-aaa) !important;
+  font-size: 14px !important;
+  font-weight: 600 !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  /* 确保按钮文字清晰可见 */
+  text-shadow: none !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+  /* 确保文字不被截断 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: nowrap !important;
+}
+
+/* 次要按钮文字修复 */
+.secondary-btn {
+  color: var(--text-primary-aaa) !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+}
+
+/* ===== 统计数据文字修复 ===== */
+
+/* 统计数值文字修复 */
+.stat-number,
+.metric-value {
+  color: var(--text-primary-aaa) !important;
+  font-size: 2rem !important;
+  font-weight: 700 !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  /* 确保数值清晰显示 */
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* 统计标签文字修复 */
+.stat-label,
+.metric-label {
+  color: var(--text-secondary-aaa) !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  line-height: 1.4 !important;
+}
+
+/* ===== 标题文字修复 ===== */
+
+/* 主标题文字修复 */
+.hero-title {
+  color: var(--text-inverse-aaa) !important;
+  font-size: 3.5rem !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  margin-bottom: 24px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  /* 增强文字阴影以提高可读性 */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.4) !important;
+  /* 确保标题完整显示 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+}
+
+/* 副标题文字修复 */
+.hero-subtitle {
+  color: var(--text-inverse-aa) !important;
+  font-size: 1.25rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 32px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  /* 添加文字阴影 */
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+  /* 确保副标题完整显示 */
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+}
+
+/* 区块标题文字修复 */
+.section-title {
+  color: var(--text-primary-aaa) !important;
+  font-size: 2.5rem !important;
+  font-weight: 700 !important;
+  margin-bottom: 16px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  line-height: 1.3 !important;
+  text-align: center !important;
+}
+
+/* 区块副标题文字修复 */
+.section-subtitle {
+  color: var(--text-secondary-aaa) !important;
+  font-size: 1.125rem !important;
+  line-height: 1.6 !important;
+  margin-bottom: 48px !important;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'SimHei', sans-serif !important;
+  text-align: center !important;
+  max-width: 600px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+}
+
+/* ===== 响应式文字修复 ===== */
+
+/* 移动端文字优化 */
+@media (max-width: 768px) {
+  .product-description,
+  .advantage-description {
+    font-size: 16px !important; /* 移动端增大字体 */
+    line-height: 1.8 !important;
+    padding: 0 4px !important; /* 增加左右内边距 */
+  }
+  
+  .feature-list li {
+    font-size: 15px !important; /* 移动端增大字体 */
+    line-height: 1.7 !important;
+    padding: 12px 4px !important;
+  }
+  
+  .product-title,
+  .advantage-title {
+    font-size: 1.3rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  .hero-title {
+    font-size: 2rem !important;
+    line-height: 1.3 !important;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+  }
+  
+  .section-title {
+    font-size: 2rem !important;
+    line-height: 1.4 !important;
+  }
+  
+  .section-subtitle {
+    font-size: 1rem !important;
+    line-height: 1.7 !important;
+  }
+}
+
+/* 平板端文字优化 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .product-description,
+  .advantage-description {
+    font-size: 15px !important;
+    line-height: 1.7 !important;
+  }
+  
+  .feature-list li {
+    font-size: 14px !important;
+    line-height: 1.6 !important;
+  }
+}
+
+/* ===== 交互状态文字修复 ===== */
+
+/* 悬停状态文字保持可见 */
+.product-card:hover .product-description,
+.product-card:hover .product-title,
+.product-card:hover .feature-list li {
+  color: var(--text-secondary-aaa) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+.advantage-item:hover .advantage-description,
+.advantage-item:hover .advantage-title {
+  color: var(--text-secondary-aaa) !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+}
+
+/* 焦点状态文字增强 */
+.product-card:focus-within .product-description,
+.advantage-item:focus-within .advantage-description {
+  color: var(--text-primary-aaa) !important;
+  font-weight: 500 !important;
+}
+
+/* ===== 特殊情况修复 ===== */
+
+/* 修复可能的文字重叠问题 */
+.product-card,
+.advantage-item {
+  /* 确保卡片有足够高度显示所有文字 */
+  min-height: 300px !important;
+  /* 确保内容不会溢出 */
+  overflow: visible !important;
+}
+
+/* 修复文字被背景遮挡的问题 */
+.product-card::before,
+.advantage-item::before {
+  /* 移除可能遮挡文字的伪元素 */
+  display: none !important;
+}
+
+/* 确保图标不会遮挡文字 */
+.product-icon,
+.advantage-icon {
+  /* 确保图标有固定尺寸，不影响文字布局 */
+  flex-shrink: 0 !important;
+  margin-bottom: 20px !important;
+}
+
+/* ===== 无障碍增强 ===== */
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .product-description,
+  .advantage-description,
+  .feature-list li {
+    color: #000000 !important;
+    font-weight: 600 !important;
+  }
+  
+  .product-title,
+  .advantage-title {
+    color: #000000 !important;
+    font-weight: 700 !important;
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  .product-card,
+  .advantage-item {
+    transition: none !important;
+  }
+}
+
+/* 强制显示所有文本内容 */
+.force-text-visible {
+  opacity: 1 !important;
+  visibility: visible !important;
+  display: block !important;
+  color: var(--text-secondary-aaa) !important;
+  overflow: visible !important;
+  text-overflow: unset !important;
+  white-space: normal !important;
+}
+
+/* 调试模式 - 显示文本边界 */
+.debug-text-visibility .product-description,
+.debug-text-visibility .advantage-description,
+.debug-text-visibility .feature-list li {
+  border: 1px dashed #ff0000 !important;
+  background: rgba(255, 255, 0, 0.1) !important;
+}

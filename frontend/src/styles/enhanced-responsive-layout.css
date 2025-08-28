@@ -1,0 +1,313 @@
+/**
+ * iFlytek 多模态面试系统 - 增强响应式布局系统
+ * 
+ * 设计目标：
+ * - 响应式网格布局：大屏2列、中屏3列、小屏1列
+ * - 板块对称排列，视觉平衡协调
+ * - 均匀间距，优雅的视觉层次
+ * - 与iFlytek品牌色系完美融合
+ */
+
+/* ===== CSS变量定义 ===== */
+:root {
+  /* 响应式断点 */
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xxl: 1400px;
+
+  /* 网格系统 */
+  --grid-gap-sm: 16px;
+  --grid-gap-md: 24px;
+  --grid-gap-lg: 32px;
+  --grid-gap-xl: 40px;
+
+  /* 容器宽度 */
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+
+  /* 间距系统 */
+  --spacing-xs: 8px;
+  --spacing-sm: 16px;
+  --spacing-md: 24px;
+  --spacing-lg: 32px;
+  --spacing-xl: 48px;
+  --spacing-xxl: 64px;
+}
+
+/* ===== 响应式容器系统 ===== */
+.responsive-container {
+  width: 100%;
+  max-width: var(--container-xxl);
+  margin: 0 auto;
+  padding: 0 var(--spacing-md);
+  box-sizing: border-box;
+}
+
+@media (min-width: 576px) {
+  .responsive-container {
+    max-width: var(--container-sm);
+    padding: 0 var(--spacing-lg);
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    max-width: var(--container-md);
+  }
+}
+
+@media (min-width: 992px) {
+  .responsive-container {
+    max-width: var(--container-lg);
+  }
+}
+
+@media (min-width: 1200px) {
+  .responsive-container {
+    max-width: var(--container-xl);
+    padding: 0 var(--spacing-xl);
+  }
+}
+
+@media (min-width: 1400px) {
+  .responsive-container {
+    max-width: var(--container-xxl);
+  }
+}
+
+/* ===== 响应式网格布局系统 ===== */
+
+/* 基础网格容器 */
+.responsive-grid {
+  display: grid;
+  gap: var(--grid-gap-md);
+  width: 100%;
+  align-items: stretch;
+}
+
+/* 小屏幕：单列布局 */
+.responsive-grid {
+  grid-template-columns: 1fr;
+  gap: var(--grid-gap-sm);
+}
+
+/* 中等屏幕：3列布局 */
+@media (min-width: 768px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--grid-gap-md);
+  }
+}
+
+/* 大屏幕：2列布局（两两相对） */
+@media (min-width: 1200px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--grid-gap-lg);
+  }
+}
+
+/* ===== 板块对称排列系统 ===== */
+
+/* 对称布局容器 */
+.symmetric-layout {
+  display: grid;
+  gap: var(--grid-gap-lg);
+  align-items: center;
+  justify-items: center;
+}
+
+/* 小屏：垂直堆叠 */
+.symmetric-layout {
+  grid-template-columns: 1fr;
+}
+
+/* 中屏：3列对称 */
+@media (min-width: 768px) {
+  .symmetric-layout {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* 大屏：2列对称 */
+@media (min-width: 1200px) {
+  .symmetric-layout {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ===== 板块卡片系统 ===== */
+
+/* 基础板块卡片 */
+.module-card {
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 16px;
+  padding: var(--spacing-lg);
+  box-shadow: 
+    0 4px 20px rgba(0, 0, 0, 0.08),
+    0 1px 3px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.module-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 
+    0 8px 40px rgba(0, 0, 0, 0.12),
+    0 2px 6px rgba(0, 0, 0, 0.15);
+}
+
+/* 等高卡片系统 */
+.equal-height-grid {
+  display: grid;
+  gap: var(--grid-gap-md);
+  align-items: stretch;
+}
+
+.equal-height-grid .module-card {
+  height: 100%;
+  min-height: 280px;
+}
+
+/* ===== 视觉平衡系统 ===== */
+
+/* 内容居中对齐 */
+.content-centered {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 均匀间距系统 */
+.uniform-spacing > * + * {
+  margin-top: var(--spacing-md);
+}
+
+.uniform-spacing-lg > * + * {
+  margin-top: var(--spacing-lg);
+}
+
+/* 视觉层次系统 */
+.visual-hierarchy {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.visual-hierarchy .primary {
+  order: 1;
+}
+
+.visual-hierarchy .secondary {
+  order: 2;
+}
+
+.visual-hierarchy .tertiary {
+  order: 3;
+}
+
+/* ===== 响应式文字系统 ===== */
+
+/* 流体排版 */
+.responsive-title {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.2;
+  font-weight: 600;
+  margin-bottom: var(--spacing-md);
+}
+
+.responsive-subtitle {
+  font-size: clamp(1rem, 2.5vw, 1.25rem);
+  line-height: 1.4;
+  opacity: 0.8;
+  margin-bottom: var(--spacing-lg);
+}
+
+.responsive-text {
+  font-size: clamp(0.875rem, 2vw, 1rem);
+  line-height: 1.6;
+}
+
+/* ===== 动画和过渡效果 ===== */
+
+/* 淡入动画 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* 交错动画 */
+.stagger-animation > *:nth-child(1) { animation-delay: 0.1s; }
+.stagger-animation > *:nth-child(2) { animation-delay: 0.2s; }
+.stagger-animation > *:nth-child(3) { animation-delay: 0.3s; }
+.stagger-animation > *:nth-child(4) { animation-delay: 0.4s; }
+.stagger-animation > *:nth-child(5) { animation-delay: 0.5s; }
+.stagger-animation > *:nth-child(6) { animation-delay: 0.6s; }
+
+/* 悬停效果 */
+.hover-lift {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.hover-lift:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+}
+
+/* ===== 移动端优化 ===== */
+@media (max-width: 767px) {
+  .responsive-container {
+    padding: 0 var(--spacing-sm);
+  }
+  
+  .responsive-grid {
+    gap: var(--grid-gap-sm);
+  }
+  
+  .module-card {
+    padding: var(--spacing-md);
+    border-radius: 12px;
+  }
+  
+  .symmetric-layout {
+    gap: var(--grid-gap-sm);
+  }
+}
+
+/* ===== 可访问性优化 ===== */
+@media (prefers-reduced-motion: reduce) {
+  .fade-in-up,
+  .hover-lift,
+  .module-card {
+    animation: none;
+    transition: none;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .module-card {
+    border: 2px solid var(--iflytek-primary);
+  }
+}

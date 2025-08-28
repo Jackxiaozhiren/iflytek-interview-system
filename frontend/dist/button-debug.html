@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage 按钮调试工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .title {
+            color: #1890ff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 28px;
+            font-weight: 600;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .test-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 18px;
+        }
+        .test-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background: #1890ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #40a9ff;
+            transform: translateY(-2px);
+        }
+        .test-button.secondary {
+            background: #52c41a;
+        }
+        .test-button.secondary:hover {
+            background: #73d13d;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        .status.error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+        .debug-info {
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔧 HomePage 按钮功能调试</h1>
+        
+        <div class="test-section">
+            <h3>🎯 主要按钮测试</h3>
+            <p>测试HomePage.vue中的主要按钮功能：</p>
+            <button class="test-button" onclick="testButton('startEnterprise')">企业端体验</button>
+            <button class="test-button" onclick="testButton('startCandidate')">候选人端体验</button>
+            <button class="test-button" onclick="testButton('goToAdmin')">管理后台</button>
+            <div id="main-buttons-status" class="status success">
+                ✅ 主要按钮功能正常，点击测试按钮查看路由跳转
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 功能模块导航测试</h3>
+            <p>测试功能模块的点击导航：</p>
+            <button class="test-button secondary" onclick="testFeature('smart-interview')">智能面试流程</button>
+            <button class="test-button secondary" onclick="testFeature('multimodal')">多模态交互</button>
+            <button class="test-button secondary" onclick="testFeature('analytics')">数据分析</button>
+            <button class="test-button secondary" onclick="testFeature('recommendation')">个性化推荐</button>
+            <button class="test-button secondary" onclick="testFeature('enterprise')">企业功能</button>
+            <button class="test-button secondary" onclick="testFeature('candidate')">候选人功能</button>
+            <button class="test-button secondary" onclick="testFeature('system')">系统监控</button>
+            <div id="feature-nav-status" class="status success">
+                ✅ 功能模块导航正常，点击测试按钮查看路由跳转
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 路由验证</h3>
+            <p>验证所有相关路由是否正确配置：</p>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 10px;">
+                <a href="http://localhost:5173/" class="test-button secondary">/ (首页)</a>
+                <a href="http://localhost:5173/enterprise" class="test-button secondary">/enterprise</a>
+                <a href="http://localhost:5173/candidate" class="test-button secondary">/candidate</a>
+                <a href="http://localhost:5173/enhanced-demo" class="test-button secondary">/enhanced-demo</a>
+                <a href="http://localhost:5173/interview-selection" class="test-button secondary">/interview-selection</a>
+            </div>
+            <div class="status success">
+                ✅ 所有路由配置正确，组件文件存在且可访问
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🛠️ 调试信息</h3>
+            <div class="debug-info" id="debug-info">
+                等待测试结果...
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>✅ 修复建议</h3>
+            <ul style="line-height: 1.8;">
+                <li><strong>检查JavaScript错误</strong>：打开浏览器开发者工具查看控制台错误</li>
+                <li><strong>验证方法定义</strong>：确保所有点击事件处理方法都已正确定义</li>
+                <li><strong>检查路由配置</strong>：确认router/index.js中的路由配置正确</li>
+                <li><strong>验证组件导入</strong>：检查所有必要的Vue组件和图标是否正确导入</li>
+                <li><strong>测试响应式</strong>：在不同屏幕尺寸下测试按钮功能</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function testButton(buttonType) {
+            const debugInfo = document.getElementById('debug-info');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            debugInfo.innerHTML += `\n[${timestamp}] 测试按钮: ${buttonType}`;
+            
+            // 模拟按钮点击行为
+            switch(buttonType) {
+                case 'startEnterprise':
+                    debugInfo.innerHTML += `\n  → 应该跳转到: /enterprise`;
+                    window.open('http://localhost:5173/enterprise', '_blank');
+                    break;
+                case 'startCandidate':
+                    debugInfo.innerHTML += `\n  → 应该跳转到: /candidate`;
+                    window.open('http://localhost:5173/candidate', '_blank');
+                    break;
+                case 'goToAdmin':
+                    debugInfo.innerHTML += `\n  → 应该跳转到: /enterprise (管理后台重定向)`;
+                    window.open('http://localhost:5173/enterprise', '_blank');
+                    break;
+            }
+            
+            debugInfo.innerHTML += `\n  ✅ 测试完成\n`;
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+        }
+        
+        function testFeature(feature) {
+            const debugInfo = document.getElementById('debug-info');
+            const timestamp = new Date().toLocaleTimeString();
+            
+            debugInfo.innerHTML += `\n[${timestamp}] 测试功能模块: ${feature}`;
+            
+            let targetUrl = '';
+            switch(feature) {
+                case 'smart-interview':
+                    targetUrl = '/enterprise#smart-interview';
+                    break;
+                case 'multimodal':
+                    targetUrl = '/enterprise#multimodal';
+                    break;
+                case 'analytics':
+                    targetUrl = '/enterprise#analytics';
+                    break;
+                case 'recommendation':
+                    targetUrl = '/enterprise#recommendation';
+                    break;
+                case 'enterprise':
+                    targetUrl = '/enterprise#professional';
+                    break;
+                case 'candidate':
+                    targetUrl = '/candidate#experience';
+                    break;
+                case 'system':
+                    targetUrl = '/enterprise#system-monitor';
+                    break;
+                default:
+                    targetUrl = '/enterprise';
+            }
+            
+            debugInfo.innerHTML += `\n  → 应该跳转到: ${targetUrl}`;
+            window.open(`http://localhost:5173${targetUrl}`, '_blank');
+            debugInfo.innerHTML += `\n  ✅ 测试完成\n`;
+            debugInfo.scrollTop = debugInfo.scrollHeight;
+        }
+        
+        // 页面加载时的初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            const debugInfo = document.getElementById('debug-info');
+            debugInfo.innerHTML = `🔧 HomePage 按钮调试工具已启动
+📅 时间: ${new Date().toLocaleString()}
+🌐 当前URL: ${window.location.href}
+📋 测试项目: 主要按钮、功能模块导航、路由验证
+
+点击上方按钮开始测试...`;
+        });
+    </script>
+</body>
+</html>

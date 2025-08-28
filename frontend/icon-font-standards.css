@@ -1,0 +1,196 @@
+/**
+ * 多模态面试评估系统 - 图标字体协调性标准
+ * Icon-Font Coordination Standards for Multimodal Interview Assessment System
+ * 
+ * 遵循 Element Plus 设计规范和 iFlytek 品牌一致性
+ * WCAG 2.1 AA 可访问性标准
+ */
+
+/* ===== 基础图标尺寸标准 ===== */
+
+/* 默认图标尺寸 - 与14px文字匹配 */
+.el-icon {
+  font-size: 16px;
+  vertical-align: middle;
+  transition: all 0.3s ease;
+}
+
+/* ===== 上下文相关的图标尺寸 ===== */
+
+/* 元数据区域图标 - 与14px文字匹配 */
+.meta-item .el-icon {
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+/* 面板标题图标 - 与16px文字匹配 */
+.panel-header .el-icon,
+.skills-header .el-icon,
+.scoring-header .el-icon,
+.thinking-header .el-icon,
+.hints-header .el-icon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+/* 控制按钮图标 - 与14px文字匹配 */
+.control-btn .el-icon {
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+/* 大型控制按钮图标 - 稍大以突出重要性 */
+.control-action-btn .el-icon {
+  font-size: 16px;
+  margin-right: 8px;
+}
+
+/* 快捷按钮图标 - 纯图标按钮，稍大便于点击 */
+.quick-btn .el-icon {
+  font-size: 18px;
+}
+
+/* 状态指示图标 - 小尺寸，不干扰文字 */
+.ai-assistance-status .el-icon,
+.hint-header .el-icon {
+  font-size: 14px;
+  margin-right: 4px;
+}
+
+/* 候选人信息区域图标 */
+.candidate-company .el-icon {
+  font-size: 13px;
+  margin-right: 4px;
+}
+
+/* 问题元数据图标 */
+.question-type .el-icon,
+.question-difficulty .el-icon {
+  font-size: 12px;
+  margin-right: 4px;
+}
+
+/* 分析标签页图标 */
+.analysis-tab .el-icon {
+  font-size: 14px;
+  margin-right: 6px;
+}
+
+/* 头像区域图标 - 大尺寸突出AI身份 */
+.avatar-icon .el-icon {
+  font-size: 20px;
+}
+
+/* ===== 响应式设计 ===== */
+
+/* 平板设备 */
+@media (max-width: 768px) {
+  .el-icon {
+    font-size: 14px;
+  }
+  
+  .panel-header .el-icon,
+  .control-action-btn .el-icon {
+    font-size: 14px;
+  }
+  
+  .quick-btn .el-icon {
+    font-size: 16px;
+  }
+  
+  .avatar-icon .el-icon {
+    font-size: 18px;
+  }
+}
+
+/* 手机设备 */
+@media (max-width: 480px) {
+  .el-icon {
+    font-size: 12px;
+  }
+  
+  .panel-header .el-icon,
+  .control-action-btn .el-icon {
+    font-size: 12px;
+  }
+  
+  .quick-btn .el-icon {
+    font-size: 14px;
+  }
+  
+  .avatar-icon .el-icon {
+    font-size: 16px;
+  }
+}
+
+/* ===== 可访问性增强 ===== */
+
+/* 确保图标有足够的点击区域 */
+.quick-btn,
+.control-btn,
+.control-action-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 图标悬停效果 */
+.el-icon:hover {
+  transform: scale(1.1);
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .el-icon {
+    filter: contrast(1.5);
+  }
+}
+
+/* 减少动画偏好支持 */
+@media (prefers-reduced-motion: reduce) {
+  .el-icon {
+    transition: none;
+  }
+  
+  .el-icon:hover {
+    transform: none;
+  }
+}
+
+/* ===== iFlytek 品牌一致性 ===== */
+
+/* 品牌色图标 */
+.el-icon.iflytek-primary {
+  color: #1890ff;
+}
+
+.el-icon.iflytek-secondary {
+  color: #667eea;
+}
+
+/* 状态色图标 */
+.el-icon.success {
+  color: #52c41a;
+}
+
+.el-icon.warning {
+  color: #fa8c16;
+}
+
+.el-icon.error {
+  color: #ff4d4f;
+}
+
+/* ===== 特殊场景图标 ===== */
+
+/* 加载状态图标 - 带动画 */
+.el-icon.loading {
+  animation: rotate 1s linear infinite;
+}
+
+@keyframes rotate {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

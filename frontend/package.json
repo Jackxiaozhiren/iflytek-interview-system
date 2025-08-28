@@ -1,0 +1,43 @@
+{
+  "name": "frontend",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "test": "vitest",
+    "test:ui": "vitest --ui",
+    "test:run": "vitest run",
+    "test:coverage": "vitest --coverage",
+    "test:iflytek": "node -e \"import('./src/utils/iflytekSparkTest.js').then(m => m.default.runFullTestSuite())\"",
+    "health:iflytek": "node -e \"import('./src/utils/iflytekSparkTest.js').then(m => m.default.quickHealthCheck())\""
+  },
+  "dependencies": {
+    "@element-plus/icons-vue": "^2.3.1",
+    "@vueuse/motion": "^3.0.3",
+    "aos": "^2.3.4",
+    "axios": "^1.10.0",
+    "echarts": "^5.6.0",
+    "element-plus": "^2.10.2",
+    "express": "^5.1.0",
+    "file-saver": "^2.0.5",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^3.0.1",
+    "katex": "^0.16.22",
+    "markdown-it": "^14.1.0",
+    "markdown-it-katex": "^2.0.3",
+    "mermaid": "^11.8.1",
+    "node-fetch": "^3.3.2",
+    "pinia": "^3.0.3",
+    "vue": "^3.3.4",
+    "vue-echarts": "^7.0.3",
+    "vue-router": "^4.5.1",
+    "xlsx": "^0.18.5"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^4.2.3",
+    "vite": "^4.4.5"
+  }
+}

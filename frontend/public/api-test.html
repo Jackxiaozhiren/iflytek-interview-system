@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API代理测试</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 1px solid #e9ecef;
+            border-radius: 10px;
+            background: #f8f9fa;
+        }
+        .btn {
+            background: linear-gradient(45deg, #007bff, #0056b3);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,123,255,0.4);
+        }
+        .result {
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            white-space: pre-wrap;
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        .success { background: #d4edda; color: #155724; border: 1px solid #c3e6cb; }
+        .error { background: #f8d7da; color: #721c24; border: 1px solid #f5c6cb; }
+        .info { background: #d1ecf1; color: #0c5460; border: 1px solid #bee5eb; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 API代理测试</h1>
+        
+        <div class="test-section">
+            <h3>📡 后端健康检查</h3>
+            <button class="btn" onclick="testHealthCheck()">测试健康检查</button>
+            <button class="btn" onclick="testDirectHealth()">直连测试</button>
+            <button class="btn" onclick="testProxyHealth()">代理测试</button>
+            <div id="health-result" class="result info">点击按钮开始测试...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🚀 系统状态检查</h3>
+            <button class="btn" onclick="testSystemStatus()">系统状态</button>
+            <button class="btn" onclick="testSystemMetrics()">系统指标</button>
+            <div id="system-result" class="result info">点击按钮开始测试...</div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 网络诊断</h3>
+            <button class="btn" onclick="testCORS()">CORS测试</button>
+            <button class="btn" onclick="testConnectivity()">连接性测试</button>
+            <div id="network-result" class="result info">点击按钮开始测试...</div>
+        </div>
+    </div>
+
+    <script>
+        // 健康检查测试
+        async function testHealthCheck() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.textContent = '🔄 正在测试健康检查...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch('/api/health', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 健康检查成功！
+状态: ${response.status}
+响应: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 健康检查失败！
+错误: ${error.message}`;
+            }
+        }
+        
+        // 直连测试
+        async function testDirectHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.textContent = '🔄 正在测试直连...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch('http://localhost:8000/health', {
+                    method: 'GET',
+                    mode: 'cors',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 直连测试成功！
+状态: ${response.status}
+响应: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 直连测试失败！
+错误: ${error.message}`;
+            }
+        }
+        
+        // 代理测试
+        async function testProxyHealth() {
+            const resultDiv = document.getElementById('health-result');
+            resultDiv.textContent = '🔄 正在测试代理...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch('/api/health', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-Requested-With': 'XMLHttpRequest'
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 代理测试成功！
+状态: ${response.status}
+通过代理: 是
+响应: ${JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 代理测试失败！
+错误: ${error.message}`;
+            }
+        }
+        
+        // 系统状态测试
+        async function testSystemStatus() {
+            const resultDiv = document.getElementById('system-result');
+            resultDiv.textContent = '🔄 正在获取系统状态...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch('/api/api/v1/system/status', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 系统状态获取成功！
+${JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 系统状态获取失败！
+错误: ${error.message}`;
+            }
+        }
+        
+        // 系统指标测试
+        async function testSystemMetrics() {
+            const resultDiv = document.getElementById('system-result');
+            resultDiv.textContent = '🔄 正在获取系统指标...';
+            resultDiv.className = 'result info';
+            
+            try {
+                const response = await fetch('/api/metrics', {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    resultDiv.className = 'result success';
+                    resultDiv.textContent = `✅ 系统指标获取成功！
+${JSON.stringify(data, null, 2)}`;
+                } else {
+                    throw new Error(`HTTP ${response.status}: ${response.statusText}`);
+                }
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ 系统指标获取失败！
+错误: ${error.message}`;
+            }
+        }
+        
+        // CORS测试
+        async function testCORS() {
+            const resultDiv = document.getElementById('network-result');
+            resultDiv.textContent = '🔄 正在测试CORS...';
+            resultDiv.className = 'result info';
+            
+            try {
+                // 测试预检请求
+                const response = await fetch('http://localhost:8000/health', {
+                    method: 'OPTIONS',
+                    headers: {
+                        'Origin': 'http://localhost:5173',
+                        'Access-Control-Request-Method': 'GET',
+                        'Access-Control-Request-Headers': 'Content-Type',
+                    },
+                });
+                
+                resultDiv.className = 'result success';
+                resultDiv.textContent = `✅ CORS预检请求成功！
+状态: ${response.status}
+允许的源: ${response.headers.get('Access-Control-Allow-Origin')}
+允许的方法: ${response.headers.get('Access-Control-Allow-Methods')}
+允许的头部: ${response.headers.get('Access-Control-Allow-Headers')}`;
+            } catch (error) {
+                resultDiv.className = 'result error';
+                resultDiv.textContent = `❌ CORS测试失败！
+错误: ${error.message}`;
+            }
+        }
+        
+        // 连接性测试
+        async function testConnectivity() {
+            const resultDiv = document.getElementById('network-result');
+            resultDiv.textContent = '🔄 正在测试连接性...';
+            resultDiv.className = 'result info';
+            
+            const tests = [
+                { name: '前端服务器', url: '/' },
+                { name: '后端直连', url: 'http://localhost:8000/health' },
+                { name: '后端代理', url: '/api/health' }
+            ];
+            
+            let results = [];
+            
+            for (const test of tests) {
+                try {
+                    const startTime = Date.now();
+                    const response = await fetch(test.url, {
+                        method: 'GET',
+                        mode: test.url.startsWith('http') ? 'cors' : 'same-origin'
+                    });
+                    const endTime = Date.now();
+                    
+                    results.push(`✅ ${test.name}: ${response.status} (${endTime - startTime}ms)`);
+                } catch (error) {
+                    results.push(`❌ ${test.name}: ${error.message}`);
+                }
+            }
+            
+            resultDiv.className = 'result info';
+            resultDiv.textContent = `🔍 连接性测试结果：
+${results.join('\n')}`;
+        }
+        
+        // 页面加载时自动运行基本测试
+        document.addEventListener('DOMContentLoaded', function() {
+            setTimeout(() => {
+                testHealthCheck();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

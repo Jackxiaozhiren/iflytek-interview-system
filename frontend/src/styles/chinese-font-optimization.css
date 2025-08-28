@@ -1,0 +1,174 @@
+/**
+ * 中文字体优化系统 - iFlytek 多模态面试评估系统
+ * 确保中文字体显示清晰、协调、符合 WCAG 2.1 AA 标准
+ */
+
+/* ===== 中文字体系统 ===== */
+:root {
+  /* 中文字体栈 - 优先级从高到低 */
+  --font-family-chinese: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'SimHei', 'Arial Unicode MS', sans-serif;
+  --font-family-chinese-title: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'SimHei', 'Source Han Sans CN', sans-serif;
+  --font-family-chinese-body: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'SimSun', sans-serif;
+  
+  /* 字体大小系统 - 基于 16px 基准 */
+  --font-size-xs: 12px;      /* 小号文字 */
+  --font-size-sm: 14px;      /* 辅助文字 */
+  --font-size-base: 16px;    /* 正文基准 */
+  --font-size-lg: 18px;      /* 大号正文 */
+  --font-size-xl: 20px;      /* 小标题 */
+  --font-size-2xl: 24px;     /* 中标题 */
+  --font-size-3xl: 32px;     /* 大标题 */
+  --font-size-4xl: 40px;     /* 超大标题 */
+  --font-size-5xl: 48px;     /* 英雄标题 */
+  
+  /* 字体粗细 */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  --font-weight-extrabold: 800;
+  
+  /* 行高系统 */
+  --line-height-tight: 1.2;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.6;
+  --line-height-loose: 1.8;
+  
+  /* 字间距 */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+}
+
+/* ===== 全局字体设置 ===== */
+* {
+  font-family: var(--font-family-chinese);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-family-chinese-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  font-weight: var(--font-weight-normal);
+  color: #262626;
+}
+
+/* ===== 标题字体系统 ===== */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-family-chinese-title);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: #1a1a1a;
+  margin: 0;
+}
+
+h1 {
+  font-size: var(--font-size-5xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+}
+
+h2 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+}
+
+h3 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+h4 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+h5 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+}
+
+h6 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+/* ===== 正文字体系统 ===== */
+p {
+  font-family: var(--font-family-chinese-body);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: #595959;
+  margin: 0 0 16px 0;
+}
+
+/* ===== 特殊文字样式 ===== */
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+.text-4xl { font-size: var(--font-size-4xl); }
+.text-5xl { font-size: var(--font-size-5xl); }
+
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+.font-extrabold { font-weight: var(--font-weight-extrabold); }
+
+/* ===== Element Plus 组件字体优化 ===== */
+.el-button {
+  font-family: var(--font-family-chinese) !important;
+  font-weight: var(--font-weight-medium) !important;
+}
+
+.el-menu-item {
+  font-family: var(--font-family-chinese) !important;
+  font-size: var(--font-size-base) !important;
+  font-weight: var(--font-weight-normal) !important;
+}
+
+.el-card__header {
+  font-family: var(--font-family-chinese-title) !important;
+  font-weight: var(--font-weight-semibold) !important;
+}
+
+.el-card__body {
+  font-family: var(--font-family-chinese-body) !important;
+}
+
+/* ===== 响应式字体调整 ===== */
+@media (max-width: 768px) {
+  :root {
+    --font-size-5xl: 36px;
+    --font-size-4xl: 32px;
+    --font-size-3xl: 28px;
+    --font-size-2xl: 20px;
+    --font-size-xl: 18px;
+  }
+  
+  body {
+    font-size: 14px;
+  }
+  
+  h1 { font-size: var(--font-size-4xl); }
+  h2 { font-size: var(--font-size-3xl); }
+  h3 { font-size: var(--font-size-2xl); }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --font-size-5xl: 32px;
+    --font-size-4xl: 28px;
+    --font-size-3xl: 24px;
+    --font-size-2xl: 18px;
+  }
+}

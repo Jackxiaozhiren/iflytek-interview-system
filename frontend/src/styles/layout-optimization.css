@@ -1,0 +1,462 @@
+/**
+ * iFlytek星火多模态面试AI系统 - 布局优化系统
+ * 解决空白区域过多、比例不协调等布局问题
+ * 
+ * 优化目标：
+ * - 消除大量空白区域
+ * - 优化文字、板块与界面的比例关系
+ * - 实施居中排版确保视觉平衡
+ * - 增强响应式设计效果
+ */
+
+/* ===== 全局布局优化 ===== */
+
+/* 防止内容溢出的全局修复 */
+* {
+  box-sizing: border-box;
+}
+
+body, html {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+}
+
+.homepage {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* 确保所有section都在容器内 */
+section {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+}
+
+/* 容器系统优化 - 修复内容溢出问题 */
+.optimized-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 5vw, 48px);
+  width: calc(100% - 48px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.optimized-container-narrow {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 clamp(20px, 4vw, 32px);
+  width: calc(100% - 40px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.optimized-container-wide {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 clamp(24px, 6vw, 64px);
+  width: calc(100% - 48px);
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* ===== 间距系统优化 ===== */
+
+/* 动态间距系统 */
+.section-spacing {
+  padding: clamp(40px, 8vh, 120px) 0;
+}
+
+.section-spacing-small {
+  padding: clamp(20px, 4vh, 60px) 0;
+}
+
+.section-spacing-large {
+  padding: clamp(60px, 12vh, 160px) 0;
+}
+
+/* 内容间距优化 */
+.content-spacing {
+  margin-bottom: clamp(20px, 4vh, 40px);
+}
+
+.content-spacing:last-child {
+  margin-bottom: 0;
+}
+
+/* ===== 网格系统优化 ===== */
+
+/* 自适应网格 */
+.optimized-grid {
+  display: grid;
+  gap: clamp(20px, 4vw, 40px);
+  width: 100%;
+}
+
+.optimized-grid-2 {
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+}
+
+.optimized-grid-3 {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.optimized-grid-4 {
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+}
+
+/* 智能网格（根据内容自动调整） */
+.smart-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 32px);
+  align-items: start;
+}
+
+/* ===== 居中排版系统 ===== */
+
+/* 垂直居中 */
+.center-vertical {
+  display: flex;
+  align-items: center;
+  min-height: 60vh;
+}
+
+/* 水平居中 */
+.center-horizontal {
+  display: flex;
+  justify-content: center;
+  text-align: center;
+}
+
+/* 完全居中 */
+.center-both {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 50vh;
+}
+
+/* 内容居中（适用于稀疏内容） */
+.content-center {
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+  padding: clamp(40px, 8vh, 80px) clamp(20px, 4vw, 40px);
+}
+
+/* ===== 比例优化系统 ===== */
+
+/* 黄金比例布局 */
+.golden-ratio-layout {
+  display: grid;
+  grid-template-columns: 1.618fr 1fr;
+  gap: clamp(20px, 4vw, 40px);
+  align-items: center;
+}
+
+/* 三分法布局 */
+.thirds-layout {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+  gap: clamp(20px, 4vw, 40px);
+  align-items: start;
+}
+
+/* 对称布局 */
+.symmetric-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: clamp(30px, 6vw, 60px);
+  align-items: center;
+}
+
+/* ===== 文字排版优化 ===== */
+
+/* 标题层级优化 */
+.optimized-title-h1 {
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  line-height: 1.2;
+  margin-bottom: clamp(16px, 3vh, 32px);
+  font-weight: 700;
+}
+
+.optimized-title-h2 {
+  font-size: clamp(1.5rem, 4vw, 2.5rem);
+  line-height: 1.3;
+  margin-bottom: clamp(12px, 2.5vh, 24px);
+  font-weight: 600;
+}
+
+.optimized-title-h3 {
+  font-size: clamp(1.25rem, 3vw, 1.875rem);
+  line-height: 1.4;
+  margin-bottom: clamp(8px, 2vh, 16px);
+  font-weight: 600;
+}
+
+/* 正文排版优化 */
+.optimized-text {
+  font-size: clamp(0.875rem, 2.5vw, 1.125rem);
+  line-height: 1.6;
+  margin-bottom: clamp(12px, 2.5vh, 20px);
+  max-width: 65ch; /* 最佳阅读宽度 */
+}
+
+.optimized-text-large {
+  font-size: clamp(1rem, 3vw, 1.25rem);
+  line-height: 1.7;
+  margin-bottom: clamp(16px, 3vh, 24px);
+  max-width: 60ch;
+}
+
+/* ===== 卡片布局优化 ===== */
+
+/* 自适应卡片 */
+.optimized-card {
+  padding: clamp(20px, 4vw, 32px);
+  border-radius: clamp(8px, 1vw, 16px);
+  background: var(--gradient-card-bg, #ffffff);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  height: fit-content;
+}
+
+.optimized-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+}
+
+/* 等高卡片 */
+.equal-height-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: clamp(20px, 4vw, 32px);
+  align-items: stretch;
+}
+
+.equal-height-cards .optimized-card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+/* ===== 空白区域优化 ===== */
+
+/* 紧凑布局（减少空白） */
+.compact-layout {
+  padding: clamp(20px, 4vh, 40px) 0;
+}
+
+.compact-layout .section-spacing {
+  padding: clamp(20px, 4vh, 60px) 0;
+}
+
+.compact-layout .content-spacing {
+  margin-bottom: clamp(12px, 2vh, 24px);
+}
+
+/* 密集网格 */
+.dense-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: clamp(12px, 2vw, 20px);
+}
+
+/* ===== 响应式断点优化 ===== */
+
+/* 超大屏幕优化 */
+@media (min-width: 1600px) {
+  .optimized-container {
+    padding: 0 80px;
+  }
+  
+  .section-spacing {
+    padding: clamp(80px, 10vh, 140px) 0;
+  }
+}
+
+/* 大屏幕优化 */
+@media (max-width: 1200px) {
+  .golden-ratio-layout,
+  .thirds-layout,
+  .symmetric-layout {
+    grid-template-columns: 1fr;
+    gap: clamp(20px, 4vh, 40px);
+  }
+  
+  .optimized-grid-2 {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* 平板优化 */
+@media (max-width: 768px) {
+  .optimized-grid-3,
+  .optimized-grid-4 {
+    grid-template-columns: 1fr;
+  }
+  
+  .equal-height-cards {
+    grid-template-columns: 1fr;
+  }
+  
+  .section-spacing {
+    padding: clamp(30px, 6vh, 60px) 0;
+  }
+}
+
+/* 手机优化 */
+@media (max-width: 480px) {
+  .optimized-container {
+    padding: 0 16px;
+  }
+  
+  .optimized-card {
+    padding: clamp(16px, 4vw, 24px);
+  }
+  
+  .content-center {
+    padding: clamp(20px, 6vh, 40px) 16px;
+  }
+}
+
+/* ===== 特殊布局优化 ===== */
+
+/* 英雄区域优化 */
+.optimized-hero {
+  min-height: clamp(500px, 70vh, 800px);
+  display: flex;
+  align-items: center;
+  padding: clamp(40px, 8vh, 80px) 0;
+}
+
+/* 功能展示区域优化 */
+.features-showcase {
+  padding: clamp(60px, 10vh, 120px) 0;
+}
+
+.features-showcase .optimized-grid-3 {
+  gap: clamp(24px, 5vw, 48px);
+}
+
+/* 统计数据展示优化 */
+.stats-display {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: clamp(20px, 4vw, 40px);
+  padding: clamp(30px, 6vh, 60px) 0;
+}
+
+/* ===== 性能优化 ===== */
+
+/* 减少重排重绘 */
+.optimized-card,
+.smart-grid,
+.equal-height-cards {
+  contain: layout style;
+}
+
+/* ===== 紫色背景区域布局修复 ===== */
+
+/* 修复紫色背景内容溢出问题 */
+.gradient-hero-bg,
+.gradient-fade-top,
+.gradient-overlay-bg,
+.gradient-animated-bg,
+.demo-page,
+.hero-section {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  position: relative;
+}
+
+/* 确保紫色背景内的容器不超出边界 */
+.gradient-hero-bg .optimized-container,
+.gradient-fade-top .optimized-container,
+.gradient-overlay-bg .optimized-container,
+.gradient-animated-bg .optimized-container,
+.demo-page .demo-container,
+.hero-section .optimized-container {
+  max-width: min(1200px, calc(100vw - 48px));
+  margin: 0 auto;
+  padding: 0 24px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* 修复统计数据显示区域 */
+.stats-display {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  justify-content: center;
+  gap: clamp(16px, 3vw, 32px);
+}
+
+.stat-item {
+  flex: 0 1 auto;
+  min-width: 120px;
+  max-width: 200px;
+  text-align: center;
+}
+
+/* 修复功能卡片网格 */
+.features-grid,
+.demo-features-container,
+.tech-grid {
+  width: 100%;
+  max-width: 100%;
+  overflow: hidden;
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  gap: clamp(16px, 3vw, 24px);
+}
+
+/* 确保卡片不超出容器 */
+.feature-card,
+.demo-feature-card,
+.tech-item {
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+/* 响应式修复 */
+@media (max-width: 768px) {
+  .gradient-hero-bg .optimized-container,
+  .gradient-fade-top .optimized-container,
+  .gradient-overlay-bg .optimized-container,
+  .gradient-animated-bg .optimized-container,
+  .demo-page .demo-container,
+  .hero-section .optimized-container {
+    max-width: calc(100vw - 32px);
+    padding: 0 16px;
+  }
+
+  .stats-display {
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+  }
+
+  .features-grid,
+  .demo-features-container,
+  .tech-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+}
+
+/* GPU加速 */
+.optimized-card {
+  transform: translateZ(0);
+  will-change: transform;
+}

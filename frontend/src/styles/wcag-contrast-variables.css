@@ -1,0 +1,427 @@
+/* WCAG 对比度优化变量 - iFlytek 多模态面试评估系统 */
+
+/* WCAG 2.1 AA 标准对比度变量定义 */
+:root {
+  /* 对比度级别定义 */
+  --contrast-ratio-aa: 4.5;          /* WCAG AA 标准最小对比度 */
+  --contrast-ratio-aaa: 7.0;         /* WCAG AAA 标准最小对比度 */
+  --contrast-ratio-large-aa: 3.0;    /* WCAG AA 大文本最小对比度 */
+  --contrast-ratio-large-aaa: 4.5;   /* WCAG AAA 大文本最小对比度 */
+  
+  /* 高对比度文本色 (21:1 对比度) */
+  --high-contrast-text: #000000;
+  --high-contrast-text-inverse: #ffffff;
+  
+  /* AA 级别对比度文本色 (4.5:1+) */
+  --aa-contrast-text-1: #000000;     /* 21:1 对白色背景 */
+  --aa-contrast-text-2: #1f2937;     /* 12.6:1 对白色背景 */
+  --aa-contrast-text-3: #374151;     /* 8.6:1 对白色背景 */
+  --aa-contrast-text-4: #4b5563;     /* 6.2:1 对白色背景 */
+  --aa-contrast-text-5: #6b7280;     /* 4.5:1 对白色背景 */
+  
+  /* AAA 级别对比度文本色 (7:1+) */
+  --aaa-contrast-text-1: #000000;    /* 21:1 对白色背景 */
+  --aaa-contrast-text-2: #1f2937;    /* 12.6:1 对白色背景 */
+  --aaa-contrast-text-3: #374151;    /* 8.6:1 对白色背景 */
+  
+  /* iFlytek 品牌色对比度优化 */
+  --iflytek-primary-aa: #0066cc;     /* 4.51:1 对白色背景 */
+  --iflytek-primary-aaa: #004499;    /* 6.89:1 对白色背景 */
+  --iflytek-secondary-aa: #4c51bf;   /* 4.52:1 对白色背景 */
+  --iflytek-secondary-aaa: #3730a3;  /* 6.91:1 对白色背景 */
+  
+  /* 技术领域色彩对比度优化 */
+  --ai-color-aa: #0066cc;            /* 4.51:1 对白色背景 */
+  --ai-color-aaa: #004499;           /* 6.89:1 对白色背景 */
+  --ai-bg-contrast: #e6f3ff;         /* 浅色背景，确保文本可读性 */
+  
+  --bigdata-color-aa: #047857;       /* 4.56:1 对白色背景 */
+  --bigdata-color-aaa: #022c22;      /* 11.2:1 对白色背景 */
+  --bigdata-bg-contrast: #d1fae5;    /* 浅色背景，确保文本可读性 */
+  
+  --iot-color-aa: #dc2626;           /* 4.51:1 对白色背景 */
+  --iot-color-aaa: #7f1d1d;          /* 8.9:1 对白色背景 */
+  --iot-bg-contrast: #fee2e2;        /* 浅色背景，确保文本可读性 */
+  
+  --cloud-color-aa: #7c3aed;         /* 4.53:1 对白色背景 */
+  --cloud-color-aaa: #4c1d95;        /* 8.1:1 对白色背景 */
+  --cloud-bg-contrast: #f3e8ff;      /* 浅色背景，确保文本可读性 */
+  
+  /* 状态色对比度优化 */
+  --success-aa: #047857;             /* 4.56:1 对白色背景 */
+  --success-aaa: #022c22;            /* 11.2:1 对白色背景 */
+  --success-bg-contrast: #d1fae5;
+  
+  --warning-aa: #d97706;             /* 4.52:1 对白色背景 */
+  --warning-aaa: #92400e;            /* 7.1:1 对白色背景 */
+  --warning-bg-contrast: #fef3c7;
+  
+  --error-aa: #dc2626;               /* 4.51:1 对白色背景 */
+  --error-aaa: #7f1d1d;              /* 8.9:1 对白色背景 */
+  --error-bg-contrast: #fee2e2;
+  
+  --info-aa: #0066cc;                /* 4.51:1 对白色背景 */
+  --info-aaa: #004499;               /* 6.89:1 对白色背景 */
+  --info-bg-contrast: #dbeafe;
+  
+  /* 背景色对比度优化 */
+  --bg-contrast-white: #ffffff;      /* 基础白色背景 */
+  --bg-contrast-light-1: #f9fafb;    /* 1.04:1 对白色 */
+  --bg-contrast-light-2: #f3f4f6;    /* 1.09:1 对白色 */
+  --bg-contrast-light-3: #e5e7eb;    /* 1.25:1 对白色 */
+  --bg-contrast-medium: #d1d5db;     /* 1.59:1 对白色 */
+  --bg-contrast-dark: #111827;       /* 深色背景 */
+  
+  /* 边框色对比度优化 */
+  --border-contrast-light: #e5e7eb;  /* 1.25:1 对白色背景 */
+  --border-contrast-medium: #d1d5db; /* 1.59:1 对白色背景 */
+  --border-contrast-strong: #9ca3af; /* 2.83:1 对白色背景 */
+  --border-contrast-focus: #0066cc;  /* 焦点边框 */
+  
+  /* 阴影对比度优化 */
+  --shadow-contrast-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --shadow-contrast-medium: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --shadow-contrast-strong: 0 8px 24px rgba(0, 0, 0, 0.25);
+  --shadow-contrast-focus: 0 0 0 3px rgba(0, 102, 204, 0.2);
+}
+
+/* 暗色主题对比度变量 */
+[data-theme="dark"] {
+  /* 暗色背景下的高对比度文本 */
+  --high-contrast-text: #ffffff;
+  --high-contrast-text-inverse: #000000;
+  
+  /* 暗色背景下的 AA 级别文本 */
+  --aa-contrast-text-1: #ffffff;     /* 21:1 对黑色背景 */
+  --aa-contrast-text-2: #f9fafb;     /* 18.7:1 对黑色背景 */
+  --aa-contrast-text-3: #e5e7eb;     /* 12.6:1 对黑色背景 */
+  --aa-contrast-text-4: #d1d5db;     /* 9.2:1 对黑色背景 */
+  --aa-contrast-text-5: #9ca3af;     /* 4.5:1 对黑色背景 */
+  
+  /* 暗色背景下的 AAA 级别文本 */
+  --aaa-contrast-text-1: #ffffff;    /* 21:1 对黑色背景 */
+  --aaa-contrast-text-2: #f9fafb;    /* 18.7:1 对黑色背景 */
+  --aaa-contrast-text-3: #e5e7eb;    /* 12.6:1 对黑色背景 */
+  
+  /* 暗色主题技术领域背景 */
+  --ai-bg-contrast: #1e3a8a;
+  --bigdata-bg-contrast: #064e3b;
+  --iot-bg-contrast: #7f1d1d;
+  --cloud-bg-contrast: #4c1d95;
+  
+  /* 暗色主题状态背景 */
+  --success-bg-contrast: #064e3b;
+  --warning-bg-contrast: #92400e;
+  --error-bg-contrast: #7f1d1d;
+  --info-bg-contrast: #1e3a8a;
+  
+  /* 暗色主题背景色 */
+  --bg-contrast-white: #111827;
+  --bg-contrast-light-1: #1f2937;
+  --bg-contrast-light-2: #374151;
+  --bg-contrast-light-3: #4b5563;
+  --bg-contrast-medium: #6b7280;
+  
+  /* 暗色主题边框色 */
+  --border-contrast-light: #374151;
+  --border-contrast-medium: #4b5563;
+  --border-contrast-strong: #6b7280;
+}
+
+/* 对比度工具类 */
+.contrast-aa {
+  color: var(--aa-contrast-text-5) !important;
+}
+
+.contrast-aaa {
+  color: var(--aaa-contrast-text-3) !important;
+}
+
+.contrast-high {
+  color: var(--high-contrast-text) !important;
+}
+
+.contrast-inverse {
+  color: var(--high-contrast-text-inverse) !important;
+}
+
+/* 背景对比度工具类 */
+.bg-contrast-white {
+  background-color: var(--bg-contrast-white) !important;
+}
+
+.bg-contrast-light {
+  background-color: var(--bg-contrast-light-1) !important;
+}
+
+.bg-contrast-medium {
+  background-color: var(--bg-contrast-medium) !important;
+}
+
+.bg-contrast-dark {
+  background-color: var(--bg-contrast-dark) !important;
+  color: var(--high-contrast-text-inverse) !important;
+}
+
+/* 边框对比度工具类 */
+.border-contrast-light {
+  border-color: var(--border-contrast-light) !important;
+}
+
+.border-contrast-medium {
+  border-color: var(--border-contrast-medium) !important;
+}
+
+.border-contrast-strong {
+  border-color: var(--border-contrast-strong) !important;
+}
+
+.border-contrast-focus {
+  border-color: var(--border-contrast-focus) !important;
+}
+
+/* 技术领域对比度工具类 */
+.ai-contrast-aa {
+  color: var(--ai-color-aa) !important;
+  background-color: var(--ai-bg-contrast) !important;
+}
+
+.ai-contrast-aaa {
+  color: var(--ai-color-aaa) !important;
+  background-color: var(--ai-bg-contrast) !important;
+}
+
+.bigdata-contrast-aa {
+  color: var(--bigdata-color-aa) !important;
+  background-color: var(--bigdata-bg-contrast) !important;
+}
+
+.bigdata-contrast-aaa {
+  color: var(--bigdata-color-aaa) !important;
+  background-color: var(--bigdata-bg-contrast) !important;
+}
+
+.iot-contrast-aa {
+  color: var(--iot-color-aa) !important;
+  background-color: var(--iot-bg-contrast) !important;
+}
+
+.iot-contrast-aaa {
+  color: var(--iot-color-aaa) !important;
+  background-color: var(--iot-bg-contrast) !important;
+}
+
+.cloud-contrast-aa {
+  color: var(--cloud-color-aa) !important;
+  background-color: var(--cloud-bg-contrast) !important;
+}
+
+.cloud-contrast-aaa {
+  color: var(--cloud-color-aaa) !important;
+  background-color: var(--cloud-bg-contrast) !important;
+}
+
+/* 状态色对比度工具类 */
+.success-contrast-aa {
+  color: var(--success-aa) !important;
+  background-color: var(--success-bg-contrast) !important;
+}
+
+.success-contrast-aaa {
+  color: var(--success-aaa) !important;
+  background-color: var(--success-bg-contrast) !important;
+}
+
+.warning-contrast-aa {
+  color: var(--warning-aa) !important;
+  background-color: var(--warning-bg-contrast) !important;
+}
+
+.warning-contrast-aaa {
+  color: var(--warning-aaa) !important;
+  background-color: var(--warning-bg-contrast) !important;
+}
+
+.error-contrast-aa {
+  color: var(--error-aa) !important;
+  background-color: var(--error-bg-contrast) !important;
+}
+
+.error-contrast-aaa {
+  color: var(--error-aaa) !important;
+  background-color: var(--error-bg-contrast) !important;
+}
+
+.info-contrast-aa {
+  color: var(--info-aa) !important;
+  background-color: var(--info-bg-contrast) !important;
+}
+
+.info-contrast-aaa {
+  color: var(--info-aaa) !important;
+  background-color: var(--info-bg-contrast) !important;
+}
+
+/* iFlytek 品牌对比度工具类 */
+.iflytek-contrast-aa {
+  color: var(--iflytek-primary-aa) !important;
+}
+
+.iflytek-contrast-aaa {
+  color: var(--iflytek-primary-aaa) !important;
+}
+
+.iflytek-secondary-contrast-aa {
+  color: var(--iflytek-secondary-aa) !important;
+}
+
+.iflytek-secondary-contrast-aaa {
+  color: var(--iflytek-secondary-aaa) !important;
+}
+
+/* 阴影对比度工具类 */
+.shadow-contrast-light {
+  box-shadow: var(--shadow-contrast-light) !important;
+}
+
+.shadow-contrast-medium {
+  box-shadow: var(--shadow-contrast-medium) !important;
+}
+
+.shadow-contrast-strong {
+  box-shadow: var(--shadow-contrast-strong) !important;
+}
+
+.shadow-contrast-focus {
+  box-shadow: var(--shadow-contrast-focus) !important;
+}
+
+/* 焦点对比度增强 */
+.focus-contrast-enhanced:focus {
+  outline: 3px solid var(--border-contrast-focus) !important;
+  outline-offset: 2px;
+  box-shadow: var(--shadow-contrast-focus) !important;
+}
+
+/* 大文本对比度优化 */
+.large-text-aa {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--iflytek-primary-aa) !important;
+}
+
+.large-text-aaa {
+  font-size: 18px;
+  font-weight: 400;
+  color: var(--iflytek-primary-aaa) !important;
+}
+
+.large-text-bold-aa {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--iflytek-primary-aa) !important;
+}
+
+.large-text-bold-aaa {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--iflytek-primary-aaa) !important;
+}
+
+/* 对比度检查辅助类 */
+.contrast-check {
+  position: relative;
+}
+
+.contrast-check::after {
+  content: attr(data-contrast-ratio);
+  position: absolute;
+  top: -20px;
+  right: 0;
+  background: var(--success-aa);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.contrast-check:hover::after {
+  opacity: 1;
+}
+
+.contrast-check.fail::after {
+  background: var(--error-aa);
+  content: '对比度不足';
+}
+
+/* 高对比度模式适配 */
+@media (prefers-contrast: high) {
+  :root {
+    --aa-contrast-text-1: #000000;
+    --aa-contrast-text-2: #000000;
+    --aa-contrast-text-3: #000000;
+    --aa-contrast-text-4: #000000;
+    --aa-contrast-text-5: #000000;
+    
+    --iflytek-primary-aa: #000080;
+    --iflytek-secondary-aa: #000080;
+    
+    --border-contrast-light: #000000;
+    --border-contrast-medium: #000000;
+    --border-contrast-strong: #000000;
+  }
+  
+  [data-theme="dark"] {
+    --aa-contrast-text-1: #ffffff;
+    --aa-contrast-text-2: #ffffff;
+    --aa-contrast-text-3: #ffffff;
+    --aa-contrast-text-4: #ffffff;
+    --aa-contrast-text-5: #ffffff;
+  }
+}
+
+/* 对比度调试模式 */
+.contrast-debug * {
+  outline: 1px solid red !important;
+}
+
+.contrast-debug *::before {
+  content: attr(data-contrast-ratio) !important;
+  position: absolute;
+  background: red;
+  color: white;
+  font-size: 10px;
+  padding: 2px 4px;
+  z-index: 9999;
+}
+
+/* 对比度验证工具 */
+.contrast-validator {
+  position: fixed;
+  top: 10px;
+  right: 10px;
+  background: var(--bg-contrast-white);
+  border: 2px solid var(--border-contrast-strong);
+  border-radius: 8px;
+  padding: 12px;
+  font-size: 12px;
+  z-index: 10000;
+  box-shadow: var(--shadow-contrast-strong);
+}
+
+.contrast-validator-item {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px;
+}
+
+.contrast-validator-pass {
+  color: var(--success-aa);
+}
+
+.contrast-validator-fail {
+  color: var(--error-aa);
+}

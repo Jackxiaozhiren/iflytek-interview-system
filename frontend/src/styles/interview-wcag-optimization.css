@@ -1,0 +1,392 @@
+/* iFlytek 面试界面 WCAG 对比度优化 */
+/* 专门针对长时间使用的面试界面进行护眼和高对比度优化 */
+
+/* ===== 面试界面护眼色彩系统 ===== */
+.interviewing-page,
+.interview-container,
+.interview-room {
+  /* 护眼背景色系统 */
+  --interview-bg-primary: var(--eye-comfort-bg);
+  --interview-bg-secondary: var(--interview-bg-secondary);
+  --interview-bg-panel: #fafbfc;
+  --interview-bg-card: #ffffff;
+  
+  /* 护眼文本色系统 */
+  --interview-text-primary: var(--eye-comfort-text);
+  --interview-text-secondary: var(--eye-comfort-secondary);
+  --interview-text-tertiary: #718096;
+  --interview-text-muted: #a0aec0;
+  
+  /* 面试专用强调色 */
+  --interview-accent: var(--interview-accent);
+  --interview-accent-light: #4299e1;
+  --interview-accent-dark: var(--iflytek-primary-dark-wcag);
+  
+  /* 状态色 - 护眼优化 */
+  --interview-success: var(--success-wcag-aa);
+  --interview-warning: var(--warning-wcag-aa);
+  --interview-error: var(--error-wcag-aa);
+  --interview-info: var(--info-wcag-aa);
+  
+  /* 边框和分割线 */
+  --interview-border: var(--eye-comfort-border);
+  --interview-border-light: #f1f5f9;
+  --interview-border-medium: #e2e8f0;
+  --interview-border-strong: #cbd5e0;
+  
+  /* 阴影系统 - 柔和护眼 */
+  --interview-shadow-sm: 0 1px 3px rgba(0, 0, 0, 0.06);
+  --interview-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.08);
+  --interview-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --interview-shadow-focus: 0 0 0 3px rgba(0, 102, 204, 0.15);
+}
+
+/* ===== 面试页面主容器 ===== */
+.interviewing-page {
+  background: var(--interview-bg-primary) !important;
+  color: var(--interview-text-primary) !important;
+  min-height: 100vh;
+  font-family: 'Microsoft YaHei', sans-serif;
+  line-height: 1.6;
+}
+
+/* ===== 面试头部区域 ===== */
+.interview-header,
+.interviewing-header {
+  background: var(--interview-bg-card) !important;
+  border-bottom: 1px solid var(--interview-border) !important;
+  box-shadow: var(--interview-shadow-sm) !important;
+  color: var(--interview-text-primary) !important;
+}
+
+.interview-title,
+.interviewing-title {
+  color: var(--interview-text-primary) !important;
+  font-weight: 600;
+}
+
+.interview-subtitle {
+  color: var(--interview-text-secondary) !important;
+}
+
+/* ===== 面试进度指示器 ===== */
+.interview-progress,
+.progress-container {
+  background: var(--interview-bg-secondary) !important;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.interview-progress-bar,
+.progress-bar {
+  background: var(--interview-accent) !important;
+  transition: width 0.6s ease;
+}
+
+.progress-text {
+  color: var(--interview-text-secondary) !important;
+  font-size: 14px;
+}
+
+/* ===== 面试问题区域 ===== */
+.interview-question,
+.question-container,
+.question-panel {
+  background: var(--interview-bg-card) !important;
+  border: 1px solid var(--interview-border) !important;
+  border-radius: 12px;
+  box-shadow: var(--interview-shadow-md) !important;
+  color: var(--interview-text-primary) !important;
+}
+
+.question-title {
+  color: var(--interview-text-primary) !important;
+  font-weight: 600;
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.question-content {
+  color: var(--interview-text-secondary) !important;
+  font-size: 16px;
+  line-height: 1.6;
+}
+
+.question-meta {
+  color: var(--interview-text-tertiary) !important;
+  font-size: 14px;
+}
+
+/* ===== 面试回答区域 ===== */
+.interview-answer,
+.answer-container,
+.response-area {
+  background: var(--interview-bg-card) !important;
+  border: 1px solid var(--interview-border) !important;
+  border-radius: 12px;
+  box-shadow: var(--interview-shadow-md) !important;
+}
+
+.answer-input,
+.response-input {
+  background: var(--interview-bg-primary) !important;
+  border: 1px solid var(--interview-border) !important;
+  color: var(--interview-text-primary) !important;
+  font-size: 16px;
+  line-height: 1.6;
+  border-radius: 8px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.answer-input:focus,
+.response-input:focus {
+  border-color: var(--interview-accent) !important;
+  box-shadow: var(--interview-shadow-focus) !important;
+  outline: none;
+}
+
+.answer-input::placeholder,
+.response-input::placeholder {
+  color: var(--interview-text-muted) !important;
+}
+
+/* ===== 面试控制按钮 ===== */
+.interview-controls,
+.control-panel {
+  background: var(--interview-bg-panel) !important;
+  border-radius: 12px;
+  padding: 16px;
+  border: 1px solid var(--interview-border);
+}
+
+.interview-btn,
+.control-btn {
+  background: var(--interview-bg-card) !important;
+  border: 1px solid var(--interview-border-medium) !important;
+  color: var(--interview-text-primary) !important;
+  border-radius: 8px;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interview-btn:hover,
+.control-btn:hover {
+  background: var(--interview-bg-secondary) !important;
+  border-color: var(--interview-accent) !important;
+  color: var(--interview-accent) !important;
+  transform: translateY(-1px);
+  box-shadow: var(--interview-shadow-md) !important;
+}
+
+.interview-btn.primary,
+.control-btn.primary {
+  background: var(--interview-accent) !important;
+  border-color: var(--interview-accent) !important;
+  color: white !important;
+}
+
+.interview-btn.primary:hover,
+.control-btn.primary:hover {
+  background: var(--interview-accent-dark) !important;
+  border-color: var(--interview-accent-dark) !important;
+  color: white !important;
+}
+
+.interview-btn.success {
+  background: var(--interview-success) !important;
+  border-color: var(--interview-success) !important;
+  color: white !important;
+}
+
+.interview-btn.warning {
+  background: var(--interview-warning) !important;
+  border-color: var(--interview-warning) !important;
+  color: white !important;
+}
+
+.interview-btn.error,
+.interview-btn.danger {
+  background: var(--interview-error) !important;
+  border-color: var(--interview-error) !important;
+  color: white !important;
+}
+
+/* ===== 面试状态指示器 ===== */
+.interview-status,
+.status-indicator {
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-recording {
+  background: rgba(220, 38, 38, 0.1) !important;
+  color: var(--interview-error) !important;
+  border: 1px solid rgba(220, 38, 38, 0.2);
+}
+
+.status-processing {
+  background: rgba(251, 191, 36, 0.1) !important;
+  color: var(--interview-warning) !important;
+  border: 1px solid rgba(251, 191, 36, 0.2);
+}
+
+.status-completed {
+  background: rgba(4, 120, 87, 0.1) !important;
+  color: var(--interview-success) !important;
+  border: 1px solid rgba(4, 120, 87, 0.2);
+}
+
+.status-waiting {
+  background: rgba(0, 102, 204, 0.1) !important;
+  color: var(--interview-info) !important;
+  border: 1px solid rgba(0, 102, 204, 0.2);
+}
+
+/* ===== 面试计时器 ===== */
+.interview-timer,
+.timer-display {
+  background: var(--interview-bg-card) !important;
+  border: 1px solid var(--interview-border) !important;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: var(--interview-text-primary) !important;
+  font-family: 'Courier New', monospace;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.timer-label {
+  color: var(--interview-text-secondary) !important;
+  font-size: 12px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+
+/* ===== 面试反馈区域 ===== */
+.interview-feedback,
+.feedback-panel {
+  background: var(--interview-bg-panel) !important;
+  border: 1px solid var(--interview-border) !important;
+  border-radius: 12px;
+  padding: 20px;
+}
+
+.feedback-title {
+  color: var(--interview-text-primary) !important;
+  font-weight: 600;
+  margin-bottom: 12px;
+}
+
+.feedback-content {
+  color: var(--interview-text-secondary) !important;
+  line-height: 1.6;
+}
+
+.feedback-score {
+  background: var(--interview-accent) !important;
+  color: white !important;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* ===== 面试侧边栏 ===== */
+.interview-sidebar,
+.sidebar-panel {
+  background: var(--interview-bg-secondary) !important;
+  border-right: 1px solid var(--interview-border) !important;
+  color: var(--interview-text-primary) !important;
+}
+
+.sidebar-section {
+  border-bottom: 1px solid var(--interview-border) !important;
+  padding: 16px;
+}
+
+.sidebar-title {
+  color: var(--interview-text-primary) !important;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+}
+
+.sidebar-content {
+  color: var(--interview-text-secondary) !important;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+/* ===== 响应式优化 ===== */
+@media (max-width: 768px) {
+  .interviewing-page {
+    padding: 12px;
+  }
+  
+  .interview-question,
+  .interview-answer,
+  .interview-controls {
+    margin-bottom: 16px;
+    padding: 16px;
+  }
+  
+  .question-title {
+    font-size: 16px;
+  }
+  
+  .answer-input,
+  .response-input {
+    font-size: 16px; /* 防止iOS缩放 */
+  }
+}
+
+/* ===== 无障碍增强 ===== */
+.interview-focus-trap:focus {
+  outline: 3px solid var(--interview-accent) !important;
+  outline-offset: 2px;
+  box-shadow: var(--interview-shadow-focus) !important;
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .interviewing-page {
+    --interview-text-primary: #000000;
+    --interview-text-secondary: #000000;
+    --interview-border: #000000;
+    --interview-accent: #000080;
+  }
+}
+
+/* 减少动画模式支持 */
+@media (prefers-reduced-motion: reduce) {
+  .interview-btn,
+  .control-btn,
+  .answer-input,
+  .response-input {
+    transition: none !important;
+  }
+}
+
+/* 护眼模式工具类 */
+.interview-eye-comfort {
+  filter: brightness(0.95) contrast(1.05);
+}
+
+.interview-high-contrast {
+  filter: contrast(1.2);
+}
+
+/* 面试专用焦点增强 */
+.interview-focus-enhanced:focus {
+  outline: 3px solid var(--interview-accent) !important;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.15) !important;
+}

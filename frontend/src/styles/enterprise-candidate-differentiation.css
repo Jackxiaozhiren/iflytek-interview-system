@@ -1,0 +1,447 @@
+/* iFlytek Spark 企业端和候选人端界面差异化设计 */
+
+/* 基础变量定义 */
+:root {
+  /* 企业端配色方案 - 专业、权威 */
+  --enterprise-primary: #1890ff;
+  --enterprise-secondary: #0066cc;
+  --enterprise-accent: #003a8c;
+  --enterprise-success: #52c41a;
+  --enterprise-warning: #faad14;
+  --enterprise-error: #ff4d4f;
+  --enterprise-bg-primary: #ffffff;
+  --enterprise-bg-secondary: #f5f5f5;
+  --enterprise-bg-accent: #e6f7ff;
+  --enterprise-text-primary: #262626;
+  --enterprise-text-secondary: #595959;
+  --enterprise-border: #d9d9d9;
+  --enterprise-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+
+  /* 候选人端配色方案 - 友好、温暖 */
+  --candidate-primary: #667eea;
+  --candidate-secondary: #764ba2;
+  --candidate-accent: #f093fb;
+  --candidate-success: #73d13d;
+  --candidate-warning: #ffc53d;
+  --candidate-error: #ff7875;
+  --candidate-bg-primary: #ffffff;
+  --candidate-bg-secondary: #fafafa;
+  --candidate-bg-accent: #f0f5ff;
+  --candidate-text-primary: #262626;
+  --candidate-text-secondary: #595959;
+  --candidate-border: #e8e8e8;
+  --candidate-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+}
+
+/* 企业端样式 */
+.enterprise-theme {
+  --primary-color: var(--enterprise-primary);
+  --secondary-color: var(--enterprise-secondary);
+  --accent-color: var(--enterprise-accent);
+  --success-color: var(--enterprise-success);
+  --warning-color: var(--enterprise-warning);
+  --error-color: var(--enterprise-error);
+  --bg-primary: var(--enterprise-bg-primary);
+  --bg-secondary: var(--enterprise-bg-secondary);
+  --bg-accent: var(--enterprise-bg-accent);
+  --text-primary: var(--enterprise-text-primary);
+  --text-secondary: var(--enterprise-text-secondary);
+  --border-color: var(--enterprise-border);
+  --box-shadow: var(--enterprise-shadow);
+}
+
+.enterprise-theme .header {
+  background: linear-gradient(135deg, var(--enterprise-primary), var(--enterprise-secondary));
+  border-bottom: 3px solid var(--enterprise-accent);
+}
+
+.enterprise-theme .nav-brand {
+  color: white;
+  font-weight: 700;
+  font-size: 1.5rem;
+}
+
+.enterprise-theme .nav-link {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 500;
+}
+
+.enterprise-theme .nav-link:hover,
+.enterprise-theme .nav-link.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 6px;
+}
+
+.enterprise-theme .btn-primary {
+  background: linear-gradient(135deg, var(--enterprise-primary), var(--enterprise-secondary));
+  border: none;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.enterprise-theme .btn-primary:hover {
+  background: linear-gradient(135deg, var(--enterprise-secondary), var(--enterprise-accent));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.3);
+}
+
+.enterprise-theme .card {
+  border: 1px solid var(--enterprise-border);
+  box-shadow: var(--enterprise-shadow);
+  border-radius: 8px;
+}
+
+.enterprise-theme .card-header {
+  background: var(--enterprise-bg-accent);
+  border-bottom: 2px solid var(--enterprise-primary);
+  font-weight: 600;
+  color: var(--enterprise-accent);
+}
+
+.enterprise-theme .dashboard-stats {
+  background: linear-gradient(135deg, var(--enterprise-bg-accent), white);
+}
+
+.enterprise-theme .stat-card {
+  background: white;
+  border-left: 4px solid var(--enterprise-primary);
+  box-shadow: var(--enterprise-shadow);
+}
+
+.enterprise-theme .data-table {
+  border: 1px solid var(--enterprise-border);
+}
+
+.enterprise-theme .data-table th {
+  background: var(--enterprise-bg-accent);
+  color: var(--enterprise-accent);
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.875rem;
+  letter-spacing: 0.5px;
+}
+
+.enterprise-theme .sidebar {
+  background: var(--enterprise-bg-secondary);
+  border-right: 2px solid var(--enterprise-border);
+}
+
+.enterprise-theme .sidebar-item {
+  color: var(--enterprise-text-secondary);
+  font-weight: 500;
+}
+
+.enterprise-theme .sidebar-item:hover,
+.enterprise-theme .sidebar-item.active {
+  background: var(--enterprise-bg-accent);
+  color: var(--enterprise-primary);
+  border-left: 4px solid var(--enterprise-primary);
+}
+
+/* 候选人端样式 */
+.candidate-theme {
+  --primary-color: var(--candidate-primary);
+  --secondary-color: var(--candidate-secondary);
+  --accent-color: var(--candidate-accent);
+  --success-color: var(--candidate-success);
+  --warning-color: var(--candidate-warning);
+  --error-color: var(--candidate-error);
+  --bg-primary: var(--candidate-bg-primary);
+  --bg-secondary: var(--candidate-bg-secondary);
+  --bg-accent: var(--candidate-bg-accent);
+  --text-primary: var(--candidate-text-primary);
+  --text-secondary: var(--candidate-text-secondary);
+  --border-color: var(--candidate-border);
+  --box-shadow: var(--candidate-shadow);
+}
+
+.candidate-theme .header {
+  background: linear-gradient(135deg, var(--candidate-primary), var(--candidate-secondary));
+  border-bottom: none;
+  box-shadow: var(--candidate-shadow);
+}
+
+.candidate-theme .nav-brand {
+  color: white;
+  font-weight: 600;
+  font-size: 1.4rem;
+}
+
+.candidate-theme .nav-link {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 400;
+  border-radius: 20px;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.candidate-theme .nav-link:hover,
+.candidate-theme .nav-link.active {
+  color: white;
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
+}
+
+.candidate-theme .btn-primary {
+  background: linear-gradient(135deg, var(--candidate-primary), var(--candidate-secondary));
+  border: none;
+  border-radius: 25px;
+  font-weight: 500;
+  padding: 12px 24px;
+}
+
+.candidate-theme .btn-primary:hover {
+  background: linear-gradient(135deg, var(--candidate-secondary), var(--candidate-accent));
+  transform: translateY(-2px);
+  box-shadow: var(--candidate-shadow);
+}
+
+.candidate-theme .card {
+  border: none;
+  box-shadow: var(--candidate-shadow);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.candidate-theme .card-header {
+  background: linear-gradient(135deg, var(--candidate-bg-accent), white);
+  border-bottom: none;
+  font-weight: 500;
+  color: var(--candidate-primary);
+}
+
+.candidate-theme .welcome-section {
+  background: linear-gradient(135deg, var(--candidate-bg-accent), rgba(240, 245, 255, 0.5));
+  border-radius: 20px;
+  padding: 32px;
+}
+
+.candidate-theme .feature-card {
+  background: white;
+  border-radius: 16px;
+  box-shadow: var(--candidate-shadow);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  transition: all 0.3s ease;
+}
+
+.candidate-theme .feature-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.2);
+}
+
+.candidate-theme .progress-bar {
+  background: var(--candidate-bg-accent);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.candidate-theme .progress-fill {
+  background: linear-gradient(90deg, var(--candidate-primary), var(--candidate-secondary));
+  border-radius: 10px;
+}
+
+.candidate-theme .interview-card {
+  background: linear-gradient(135deg, white, var(--candidate-bg-accent));
+  border-radius: 20px;
+  border: 2px solid rgba(102, 126, 234, 0.1);
+}
+
+.candidate-theme .status-badge {
+  border-radius: 20px;
+  padding: 6px 16px;
+  font-weight: 500;
+  font-size: 0.875rem;
+}
+
+.candidate-theme .status-badge.pending {
+  background: rgba(255, 197, 61, 0.2);
+  color: var(--candidate-warning);
+}
+
+.candidate-theme .status-badge.completed {
+  background: rgba(115, 209, 61, 0.2);
+  color: var(--candidate-success);
+}
+
+.candidate-theme .status-badge.in-progress {
+  background: rgba(102, 126, 234, 0.2);
+  color: var(--candidate-primary);
+}
+
+/* 图标差异化 */
+.enterprise-theme .icon {
+  color: var(--enterprise-primary);
+}
+
+.enterprise-theme .icon-success {
+  color: var(--enterprise-success);
+}
+
+.enterprise-theme .icon-warning {
+  color: var(--enterprise-warning);
+}
+
+.enterprise-theme .icon-error {
+  color: var(--enterprise-error);
+}
+
+.candidate-theme .icon {
+  color: var(--candidate-primary);
+}
+
+.candidate-theme .icon-success {
+  color: var(--candidate-success);
+}
+
+.candidate-theme .icon-warning {
+  color: var(--candidate-warning);
+}
+
+.candidate-theme .icon-error {
+  color: var(--candidate-error);
+}
+
+/* 表单样式差异化 */
+.enterprise-theme .form-input {
+  border: 2px solid var(--enterprise-border);
+  border-radius: 6px;
+  font-weight: 500;
+}
+
+.enterprise-theme .form-input:focus {
+  border-color: var(--enterprise-primary);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+.candidate-theme .form-input {
+  border: 1px solid var(--candidate-border);
+  border-radius: 12px;
+  font-weight: 400;
+}
+
+.candidate-theme .form-input:focus {
+  border-color: var(--candidate-primary);
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+/* 布局差异化 */
+.enterprise-theme .layout {
+  background: var(--enterprise-bg-secondary);
+}
+
+.enterprise-theme .content-area {
+  background: var(--enterprise-bg-primary);
+  border-radius: 8px;
+  border: 1px solid var(--enterprise-border);
+}
+
+.candidate-theme .layout {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+}
+
+.candidate-theme .content-area {
+  background: var(--candidate-bg-primary);
+  border-radius: 20px;
+  box-shadow: var(--candidate-shadow);
+}
+
+/* 动画效果差异化 */
+.enterprise-theme .hover-effect {
+  transition: all 0.2s ease;
+}
+
+.enterprise-theme .hover-effect:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--enterprise-shadow);
+}
+
+.candidate-theme .hover-effect {
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.candidate-theme .hover-effect:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--candidate-shadow);
+}
+
+/* 响应式适配 */
+@media (max-width: 768px) {
+  .enterprise-theme .nav-link,
+  .candidate-theme .nav-link {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+  
+  .enterprise-theme .btn-primary,
+  .candidate-theme .btn-primary {
+    padding: 10px 20px;
+    font-size: 0.9rem;
+  }
+  
+  .candidate-theme .welcome-section {
+    padding: 20px;
+    border-radius: 16px;
+  }
+  
+  .candidate-theme .card,
+  .candidate-theme .feature-card,
+  .candidate-theme .interview-card {
+    border-radius: 12px;
+  }
+}
+
+/* 深色模式适配 */
+@media (prefers-color-scheme: dark) {
+  .enterprise-theme {
+    --enterprise-bg-primary: #1f1f1f;
+    --enterprise-bg-secondary: #2a2a2a;
+    --enterprise-text-primary: #ffffff;
+    --enterprise-text-secondary: #cccccc;
+    --enterprise-border: #404040;
+  }
+  
+  .candidate-theme {
+    --candidate-bg-primary: #1a1a1a;
+    --candidate-bg-secondary: #252525;
+    --candidate-text-primary: #ffffff;
+    --candidate-text-secondary: #cccccc;
+    --candidate-border: #383838;
+  }
+}
+
+/* 无障碍支持 */
+.enterprise-theme .focus-visible,
+.candidate-theme .focus-visible {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+.enterprise-theme .sr-only,
+.candidate-theme .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .enterprise-theme,
+  .candidate-theme {
+    --border-color: #000000;
+    --text-primary: #000000;
+    --text-secondary: #333333;
+  }
+  
+  .enterprise-theme .btn-primary,
+  .candidate-theme .btn-primary {
+    border: 2px solid #000000;
+  }
+}

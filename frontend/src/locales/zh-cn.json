@@ -1,0 +1,106 @@
+{
+  "app": {
+    "title": "iFlytek智能面试评估系统",
+    "description": "基于讯飞星火大模型的多模态面试评估平台"
+  },
+  "interview": {
+    "start": "开始面试",
+    "end": "结束面试",
+    "status": {
+      "inProgress": "面试进行中",
+      "completed": "面试已完成",
+      "pending": "等待开始",
+      "cancelled": "已取消"
+    },
+    "questions": {
+      "technical": "技术问题",
+      "behavioral": "行为问题",
+      "scenario": "场景问题"
+    }
+  },
+  "ai": {
+    "sparkModel": "讯飞星火大模型",
+    "processing": "AI分析中...",
+    "completed": "AI分析完成",
+    "error": "AI分析失败"
+  },
+  "capabilities": {
+    "technical": "技术能力",
+    "problem_solving": "问题解决能力",
+    "communication": "沟通表达能力",
+    "learning": "学习能力",
+    "teamwork": "团队协作能力",
+    "innovation": "创新能力"
+  },
+  "domains": {
+    "ai": "人工智能",
+    "bigdata": "大数据",
+    "iot": "物联网",
+    "frontend": "前端开发",
+    "backend": "后端开发",
+    "mobile": "移动开发"
+  },
+  "report": {
+    "title": "面试评估报告",
+    "summary": "综合评估",
+    "details": "详细分析",
+    "recommendations": "改进建议",
+    "score": "评分",
+    "strengths": "优势",
+    "weaknesses": "待改进"
+  },
+  "error": {
+    "network": "网络连接错误",
+    "server": "服务器错误",
+    "validation": "数据验证错误",
+    "unauthorized": "未授权访问",
+    "notFound": "资源未找到"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "view": "查看",
+    "loading": "加载中...",
+    "success": "操作成功",
+    "failed": "操作失败"
+  },
+  "navigation": {
+    "home": "首页",
+    "demo": "演示",
+    "interview": "面试",
+    "report": "报告",
+    "settings": "设置"
+  },
+  "demo": {
+    "title": "系统演示",
+    "description": "体验iFlytek智能面试评估系统的强大功能",
+    "features": "功能特色",
+    "start": "开始演示",
+    "video": {
+      "play": "播放",
+      "pause": "暂停",
+      "fullscreen": "全屏",
+      "volume": "音量",
+      "speed": "播放速度",
+      "quality": "画质"
+    }
+  },
+  "assessment": {
+    "multimodal": "多模态分析",
+    "voice": "语音分析",
+    "video": "视频分析",
+    "text": "文本分析",
+    "realtime": "实时评估",
+    "comprehensive": "综合评估"
+  },
+  "system": {
+    "status": "系统状态",
+    "health": "健康检查",
+    "performance": "性能监控",
+    "localization": "本地化状态",
+    "monitoring": "系统监控"
+  }
+}

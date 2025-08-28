@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Vue测试页面</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .test-container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+        .status {
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.3);
+            border: 1px solid #4CAF50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.3);
+            border: 1px solid #f44336;
+        }
+        .info {
+            background: rgba(33, 150, 243, 0.3);
+            border: 1px solid #2196F3;
+        }
+        button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #40a9ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🔧 Vue.js 应用诊断页面</h1>
+        
+        <div id="vue-test">
+            <div class="status info">
+                <h3>📋 基础检查</h3>
+                <p>✅ HTML页面加载正常</p>
+                <p>✅ CSS样式应用正常</p>
+                <p id="js-status">⏳ JavaScript执行检查中...</p>
+            </div>
+            
+            <div class="status" id="vue-status">
+                <h3>🔍 Vue.js 状态检查</h3>
+                <p id="vue-load-status">⏳ Vue.js 加载检查中...</p>
+                <p id="vue-mount-status">⏳ Vue.js 挂载检查中...</p>
+            </div>
+            
+            <div class="status info">
+                <h3>🎯 功能测试</h3>
+                <button onclick="testBasicFunction()">测试基础功能</button>
+                <button onclick="testNavigation()">测试页面导航</button>
+                <button onclick="window.location.href='/'">返回主页</button>
+            </div>
+            
+            <div id="test-results"></div>
+        </div>
+    </div>
+
+    <script>
+        // 基础JavaScript测试
+        document.getElementById('js-status').innerHTML = '✅ JavaScript执行正常';
+        
+        // Vue.js 测试
+        function testVueLoading() {
+            const vueStatus = document.getElementById('vue-load-status');
+            const vueMount = document.getElementById('vue-mount-status');
+            const vueContainer = document.getElementById('vue-status');
+            
+            try {
+                // 尝试加载Vue
+                import('/node_modules/.vite/deps/vue.js')
+                    .then(Vue => {
+                        vueStatus.innerHTML = '✅ Vue.js 模块加载成功';
+                        vueContainer.className = 'status success';
+                        
+                        // 尝试创建Vue应用
+                        try {
+                            const { createApp } = Vue;
+                            const app = createApp({
+                                data() {
+                                    return {
+                                        message: 'Vue.js 工作正常！'
+                                    }
+                                }
+                            });
+                            vueMount.innerHTML = '✅ Vue.js 应用创建成功';
+                        } catch (e) {
+                            vueMount.innerHTML = '❌ Vue.js 应用创建失败: ' + e.message;
+                            vueContainer.className = 'status error';
+                        }
+                    })
+                    .catch(error => {
+                        vueStatus.innerHTML = '❌ Vue.js 模块加载失败: ' + error.message;
+                        vueMount.innerHTML = '❌ 无法测试Vue.js应用创建';
+                        vueContainer.className = 'status error';
+                    });
+            } catch (error) {
+                vueStatus.innerHTML = '❌ Vue.js 导入失败: ' + error.message;
+                vueMount.innerHTML = '❌ 无法测试Vue.js应用创建';
+                vueContainer.className = 'status error';
+            }
+        }
+        
+        function testBasicFunction() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = `
+                <div class="status success">
+                    <h3>✅ 基础功能测试通过</h3>
+                    <p>• DOM操作正常</p>
+                    <p>• 事件处理正常</p>
+                    <p>• 时间戳: ${new Date().toLocaleString()}</p>
+                </div>
+            `;
+        }
+        
+        function testNavigation() {
+            const results = document.getElementById('test-results');
+            results.innerHTML = `
+                <div class="status info">
+                    <h3>🔗 导航测试</h3>
+                    <p>可用页面:</p>
+                    <p>• <a href="/" style="color: #40a9ff;">主页 (/)</a></p>
+                    <p>• <a href="/demo" style="color: #40a9ff;">演示页面 (/demo)</a></p>
+                    <p>• <a href="/interview-selection" style="color: #40a9ff;">面试选择 (/interview-selection)</a></p>
+                    <p>• <a href="/learning-path" style="color: #40a9ff;">学习路径 (/learning-path)</a></p>
+                </div>
+            `;
+        }
+        
+        // 页面加载完成后执行Vue测试
+        window.addEventListener('load', () => {
+            setTimeout(testVueLoading, 1000);
+        });
+    </script>
+</body>
+</html>

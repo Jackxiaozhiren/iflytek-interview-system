@@ -1,0 +1,46 @@
+# Render.com 部署配置
+# 完全免费，无需信用卡
+
+services:
+  # 后端服务
+  - type: web
+    name: iflytek-interview-backend
+    env: python
+    buildCommand: |
+      cd backend
+      pip install -r requirements.txt
+    startCommand: |
+      cd backend
+      python -m uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PYTHONPATH
+        value: /opt/render/project/src/backend
+      - key: DATABASE_URL
+        value: sqlite:///./data/interview_system.db
+      - key: IFLYTEK_APP_ID
+        sync: false
+      - key: IFLYTEK_API_KEY
+        sync: false
+      - key: IFLYTEK_API_SECRET
+        sync: false
+      - key: IFLYTEK_SPARK_URL
+        value: wss://spark-api.xf-yun.com/v3.5/chat
+      - key: ENVIRONMENT
+        value: production
+    
+  # 前端服务
+  - type: web
+    name: iflytek-interview-frontend
+    env: static
+    buildCommand: |
+      cd frontend
+      npm install
+      npm run build
+    staticPublishPath: ./frontend/dist
+    routes:
+      - type: rewrite
+        source: /api/*
+        destination: https://iflytek-interview-backend.onrender.com/api/*
+      - type: rewrite
+        source: /*
+        destination: /index.html

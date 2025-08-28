@@ -1,0 +1,522 @@
+/* 全面紫色背景文字修复样式 - iFlytek 多模态面试评估系统 */
+
+/* 紫色背景通用文字修复 */
+.purple-bg,
+.purple-background,
+[style*="background: purple"],
+[style*="background-color: purple"],
+[style*="background: #800080"],
+[style*="background-color: #800080"],
+[style*="background: #663399"],
+[style*="background-color: #663399"],
+[style*="background: #6a4c93"],
+[style*="background-color: #6a4c93"],
+[style*="background: #764ba2"],
+[style*="background-color: #764ba2"],
+[style*="background: #667eea"],
+[style*="background-color: #667eea"],
+[style*="background: #4c51bf"],
+[style*="background-color: #4c51bf"],
+[style*="background: #7c3aed"],
+[style*="background-color: #7c3aed"],
+[style*="background: #6d28d9"],
+[style*="background-color: #6d28d9"] {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 紫色渐变背景文字修复 */
+[style*="background: linear-gradient"][style*="purple"],
+[style*="background: linear-gradient"][style*="#800080"],
+[style*="background: linear-gradient"][style*="#663399"],
+[style*="background: linear-gradient"][style*="#6a4c93"],
+[style*="background: linear-gradient"][style*="#764ba2"],
+[style*="background: linear-gradient"][style*="#667eea"],
+[style*="background: linear-gradient"][style*="#4c51bf"],
+[style*="background: linear-gradient"][style*="#7c3aed"],
+[style*="background: linear-gradient"][style*="#6d28d9"] {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* iFlytek 品牌紫色系背景文字修复 */
+.iflytek-purple-bg,
+.iflytek-secondary-bg,
+.cloud-theme-bg,
+.cloud-module-bg {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 技术领域紫色主题文字修复 */
+.cloud-theme,
+.cloud-module,
+.purple-theme,
+.secondary-theme {
+  color: #ffffff !important;
+}
+
+.cloud-theme *,
+.cloud-module *,
+.purple-theme *,
+.secondary-theme * {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 紫色卡片和面板文字修复 */
+.card.purple-bg,
+.panel.purple-bg,
+.widget.purple-bg,
+.card.cloud-theme,
+.panel.cloud-theme,
+.widget.cloud-theme {
+  color: #ffffff !important;
+}
+
+.card.purple-bg .card-title,
+.card.purple-bg .card-header,
+.card.purple-bg .card-body,
+.card.purple-bg .card-footer,
+.panel.purple-bg .panel-title,
+.panel.purple-bg .panel-header,
+.panel.purple-bg .panel-body,
+.panel.purple-bg .panel-footer,
+.widget.purple-bg .widget-title,
+.widget.purple-bg .widget-header,
+.widget.purple-bg .widget-body,
+.widget.purple-bg .widget-footer {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 紫色按钮文字修复 */
+.btn.purple-bg,
+.button.purple-bg,
+button.purple-bg,
+.btn.cloud-theme,
+.button.cloud-theme,
+button.cloud-theme,
+.btn-purple,
+.button-purple {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.btn.purple-bg:hover,
+.button.purple-bg:hover,
+button.purple-bg:hover,
+.btn.cloud-theme:hover,
+.button.cloud-theme:hover,
+button.cloud-theme:hover {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+  border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* 紫色导航文字修复 */
+.navbar.purple-bg,
+.nav.purple-bg,
+.navigation.purple-bg,
+.navbar.cloud-theme,
+.nav.cloud-theme,
+.navigation.cloud-theme {
+  color: #ffffff !important;
+}
+
+.navbar.purple-bg .nav-link,
+.navbar.purple-bg .nav-item,
+.nav.purple-bg .nav-link,
+.nav.purple-bg .nav-item,
+.navigation.purple-bg .menu-item {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.navbar.purple-bg .nav-link:hover,
+.navbar.purple-bg .nav-item:hover,
+.navbar.purple-bg .nav-link.active,
+.navbar.purple-bg .nav-item.active,
+.nav.purple-bg .nav-link:hover,
+.nav.purple-bg .nav-item:hover,
+.nav.purple-bg .nav-link.active,
+.nav.purple-bg .nav-item.active {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 紫色表格文字修复 */
+.table.purple-bg,
+table.purple-bg,
+.table.cloud-theme,
+table.cloud-theme {
+  color: #ffffff !important;
+}
+
+.table.purple-bg th,
+.table.purple-bg td,
+table.purple-bg th,
+table.purple-bg td {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.2) !important;
+}
+
+.table.purple-bg thead th,
+table.purple-bg thead th {
+  background-color: rgba(0, 0, 0, 0.2) !important;
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 紫色表单文字修复 */
+.form.purple-bg,
+.form-group.purple-bg,
+.form.cloud-theme,
+.form-group.cloud-theme {
+  color: #ffffff !important;
+}
+
+.form.purple-bg .form-label,
+.form.purple-bg label,
+.form-group.purple-bg .form-label,
+.form-group.purple-bg label {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+  font-weight: 600 !important;
+}
+
+.form.purple-bg .form-control,
+.form.purple-bg input,
+.form.purple-bg textarea,
+.form.purple-bg select,
+.form-group.purple-bg .form-control,
+.form-group.purple-bg input,
+.form-group.purple-bg textarea,
+.form-group.purple-bg select {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #333333 !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.form.purple-bg .form-control::placeholder,
+.form.purple-bg input::placeholder,
+.form.purple-bg textarea::placeholder,
+.form-group.purple-bg .form-control::placeholder,
+.form-group.purple-bg input::placeholder,
+.form-group.purple-bg textarea::placeholder {
+  color: #666666 !important;
+  opacity: 1;
+}
+
+/* 紫色模态框文字修复 */
+.modal.purple-bg,
+.dialog.purple-bg,
+.popup.purple-bg,
+.modal.cloud-theme,
+.dialog.cloud-theme,
+.popup.cloud-theme {
+  color: #ffffff !important;
+}
+
+.modal.purple-bg .modal-header,
+.modal.purple-bg .modal-title,
+.modal.purple-bg .modal-body,
+.modal.purple-bg .modal-footer,
+.dialog.purple-bg .dialog-header,
+.dialog.purple-bg .dialog-title,
+.dialog.purple-bg .dialog-body,
+.dialog.purple-bg .dialog-footer {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 紫色通知/警告文字修复 */
+.alert.purple-bg,
+.notification.purple-bg,
+.message.purple-bg,
+.alert.cloud-theme,
+.notification.cloud-theme,
+.message.cloud-theme {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 紫色标签/徽章文字修复 */
+.badge.purple-bg,
+.tag.purple-bg,
+.chip.purple-bg,
+.badge.cloud-theme,
+.tag.cloud-theme,
+.chip.cloud-theme,
+.badge-purple,
+.tag-purple,
+.chip-purple {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+/* 紫色进度条文字修复 */
+.progress.purple-bg,
+.progress-bar.purple-bg,
+.progress.cloud-theme,
+.progress-bar.cloud-theme {
+  color: #ffffff !important;
+}
+
+.progress.purple-bg .progress-fill,
+.progress-bar.purple-bg .progress-bar-fill {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 紫色下拉菜单文字修复 */
+.dropdown.purple-bg,
+.select-dropdown.purple-bg,
+.menu-dropdown.purple-bg,
+.dropdown.cloud-theme,
+.select-dropdown.cloud-theme,
+.menu-dropdown.cloud-theme {
+  color: #ffffff !important;
+}
+
+.dropdown.purple-bg .dropdown-item,
+.dropdown.purple-bg .select-option,
+.dropdown.purple-bg .menu-option {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.dropdown.purple-bg .dropdown-item:hover,
+.dropdown.purple-bg .select-option:hover,
+.dropdown.purple-bg .menu-option:hover {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 紫色分页文字修复 */
+.pagination.purple-bg,
+.pagination.cloud-theme {
+  color: #ffffff !important;
+}
+
+.pagination.purple-bg .pagination-item,
+.pagination.purple-bg .page-link {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+}
+
+.pagination.purple-bg .pagination-item:hover,
+.pagination.purple-bg .page-link:hover,
+.pagination.purple-bg .pagination-item.active,
+.pagination.purple-bg .page-link.active {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 紫色标签页文字修复 */
+.tabs.purple-bg,
+.tab-nav.purple-bg,
+.tabs.cloud-theme,
+.tab-nav.cloud-theme {
+  color: #ffffff !important;
+}
+
+.tabs.purple-bg .tab-item,
+.tabs.purple-bg .tab-link,
+.tab-nav.purple-bg .tab-item,
+.tab-nav.purple-bg .tab-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.tabs.purple-bg .tab-item:hover,
+.tabs.purple-bg .tab-link:hover,
+.tabs.purple-bg .tab-item.active,
+.tabs.purple-bg .tab-link.active {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 紫色面包屑导航文字修复 */
+.breadcrumb.purple-bg,
+.breadcrumb.cloud-theme {
+  color: #ffffff !important;
+}
+
+.breadcrumb.purple-bg .breadcrumb-item,
+.breadcrumb.purple-bg .breadcrumb-item a {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.breadcrumb.purple-bg .breadcrumb-item a:hover {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+.breadcrumb.purple-bg .breadcrumb-item.active {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 紫色工具提示文字修复 */
+.tooltip.purple-bg,
+.popover.purple-bg,
+.tooltip.cloud-theme,
+.popover.cloud-theme {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+/* 特殊元素紫色背景文字修复 */
+.hero.purple-bg,
+.banner.purple-bg,
+.header.purple-bg,
+.footer.purple-bg,
+.sidebar.purple-bg,
+.hero.cloud-theme,
+.banner.cloud-theme,
+.header.cloud-theme,
+.footer.cloud-theme,
+.sidebar.cloud-theme {
+  color: #ffffff !important;
+}
+
+.hero.purple-bg *,
+.banner.purple-bg *,
+.header.purple-bg *,
+.footer.purple-bg *,
+.sidebar.purple-bg *,
+.hero.cloud-theme *,
+.banner.cloud-theme *,
+.header.cloud-theme *,
+.footer.cloud-theme *,
+.sidebar.cloud-theme * {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 紫色背景链接修复 */
+.purple-bg a,
+.cloud-theme a,
+.purple-background a {
+  color: #ffffff !important;
+  text-decoration: underline;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5) !important;
+}
+
+.purple-bg a:hover,
+.cloud-theme a:hover,
+.purple-background a:hover {
+  color: #f0f0f0 !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+}
+
+/* 紫色背景图标修复 */
+.purple-bg .icon,
+.cloud-theme .icon,
+.purple-background .icon {
+  color: #ffffff !important;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* 紫色背景输入框占位符修复 */
+.purple-bg input::placeholder,
+.purple-bg textarea::placeholder,
+.cloud-theme input::placeholder,
+.cloud-theme textarea::placeholder {
+  color: rgba(255, 255, 255, 0.7) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+/* 紫色背景选择框修复 */
+.purple-bg select,
+.cloud-theme select {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: #333333 !important;
+  border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.purple-bg select option,
+.cloud-theme select option {
+  background-color: #ffffff !important;
+  color: #333333 !important;
+}
+
+/* 紫色背景复选框和单选框修复 */
+.purple-bg input[type="checkbox"],
+.purple-bg input[type="radio"],
+.cloud-theme input[type="checkbox"],
+.cloud-theme input[type="radio"] {
+  accent-color: #ffffff !important;
+  filter: drop-shadow(1px 1px 2px rgba(0, 0, 0, 0.5));
+}
+
+/* 紫色背景滚动条修复 */
+.purple-bg::-webkit-scrollbar-thumb,
+.cloud-theme::-webkit-scrollbar-thumb {
+  background-color: rgba(255, 255, 255, 0.3) !important;
+  border-radius: 4px;
+}
+
+.purple-bg::-webkit-scrollbar-thumb:hover,
+.cloud-theme::-webkit-scrollbar-thumb:hover {
+  background-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+.purple-bg::-webkit-scrollbar-track,
+.cloud-theme::-webkit-scrollbar-track {
+  background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+/* 强制应用样式 - 最高优先级 */
+[class*="purple"][class*="bg"] *,
+[class*="cloud"][class*="theme"] *,
+[style*="background"][style*="purple"] *,
+[style*="background"][style*="#7c3aed"] *,
+[style*="background"][style*="#6d28d9"] *,
+[style*="background"][style*="#8b5cf6"] * {
+  color: #ffffff !important;
+}
+
+/* 确保文本可读性的最终保障 */
+.text-readability-fix {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8) !important;
+  font-weight: 500 !important;
+}
+
+/* 高对比度模式下的紫色背景处理 */
+@media (prefers-contrast: high) {
+  .purple-bg,
+  .cloud-theme,
+  .purple-background,
+  [style*="background: purple"],
+  [style*="background-color: purple"] {
+    background-color: #4a0080 !important;
+    color: #ffffff !important;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9) !important;
+    border: 2px solid #ffffff !important;
+  }
+}
+
+/* 打印模式下的紫色背景处理 */
+@media print {
+  .purple-bg,
+  .cloud-theme,
+  .purple-background {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    text-shadow: none !important;
+    border: 2px solid #000000 !important;
+  }
+}

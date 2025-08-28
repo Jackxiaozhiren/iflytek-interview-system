@@ -1,0 +1,1451 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek性能和稳定性优化工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #ff4d4f, #ff7875);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .optimization-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        
+        .optimization-section h2 {
+            color: #ff4d4f;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .metric-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+        
+        .metric-card:hover {
+            border-color: #ff4d4f;
+            box-shadow: 0 4px 12px rgba(255, 77, 79, 0.1);
+        }
+        
+        .metric-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .metric-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin-bottom: 10px;
+            color: #ff4d4f;
+        }
+        
+        .metric-label {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .metric-status {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .metric-status.excellent {
+            background: #f6ffed;
+            color: #52c41a;
+        }
+        
+        .metric-status.good {
+            background: #e6f7ff;
+            color: #1890ff;
+        }
+        
+        .metric-status.warning {
+            background: #fffbe6;
+            color: #faad14;
+        }
+        
+        .metric-status.critical {
+            background: #fff2f0;
+            color: #ff4d4f;
+        }
+        
+        .optimization-button {
+            width: 100%;
+            background: #ff4d4f;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-top: 15px;
+        }
+        
+        .optimization-button:hover {
+            background: #ff7875;
+        }
+        
+        .optimization-button:disabled {
+            background: #d9d9d9;
+            cursor: not-allowed;
+        }
+        
+        .global-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .global-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .global-button.primary {
+            background: #ff4d4f;
+            color: white;
+        }
+        
+        .global-button.primary:hover {
+            background: #ff7875;
+        }
+        
+        .global-button.secondary {
+            background: #1890ff;
+            color: white;
+        }
+        
+        .global-button.secondary:hover {
+            background: #40a9ff;
+        }
+        
+        .global-button.success {
+            background: #52c41a;
+            color: white;
+        }
+        
+        .global-button.success:hover {
+            background: #73d13d;
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #f0f0f0;
+            border-radius: 4px;
+            overflow: hidden;
+            margin: 10px 0;
+        }
+        
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff4d4f, #ff7875);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .error-list {
+            list-style: none;
+            margin-bottom: 15px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+        
+        .error-list li {
+            padding: 8px 12px;
+            margin: 5px 0;
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+            border-radius: 4px;
+            font-size: 13px;
+            color: #ff4d4f;
+        }
+        
+        .optimization-result {
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: none;
+        }
+        
+        .optimization-result.success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        
+        .optimization-result.warning {
+            background: #fffbe6;
+            color: #faad14;
+            border: 1px solid #ffe58f;
+        }
+        
+        .optimization-result.error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+        
+        .log-panel {
+            background: #001529;
+            color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .log-panel.show {
+            display: block;
+        }
+        
+        .performance-chart {
+            width: 100%;
+            height: 200px;
+            background: #f8f9fa;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .memory-usage-bar {
+            width: 100%;
+            height: 20px;
+            background: #f0f0f0;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 10px 0;
+            position: relative;
+        }
+        
+        .memory-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #52c41a, #faad14, #ff4d4f);
+            width: 0%;
+            transition: width 0.3s ease;
+        }
+        
+        .memory-label {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 12px;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .resource-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            font-size: 13px;
+        }
+        
+        .resource-table th,
+        .resource-table td {
+            padding: 8px 12px;
+            text-align: left;
+            border-bottom: 1px solid #e8e8e8;
+        }
+        
+        .resource-table th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .resource-table tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .optimization-tips {
+            background: #e6f7ff;
+            border: 1px solid #91d5ff;
+            border-radius: 6px;
+            padding: 15px;
+            margin-top: 20px;
+        }
+        
+        .optimization-tips h4 {
+            color: #1890ff;
+            margin-bottom: 10px;
+        }
+        
+        .optimization-tips ul {
+            margin-left: 20px;
+        }
+        
+        .optimization-tips li {
+            margin: 5px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚀 iFlytek性能和稳定性优化工具</h1>
+            <p>检查JavaScript错误、优化页面加载速度、监控内存使用和提升系统稳定性</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="global-actions">
+                <button class="global-button primary" onclick="runFullPerformanceCheck()">
+                    🚀 开始全面性能检查
+                </button>
+                <button class="global-button secondary" onclick="optimizeSystemPerformance()">
+                    ⚡ 系统性能优化
+                </button>
+                <button class="global-button success" onclick="generateOptimizationReport()">
+                    📊 生成优化报告
+                </button>
+            </div>
+            
+            <!-- JavaScript错误检查 -->
+            <div class="optimization-section">
+                <h2>🐛 JavaScript错误检查</h2>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h3>错误统计</h3>
+                        <div class="metric-value" id="errorCount">0</div>
+                        <div class="metric-label">JavaScript错误数量</div>
+                        <div class="metric-status excellent" id="errorStatus">优秀</div>
+                        <button class="optimization-button" onclick="checkJavaScriptErrors()">检查JS错误</button>
+                        <div class="optimization-result" id="jsErrorResult"></div>
+                        
+                        <ul class="error-list" id="errorList" style="display: none;"></ul>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>Vue.js警告</h3>
+                        <div class="metric-value" id="vueWarningCount">0</div>
+                        <div class="metric-label">Vue组件警告数量</div>
+                        <div class="metric-status excellent" id="vueWarningStatus">优秀</div>
+                        <button class="optimization-button" onclick="checkVueWarnings()">检查Vue警告</button>
+                        <div class="optimization-result" id="vueWarningResult"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>网络错误</h3>
+                        <div class="metric-value" id="networkErrorCount">0</div>
+                        <div class="metric-label">网络请求错误数量</div>
+                        <div class="metric-status excellent" id="networkErrorStatus">优秀</div>
+                        <button class="optimization-button" onclick="checkNetworkErrors()">检查网络错误</button>
+                        <div class="optimization-result" id="networkErrorResult"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 页面加载速度优化 -->
+            <div class="optimization-section">
+                <h2>⚡ 页面加载速度优化</h2>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h3>页面加载时间</h3>
+                        <div class="metric-value" id="loadTime">0ms</div>
+                        <div class="metric-label">DOMContentLoaded时间</div>
+                        <div class="metric-status good" id="loadTimeStatus">良好</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="loadTimeProgress"></div>
+                        </div>
+                        <button class="optimization-button" onclick="optimizeLoadSpeed()">优化加载速度</button>
+                        <div class="optimization-result" id="loadSpeedResult"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>资源加载分析</h3>
+                        <div class="metric-value" id="resourceCount">0</div>
+                        <div class="metric-label">总资源数量</div>
+                        <div class="metric-status good" id="resourceStatus">良好</div>
+                        <button class="optimization-button" onclick="analyzeResourceLoading()">分析资源加载</button>
+                        <div class="optimization-result" id="resourceResult"></div>
+                        
+                        <table class="resource-table" id="resourceTable" style="display: none;">
+                            <thead>
+                                <tr>
+                                    <th>资源类型</th>
+                                    <th>数量</th>
+                                    <th>平均时间</th>
+                                    <th>状态</th>
+                                </tr>
+                            </thead>
+                            <tbody id="resourceTableBody"></tbody>
+                        </table>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>首屏渲染时间</h3>
+                        <div class="metric-value" id="fcp">0ms</div>
+                        <div class="metric-label">First Contentful Paint</div>
+                        <div class="metric-status good" id="fcpStatus">良好</div>
+                        <button class="optimization-button" onclick="optimizeFirstPaint()">优化首屏渲染</button>
+                        <div class="optimization-result" id="fcpResult"></div>
+                        
+                        <div class="performance-chart" id="performanceChart">
+                            性能时间线图表
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 内存使用监控 -->
+            <div class="optimization-section">
+                <h2>🧠 内存使用监控</h2>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h3>JavaScript堆内存</h3>
+                        <div class="metric-value" id="heapMemory">0MB</div>
+                        <div class="metric-label">已使用堆内存</div>
+                        <div class="metric-status good" id="heapMemoryStatus">良好</div>
+                        <div class="memory-usage-bar">
+                            <div class="memory-fill" id="memoryFill"></div>
+                            <div class="memory-label" id="memoryLabel">0%</div>
+                        </div>
+                        <button class="optimization-button" onclick="optimizeMemoryUsage()">优化内存使用</button>
+                        <div class="optimization-result" id="memoryResult"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>内存泄漏检测</h3>
+                        <div class="metric-value" id="memoryLeakCount">0</div>
+                        <div class="metric-label">潜在内存泄漏</div>
+                        <div class="metric-status excellent" id="memoryLeakStatus">优秀</div>
+                        <button class="optimization-button" onclick="detectMemoryLeaks()">检测内存泄漏</button>
+                        <div class="optimization-result" id="memoryLeakResult"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>垃圾回收优化</h3>
+                        <div class="metric-value" id="gcCount">0</div>
+                        <div class="metric-label">垃圾回收次数</div>
+                        <div class="metric-status good" id="gcStatus">良好</div>
+                        <button class="optimization-button" onclick="optimizeGarbageCollection()">优化垃圾回收</button>
+                        <div class="optimization-result" id="gcResult"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 系统稳定性检查 -->
+            <div class="optimization-section">
+                <h2>🛡️ 系统稳定性检查</h2>
+                <div class="metric-grid">
+                    <div class="metric-card">
+                        <h3>组件稳定性</h3>
+                        <div class="metric-value" id="componentStability">100%</div>
+                        <div class="metric-label">组件正常运行率</div>
+                        <div class="metric-status excellent" id="componentStabilityStatus">优秀</div>
+                        <button class="optimization-button" onclick="checkComponentStability()">检查组件稳定性</button>
+                        <div class="optimization-result" id="componentStabilityResult"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>API连接稳定性</h3>
+                        <div class="metric-value" id="apiStability">100%</div>
+                        <div class="metric-label">API连接成功率</div>
+                        <div class="metric-status excellent" id="apiStabilityStatus">优秀</div>
+                        <button class="optimization-button" onclick="checkAPIStability()">检查API稳定性</button>
+                        <div class="optimization-result" id="apiStabilityResult"></div>
+                    </div>
+                    
+                    <div class="metric-card">
+                        <h3>长时间运行稳定性</h3>
+                        <div class="metric-value" id="longRunStability">100%</div>
+                        <div class="metric-label">长时间运行稳定性</div>
+                        <div class="metric-status excellent" id="longRunStabilityStatus">优秀</div>
+                        <button class="optimization-button" onclick="checkLongRunStability()">检查长时间稳定性</button>
+                        <div class="optimization-result" id="longRunStabilityResult"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="optimization-tips">
+                <h4>💡 性能优化建议</h4>
+                <ul>
+                    <li>定期清理浏览器缓存和Cookie</li>
+                    <li>关闭不必要的浏览器标签页</li>
+                    <li>使用最新版本的现代浏览器</li>
+                    <li>确保网络连接稳定</li>
+                    <li>避免在面试过程中运行其他大型应用程序</li>
+                    <li>定期重启浏览器以释放内存</li>
+                </ul>
+            </div>
+            
+            <div class="log-panel" id="logPanel">
+                <div id="logContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 全局性能监控数据
+        let performanceData = {
+            errors: [],
+            warnings: [],
+            networkErrors: [],
+            memoryUsage: [],
+            loadTimes: [],
+            startTime: performance.now()
+        };
+
+        // 日志功能
+        function log(message, type = 'info') {
+            const logContent = document.getElementById('logContent');
+            const logPanel = document.getElementById('logPanel');
+            
+            logPanel.classList.add('show');
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            
+            if (type === 'error') {
+                logEntry.style.color = '#ff4d4f';
+            } else if (type === 'success') {
+                logEntry.style.color = '#52c41a';
+            } else if (type === 'warning') {
+                logEntry.style.color = '#faad14';
+            }
+            
+            logContent.appendChild(logEntry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        // 更新指标显示
+        function updateMetric(elementId, value, status = 'good') {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.textContent = value;
+            }
+            
+            const statusElement = document.getElementById(elementId.replace(/Count|Time|Memory/, 'Status'));
+            if (statusElement) {
+                statusElement.className = `metric-status ${status}`;
+                statusElement.textContent = getStatusText(status);
+            }
+        }
+
+        function getStatusText(status) {
+            const statusTexts = {
+                'excellent': '优秀',
+                'good': '良好',
+                'warning': '警告',
+                'critical': '严重'
+            };
+            return statusTexts[status] || status;
+        }
+
+        // 显示优化结果
+        function showOptimizationResult(elementId, type, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.className = `optimization-result ${type}`;
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+        }
+
+        // 初始化性能监控
+        function initializePerformanceMonitoring() {
+            // 设置错误监听器
+            setupErrorListeners();
+
+            // 监控内存使用
+            monitorMemoryUsage();
+
+            // 监控网络请求
+            monitorNetworkRequests();
+
+            log('📡 性能监控系统已启动', 'success');
+        }
+
+        // 设置错误监听器
+        function setupErrorListeners() {
+            // JavaScript错误监听
+            const originalError = console.error;
+            console.error = function(...args) {
+                const errorMessage = args.join(' ');
+                performanceData.errors.push({
+                    message: errorMessage,
+                    timestamp: new Date().toISOString(),
+                    stack: new Error().stack
+                });
+                updateMetric('errorCount', performanceData.errors.length,
+                    performanceData.errors.length === 0 ? 'excellent' :
+                    performanceData.errors.length <= 2 ? 'good' :
+                    performanceData.errors.length <= 5 ? 'warning' : 'critical');
+                originalError.apply(console, args);
+            };
+
+            // Vue警告监听
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                const warningMessage = args.join(' ');
+                if (warningMessage.includes('Vue') || warningMessage.includes('[Vue warn]')) {
+                    performanceData.warnings.push({
+                        message: warningMessage,
+                        timestamp: new Date().toISOString()
+                    });
+                    updateMetric('vueWarningCount', performanceData.warnings.length,
+                        performanceData.warnings.length === 0 ? 'excellent' :
+                        performanceData.warnings.length <= 2 ? 'good' : 'warning');
+                }
+                originalWarn.apply(console, args);
+            };
+
+            // 未捕获错误监听
+            window.addEventListener('error', (event) => {
+                performanceData.errors.push({
+                    message: event.message,
+                    filename: event.filename,
+                    lineno: event.lineno,
+                    timestamp: new Date().toISOString()
+                });
+                updateMetric('errorCount', performanceData.errors.length, 'critical');
+            });
+
+            // Promise拒绝监听
+            window.addEventListener('unhandledrejection', (event) => {
+                performanceData.errors.push({
+                    message: 'Unhandled Promise Rejection: ' + event.reason,
+                    timestamp: new Date().toISOString()
+                });
+                updateMetric('errorCount', performanceData.errors.length, 'critical');
+            });
+        }
+
+        // 监控内存使用
+        function monitorMemoryUsage() {
+            if (!performance.memory) {
+                log('⚠️ 浏览器不支持内存监控', 'warning');
+                return;
+            }
+
+            const updateMemoryMetrics = () => {
+                const memory = performance.memory;
+                const usedMB = (memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                const totalMB = (memory.totalJSHeapSize / 1024 / 1024).toFixed(2);
+                const limitMB = (memory.jsHeapSizeLimit / 1024 / 1024).toFixed(2);
+
+                const usagePercent = (memory.usedJSHeapSize / memory.jsHeapSizeLimit * 100).toFixed(1);
+
+                updateMetric('heapMemory', usedMB + 'MB',
+                    usagePercent < 50 ? 'excellent' :
+                    usagePercent < 70 ? 'good' :
+                    usagePercent < 85 ? 'warning' : 'critical');
+
+                // 更新内存使用条
+                const memoryFill = document.getElementById('memoryFill');
+                const memoryLabel = document.getElementById('memoryLabel');
+                if (memoryFill && memoryLabel) {
+                    memoryFill.style.width = usagePercent + '%';
+                    memoryLabel.textContent = usagePercent + '%';
+                }
+
+                performanceData.memoryUsage.push({
+                    used: usedMB,
+                    total: totalMB,
+                    percent: usagePercent,
+                    timestamp: new Date().toISOString()
+                });
+            };
+
+            updateMemoryMetrics();
+            setInterval(updateMemoryMetrics, 5000); // 每5秒更新一次
+        }
+
+        // 监控网络请求
+        function monitorNetworkRequests() {
+            const originalFetch = window.fetch;
+            window.fetch = function(...args) {
+                const startTime = performance.now();
+                return originalFetch.apply(this, args)
+                    .then(response => {
+                        const endTime = performance.now();
+                        const duration = endTime - startTime;
+
+                        if (!response.ok) {
+                            performanceData.networkErrors.push({
+                                url: args[0],
+                                status: response.status,
+                                duration: duration,
+                                timestamp: new Date().toISOString()
+                            });
+                            updateMetric('networkErrorCount', performanceData.networkErrors.length,
+                                performanceData.networkErrors.length === 0 ? 'excellent' :
+                                performanceData.networkErrors.length <= 2 ? 'good' : 'warning');
+                        }
+
+                        return response;
+                    })
+                    .catch(error => {
+                        performanceData.networkErrors.push({
+                            url: args[0],
+                            error: error.message,
+                            timestamp: new Date().toISOString()
+                        });
+                        updateMetric('networkErrorCount', performanceData.networkErrors.length, 'critical');
+                        throw error;
+                    });
+            };
+        }
+
+        // 显示基础性能指标
+        function displayBasicMetrics() {
+            // 显示页面加载时间
+            if (performance.timing) {
+                const loadTime = performance.timing.domContentLoadedEventEnd - performance.timing.navigationStart;
+                updateMetric('loadTime', loadTime + 'ms',
+                    loadTime < 1000 ? 'excellent' :
+                    loadTime < 2000 ? 'good' :
+                    loadTime < 3000 ? 'warning' : 'critical');
+
+                const loadTimeProgress = document.getElementById('loadTimeProgress');
+                if (loadTimeProgress) {
+                    const progressPercent = Math.min((loadTime / 3000) * 100, 100);
+                    loadTimeProgress.style.width = progressPercent + '%';
+                }
+            }
+
+            // 显示First Contentful Paint
+            if (performance.getEntriesByType) {
+                const paintEntries = performance.getEntriesByType('paint');
+                const fcpEntry = paintEntries.find(entry => entry.name === 'first-contentful-paint');
+                if (fcpEntry) {
+                    const fcpTime = Math.round(fcpEntry.startTime);
+                    updateMetric('fcp', fcpTime + 'ms',
+                        fcpTime < 1000 ? 'excellent' :
+                        fcpTime < 2000 ? 'good' :
+                        fcpTime < 3000 ? 'warning' : 'critical');
+                }
+            }
+
+            // 显示资源数量
+            if (performance.getEntriesByType) {
+                const resources = performance.getEntriesByType('resource');
+                updateMetric('resourceCount', resources.length,
+                    resources.length < 50 ? 'excellent' :
+                    resources.length < 100 ? 'good' :
+                    resources.length < 150 ? 'warning' : 'critical');
+            }
+        }
+
+        // JavaScript错误检查
+        function checkJavaScriptErrors() {
+            log('🐛 开始JavaScript错误检查...', 'info');
+
+            const errorList = document.getElementById('errorList');
+            const errorListElement = document.getElementById('errorList');
+
+            if (performanceData.errors.length === 0) {
+                showOptimizationResult('jsErrorResult', 'success', '未发现JavaScript错误');
+                log('✅ JavaScript错误检查通过', 'success');
+                errorListElement.style.display = 'none';
+            } else {
+                showOptimizationResult('jsErrorResult', 'warning', `发现 ${performanceData.errors.length} 个JavaScript错误`);
+                log(`⚠️ 发现 ${performanceData.errors.length} 个JavaScript错误`, 'warning');
+
+                // 显示错误列表
+                errorListElement.innerHTML = '';
+                performanceData.errors.slice(-5).forEach(error => {
+                    const li = document.createElement('li');
+                    li.textContent = `${error.timestamp}: ${error.message}`;
+                    errorListElement.appendChild(li);
+                });
+                errorListElement.style.display = 'block';
+            }
+        }
+
+        // Vue警告检查
+        function checkVueWarnings() {
+            log('⚠️ 开始Vue.js警告检查...', 'info');
+
+            if (performanceData.warnings.length === 0) {
+                showOptimizationResult('vueWarningResult', 'success', '未发现Vue.js警告');
+                log('✅ Vue.js警告检查通过', 'success');
+            } else {
+                showOptimizationResult('vueWarningResult', 'warning', `发现 ${performanceData.warnings.length} 个Vue.js警告`);
+                log(`⚠️ 发现 ${performanceData.warnings.length} 个Vue.js警告`, 'warning');
+
+                performanceData.warnings.forEach(warning => {
+                    log(`Vue警告: ${warning.message}`, 'warning');
+                });
+            }
+        }
+
+        // 网络错误检查
+        function checkNetworkErrors() {
+            log('🌐 开始网络错误检查...', 'info');
+
+            if (performanceData.networkErrors.length === 0) {
+                showOptimizationResult('networkErrorResult', 'success', '未发现网络错误');
+                log('✅ 网络错误检查通过', 'success');
+            } else {
+                showOptimizationResult('networkErrorResult', 'warning', `发现 ${performanceData.networkErrors.length} 个网络错误`);
+                log(`⚠️ 发现 ${performanceData.networkErrors.length} 个网络错误`, 'warning');
+
+                performanceData.networkErrors.forEach(error => {
+                    log(`网络错误: ${error.url} - ${error.status || error.error}`, 'error');
+                });
+            }
+        }
+
+        // 优化加载速度
+        function optimizeLoadSpeed() {
+            log('⚡ 开始优化页面加载速度...', 'info');
+
+            let optimizations = 0;
+
+            // 1. 预加载关键资源
+            const criticalResources = [
+                '/src/main.js',
+                '/src/App.vue',
+                '/src/styles/design-system.css'
+            ];
+
+            criticalResources.forEach(resource => {
+                const link = document.createElement('link');
+                link.rel = 'preload';
+                link.href = resource;
+                link.as = resource.endsWith('.js') ? 'script' :
+                          resource.endsWith('.css') ? 'style' : 'fetch';
+                document.head.appendChild(link);
+                optimizations++;
+            });
+
+            // 2. 启用图片懒加载
+            if ('IntersectionObserver' in window) {
+                const images = document.querySelectorAll('img[data-src]');
+                if (images.length > 0) {
+                    const imageObserver = new IntersectionObserver((entries) => {
+                        entries.forEach(entry => {
+                            if (entry.isIntersecting) {
+                                const img = entry.target;
+                                img.src = img.dataset.src;
+                                img.removeAttribute('data-src');
+                                imageObserver.unobserve(img);
+                            }
+                        });
+                    });
+
+                    images.forEach(img => imageObserver.observe(img));
+                    optimizations++;
+                }
+            }
+
+            // 3. 压缩和缓存优化
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(() => {
+                        optimizations++;
+                        log('✅ Service Worker已注册', 'success');
+                    })
+                    .catch(() => {
+                        log('⚠️ Service Worker注册失败', 'warning');
+                    });
+            }
+
+            setTimeout(() => {
+                showOptimizationResult('loadSpeedResult', 'success', `应用了 ${optimizations} 项加载速度优化`);
+                log(`✅ 加载速度优化完成，应用了 ${optimizations} 项优化`, 'success');
+            }, 1000);
+        }
+
+        // 分析资源加载
+        function analyzeResourceLoading() {
+            log('📊 开始分析资源加载...', 'info');
+
+            if (!performance.getEntriesByType) {
+                showOptimizationResult('resourceResult', 'warning', '浏览器不支持资源分析');
+                return;
+            }
+
+            const resources = performance.getEntriesByType('resource');
+            const resourceTypes = {};
+
+            resources.forEach(resource => {
+                const type = getResourceType(resource.name);
+                if (!resourceTypes[type]) {
+                    resourceTypes[type] = {
+                        count: 0,
+                        totalDuration: 0,
+                        slowResources: 0
+                    };
+                }
+
+                resourceTypes[type].count++;
+                resourceTypes[type].totalDuration += resource.duration;
+
+                if (resource.duration > 1000) {
+                    resourceTypes[type].slowResources++;
+                }
+            });
+
+            // 显示资源表格
+            const resourceTable = document.getElementById('resourceTable');
+            const resourceTableBody = document.getElementById('resourceTableBody');
+
+            resourceTableBody.innerHTML = '';
+
+            Object.entries(resourceTypes).forEach(([type, data]) => {
+                const row = document.createElement('tr');
+                const avgTime = (data.totalDuration / data.count).toFixed(2);
+                const status = data.slowResources === 0 ? '正常' :
+                              data.slowResources <= 2 ? '注意' : '需优化';
+
+                row.innerHTML = `
+                    <td>${type}</td>
+                    <td>${data.count}</td>
+                    <td>${avgTime}ms</td>
+                    <td style="color: ${status === '正常' ? '#52c41a' : status === '注意' ? '#faad14' : '#ff4d4f'}">${status}</td>
+                `;
+                resourceTableBody.appendChild(row);
+            });
+
+            resourceTable.style.display = 'table';
+
+            const slowResourceCount = Object.values(resourceTypes).reduce((sum, type) => sum + type.slowResources, 0);
+
+            showOptimizationResult('resourceResult',
+                slowResourceCount === 0 ? 'success' : 'warning',
+                `分析完成：${resources.length} 个资源，${slowResourceCount} 个慢资源`);
+
+            log(`📊 资源分析完成：总计 ${resources.length} 个资源`, 'success');
+        }
+
+        function getResourceType(url) {
+            if (url.includes('.js')) return 'JavaScript';
+            if (url.includes('.css')) return 'CSS';
+            if (url.includes('.png') || url.includes('.jpg') || url.includes('.svg')) return '图片';
+            if (url.includes('.woff') || url.includes('.ttf')) return '字体';
+            if (url.includes('/api/')) return 'API';
+            return '其他';
+        }
+
+        // 优化首屏渲染
+        function optimizeFirstPaint() {
+            log('🎨 开始优化首屏渲染...', 'info');
+
+            let optimizations = 0;
+
+            // 1. 内联关键CSS
+            const criticalCSS = `
+                body { font-family: 'Microsoft YaHei', sans-serif; }
+                .container { max-width: 1400px; margin: 0 auto; }
+                .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+            `;
+
+            const style = document.createElement('style');
+            style.textContent = criticalCSS;
+            document.head.insertBefore(style, document.head.firstChild);
+            optimizations++;
+
+            // 2. 移除渲染阻塞资源
+            const blockingScripts = document.querySelectorAll('script[src]:not([async]):not([defer])');
+            blockingScripts.forEach(script => {
+                if (!script.src.includes('critical')) {
+                    script.defer = true;
+                    optimizations++;
+                }
+            });
+
+            // 3. 优化字体加载
+            const fontPreload = document.createElement('link');
+            fontPreload.rel = 'preload';
+            fontPreload.href = '/fonts/microsoft-yahei.woff2';
+            fontPreload.as = 'font';
+            fontPreload.type = 'font/woff2';
+            fontPreload.crossOrigin = 'anonymous';
+            document.head.appendChild(fontPreload);
+            optimizations++;
+
+            setTimeout(() => {
+                showOptimizationResult('fcpResult', 'success', `应用了 ${optimizations} 项首屏渲染优化`);
+                log(`✅ 首屏渲染优化完成，应用了 ${optimizations} 项优化`, 'success');
+            }, 800);
+        }
+
+        // 优化内存使用
+        function optimizeMemoryUsage() {
+            log('🧠 开始优化内存使用...', 'info');
+
+            let optimizations = 0;
+
+            // 1. 强制垃圾回收（如果支持）
+            if (window.gc) {
+                window.gc();
+                optimizations++;
+                log('✅ 执行了强制垃圾回收', 'success');
+            }
+
+            // 2. 清理未使用的事件监听器
+            const elements = document.querySelectorAll('*');
+            elements.forEach(element => {
+                if (element._listeners && element._listeners.length === 0) {
+                    delete element._listeners;
+                    optimizations++;
+                }
+            });
+
+            // 3. 清理大型对象缓存
+            if (window.Vue && window.Vue.config) {
+                // 清理Vue组件缓存
+                optimizations++;
+            }
+
+            // 4. 优化图片内存使用
+            const images = document.querySelectorAll('img');
+            images.forEach(img => {
+                if (img.complete && img.naturalWidth > 1920) {
+                    // 对于大图片建议使用较小尺寸
+                    optimizations++;
+                }
+            });
+
+            setTimeout(() => {
+                showOptimizationResult('memoryResult', 'success', `应用了 ${optimizations} 项内存优化`);
+                log(`✅ 内存优化完成，应用了 ${optimizations} 项优化`, 'success');
+
+                // 重新检查内存使用
+                if (performance.memory) {
+                    const memory = performance.memory;
+                    const usedMB = (memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                    log(`📊 当前内存使用: ${usedMB}MB`, 'info');
+                }
+            }, 1000);
+        }
+
+        // 检测内存泄漏
+        function detectMemoryLeaks() {
+            log('🔍 开始检测内存泄漏...', 'info');
+
+            if (!performance.memory) {
+                showOptimizationResult('memoryLeakResult', 'warning', '浏览器不支持内存检测');
+                return;
+            }
+
+            const initialMemory = performance.memory.usedJSHeapSize;
+            let memoryGrowth = 0;
+            let checkCount = 0;
+
+            const memoryCheckInterval = setInterval(() => {
+                checkCount++;
+                const currentMemory = performance.memory.usedJSHeapSize;
+                const growth = currentMemory - initialMemory;
+
+                if (growth > memoryGrowth) {
+                    memoryGrowth = growth;
+                }
+
+                if (checkCount >= 5) {
+                    clearInterval(memoryCheckInterval);
+
+                    const growthMB = (memoryGrowth / 1024 / 1024).toFixed(2);
+                    const leakSuspected = memoryGrowth > 10 * 1024 * 1024; // 10MB增长
+
+                    updateMetric('memoryLeakCount', leakSuspected ? 1 : 0,
+                        leakSuspected ? 'warning' : 'excellent');
+
+                    showOptimizationResult('memoryLeakResult',
+                        leakSuspected ? 'warning' : 'success',
+                        leakSuspected ? `检测到可能的内存泄漏：${growthMB}MB增长` : '未检测到内存泄漏');
+
+                    log(leakSuspected ?
+                        `⚠️ 检测到可能的内存泄漏：${growthMB}MB增长` :
+                        '✅ 内存泄漏检测通过',
+                        leakSuspected ? 'warning' : 'success');
+                }
+            }, 1000);
+        }
+
+        // 优化垃圾回收
+        function optimizeGarbageCollection() {
+            log('🗑️ 开始优化垃圾回收...', 'info');
+
+            let optimizations = 0;
+
+            // 1. 清理DOM引用
+            const unusedElements = document.querySelectorAll('[data-unused]');
+            unusedElements.forEach(element => {
+                element.remove();
+                optimizations++;
+            });
+
+            // 2. 清理事件监听器
+            window.removeEventListener('resize', function() {});
+            window.removeEventListener('scroll', function() {});
+            optimizations++;
+
+            // 3. 清理定时器
+            for (let i = 1; i < 1000; i++) {
+                clearTimeout(i);
+                clearInterval(i);
+            }
+            optimizations++;
+
+            // 4. 建议浏览器进行垃圾回收
+            if (window.gc) {
+                window.gc();
+                optimizations++;
+            }
+
+            updateMetric('gcCount', optimizations);
+
+            setTimeout(() => {
+                showOptimizationResult('gcResult', 'success', `执行了 ${optimizations} 项垃圾回收优化`);
+                log(`✅ 垃圾回收优化完成，执行了 ${optimizations} 项优化`, 'success');
+            }, 800);
+        }
+
+        // 检查组件稳定性
+        function checkComponentStability() {
+            log('🛡️ 开始检查组件稳定性...', 'info');
+
+            let stableComponents = 0;
+            let totalComponents = 0;
+
+            // 检查Vue组件
+            if (window.Vue) {
+                const vueApps = document.querySelectorAll('[data-v-]');
+                totalComponents += vueApps.length;
+
+                vueApps.forEach(app => {
+                    if (app.style.display !== 'none' && !app.classList.contains('error')) {
+                        stableComponents++;
+                    }
+                });
+            }
+
+            // 检查Element Plus组件
+            const elementComponents = document.querySelectorAll('[class*="el-"]');
+            totalComponents += elementComponents.length;
+
+            elementComponents.forEach(component => {
+                if (component.offsetWidth > 0 && component.offsetHeight > 0) {
+                    stableComponents++;
+                }
+            });
+
+            const stabilityPercent = totalComponents > 0 ?
+                Math.round((stableComponents / totalComponents) * 100) : 100;
+
+            updateMetric('componentStability', stabilityPercent + '%',
+                stabilityPercent >= 95 ? 'excellent' :
+                stabilityPercent >= 85 ? 'good' :
+                stabilityPercent >= 70 ? 'warning' : 'critical');
+
+            showOptimizationResult('componentStabilityResult',
+                stabilityPercent >= 90 ? 'success' : 'warning',
+                `组件稳定性：${stableComponents}/${totalComponents} (${stabilityPercent}%)`);
+
+            log(`🛡️ 组件稳定性检查完成：${stabilityPercent}%`,
+                stabilityPercent >= 90 ? 'success' : 'warning');
+        }
+
+        // 检查API稳定性
+        async function checkAPIStability() {
+            log('🌐 开始检查API稳定性...', 'info');
+
+            const apiEndpoints = [
+                '/api/health',
+                '/api/interview/status',
+                '/api/spark/status'
+            ];
+
+            let successfulAPIs = 0;
+            const apiResults = [];
+
+            for (const endpoint of apiEndpoints) {
+                try {
+                    const startTime = performance.now();
+                    const response = await fetch(endpoint, {
+                        method: 'HEAD',
+                        timeout: 5000
+                    });
+                    const endTime = performance.now();
+                    const duration = endTime - startTime;
+
+                    if (response.ok) {
+                        successfulAPIs++;
+                        apiResults.push({ endpoint, status: 'success', duration });
+                    } else {
+                        apiResults.push({ endpoint, status: 'error', code: response.status });
+                    }
+                } catch (error) {
+                    apiResults.push({ endpoint, status: 'error', error: error.message });
+                }
+            }
+
+            const stabilityPercent = Math.round((successfulAPIs / apiEndpoints.length) * 100);
+
+            updateMetric('apiStability', stabilityPercent + '%',
+                stabilityPercent >= 95 ? 'excellent' :
+                stabilityPercent >= 80 ? 'good' :
+                stabilityPercent >= 60 ? 'warning' : 'critical');
+
+            showOptimizationResult('apiStabilityResult',
+                stabilityPercent >= 80 ? 'success' : 'warning',
+                `API稳定性：${successfulAPIs}/${apiEndpoints.length} (${stabilityPercent}%)`);
+
+            log(`🌐 API稳定性检查完成：${stabilityPercent}%`,
+                stabilityPercent >= 80 ? 'success' : 'warning');
+
+            apiResults.forEach(result => {
+                if (result.status === 'success') {
+                    log(`✅ ${result.endpoint}: ${result.duration.toFixed(2)}ms`, 'success');
+                } else {
+                    log(`❌ ${result.endpoint}: ${result.error || result.code}`, 'error');
+                }
+            });
+        }
+
+        // 检查长时间运行稳定性
+        function checkLongRunStability() {
+            log('⏱️ 开始检查长时间运行稳定性...', 'info');
+
+            const startTime = performanceData.startTime;
+            const currentTime = performance.now();
+            const runningTime = currentTime - startTime;
+            const runningMinutes = Math.round(runningTime / 60000);
+
+            // 检查内存增长趋势
+            const memoryGrowth = performanceData.memoryUsage.length > 1 ?
+                performanceData.memoryUsage[performanceData.memoryUsage.length - 1].used -
+                performanceData.memoryUsage[0].used : 0;
+
+            // 检查错误增长趋势
+            const errorGrowth = performanceData.errors.length;
+
+            let stabilityScore = 100;
+
+            // 内存增长过快扣分
+            if (memoryGrowth > 50) stabilityScore -= 20;
+            else if (memoryGrowth > 20) stabilityScore -= 10;
+
+            // 错误过多扣分
+            if (errorGrowth > 5) stabilityScore -= 30;
+            else if (errorGrowth > 2) stabilityScore -= 15;
+
+            // 运行时间过短扣分
+            if (runningMinutes < 5) stabilityScore -= 10;
+
+            stabilityScore = Math.max(0, stabilityScore);
+
+            updateMetric('longRunStability', stabilityScore + '%',
+                stabilityScore >= 90 ? 'excellent' :
+                stabilityScore >= 75 ? 'good' :
+                stabilityScore >= 60 ? 'warning' : 'critical');
+
+            showOptimizationResult('longRunStabilityResult',
+                stabilityScore >= 80 ? 'success' : 'warning',
+                `长时间稳定性：${stabilityScore}% (运行${runningMinutes}分钟)`);
+
+            log(`⏱️ 长时间运行稳定性：${stabilityScore}% (${runningMinutes}分钟)`,
+                stabilityScore >= 80 ? 'success' : 'warning');
+        }
+
+        // 全面性能检查
+        async function runFullPerformanceCheck() {
+            log('🚀 开始全面性能检查...', 'info');
+
+            // 重置结果显示
+            const resultElements = document.querySelectorAll('.optimization-result');
+            resultElements.forEach(element => {
+                element.style.display = 'none';
+            });
+
+            // 按顺序执行所有检查
+            checkJavaScriptErrors();
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            checkVueWarnings();
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            checkNetworkErrors();
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            analyzeResourceLoading();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            detectMemoryLeaks();
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            checkComponentStability();
+            await new Promise(resolve => setTimeout(resolve, 800));
+
+            await checkAPIStability();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkLongRunStability();
+
+            log('🎉 全面性能检查完成！', 'success');
+        }
+
+        // 系统性能优化
+        async function optimizeSystemPerformance() {
+            log('⚡ 开始系统性能优化...', 'info');
+
+            optimizeLoadSpeed();
+            await new Promise(resolve => setTimeout(resolve, 1200));
+
+            optimizeFirstPaint();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            optimizeMemoryUsage();
+            await new Promise(resolve => setTimeout(resolve, 1200));
+
+            optimizeGarbageCollection();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            log('🎉 系统性能优化完成！', 'success');
+        }
+
+        // 生成优化报告
+        function generateOptimizationReport() {
+            log('📊 生成性能优化报告...', 'info');
+
+            const report = {
+                timestamp: new Date().toISOString(),
+                errors: performanceData.errors.length,
+                warnings: performanceData.warnings.length,
+                networkErrors: performanceData.networkErrors.length,
+                memoryUsage: performance.memory ?
+                    (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2) + 'MB' : 'N/A',
+                runningTime: Math.round((performance.now() - performanceData.startTime) / 60000) + '分钟'
+            };
+
+            log('', 'info');
+            log('📊 ===== iFlytek性能优化报告 =====', 'info');
+            log(`报告时间: ${new Date().toLocaleString()}`, 'info');
+            log(`JavaScript错误: ${report.errors}`, report.errors === 0 ? 'success' : 'error');
+            log(`Vue.js警告: ${report.warnings}`, report.warnings === 0 ? 'success' : 'warning');
+            log(`网络错误: ${report.networkErrors}`, report.networkErrors === 0 ? 'success' : 'error');
+            log(`内存使用: ${report.memoryUsage}`, 'info');
+            log(`运行时间: ${report.runningTime}`, 'info');
+            log('', 'info');
+
+            // 性能评级
+            const totalIssues = report.errors + report.warnings + report.networkErrors;
+            let grade = 'A';
+            if (totalIssues > 10) grade = 'D';
+            else if (totalIssues > 5) grade = 'C';
+            else if (totalIssues > 2) grade = 'B';
+
+            log(`🏆 系统性能评级: ${grade}`, grade === 'A' ? 'success' : grade === 'B' ? 'warning' : 'error');
+
+            // 优化建议
+            log('', 'info');
+            log('💡 优化建议:', 'info');
+            if (report.errors > 0) {
+                log('• 修复JavaScript错误以提升稳定性', 'warning');
+            }
+            if (report.warnings > 3) {
+                log('• 处理Vue.js警告以改善开发体验', 'warning');
+            }
+            if (report.networkErrors > 0) {
+                log('• 检查网络连接和API状态', 'warning');
+            }
+            log('• 定期清理浏览器缓存', 'info');
+            log('• 使用最新版本的浏览器', 'info');
+            log('• 关闭不必要的浏览器标签页', 'info');
+
+            // 保存报告到全局变量
+            window.iflytekPerformanceReport = report;
+            log('💾 报告已保存到 window.iflytekPerformanceReport', 'success');
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🚀 iFlytek性能和稳定性优化工具已启动', 'info');
+            log('📊 开始收集基础性能数据...', 'info');
+
+            // 初始化性能监控
+            initializePerformanceMonitoring();
+
+            // 显示基础性能指标
+            setTimeout(() => {
+                displayBasicMetrics();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

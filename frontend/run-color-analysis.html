@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek 颜色对比度分析报告</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f8fafc;
+            color: #1a1a1a;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #1890ff;
+        }
+        
+        .header h1 {
+            color: #1890ff;
+            margin-bottom: 10px;
+        }
+        
+        .analysis-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e5e7eb;
+        }
+        
+        .analysis-section h3 {
+            color: #374151;
+            margin-top: 0;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #e5e7eb;
+        }
+        
+        .color-test {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 12px;
+            margin: 8px 0;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .color-test.pass-aaa {
+            background: #f0f9ff;
+            border-color: #0369a1;
+        }
+        
+        .color-test.pass-aa {
+            background: #fffbeb;
+            border-color: #d97706;
+        }
+        
+        .color-test.fail {
+            background: #fef2f2;
+            border-color: #dc2626;
+        }
+        
+        .color-sample {
+            width: 40px;
+            height: 40px;
+            border-radius: 4px;
+            border: 1px solid #d1d5db;
+            margin-right: 12px;
+        }
+        
+        .test-info {
+            flex: 1;
+        }
+        
+        .test-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .test-colors {
+            font-size: 12px;
+            color: #6b7280;
+        }
+        
+        .contrast-ratio {
+            font-weight: 700;
+            font-size: 16px;
+        }
+        
+        .status-badge {
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .status-aaa {
+            background: #dcfce7;
+            color: #166534;
+        }
+        
+        .status-aa {
+            background: #fef3c7;
+            color: #92400e;
+        }
+        
+        .status-fail {
+            background: #fee2e2;
+            color: #991b1b;
+        }
+        
+        .summary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .summary-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 6px;
+        }
+        
+        .stat-number {
+            font-size: 24px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        
+        .recommendations {
+            background: #f0f9ff;
+            border: 1px solid #0369a1;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+        
+        .recommendations h4 {
+            color: #0369a1;
+            margin-top: 0;
+        }
+        
+        .color-palette {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .palette-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            background: white;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .palette-color {
+            width: 30px;
+            height: 30px;
+            border-radius: 4px;
+            margin-right: 10px;
+            border: 1px solid #d1d5db;
+        }
+        
+        .palette-info {
+            flex: 1;
+        }
+        
+        .palette-name {
+            font-weight: 600;
+            font-size: 14px;
+            margin-bottom: 2px;
+        }
+        
+        .palette-value {
+            font-size: 12px;
+            color: #6b7280;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 iFlytek 多模态智能面试系统</h1>
+            <h2>颜色对比度分析报告</h2>
+            <p>WCAG 2.1 AA/AAA 标准合规性评估</p>
+        </div>
+        
+        <div id="analysis-results">
+            <p>正在分析颜色对比度...</p>
+        </div>
+    </div>
+    
+    <script>
+        // WCAG 2.1 对比度标准
+        const WCAG_STANDARDS = {
+            AA_NORMAL: 4.5,
+            AA_LARGE: 3.0,
+            AAA_NORMAL: 7.0,
+            AAA_LARGE: 4.5
+        };
+        
+        // 当前系统颜色
+        const CURRENT_COLORS = {
+            primary: '#1890ff',
+            primaryLight: '#40a9ff',
+            primaryDark: '#096dd9',
+            secondary: '#667eea',
+            accent: '#764ba2',
+            success: '#52c41a',
+            warning: '#faad14',
+            error: '#ff4d4f',
+            info: '#1890ff',
+            textPrimary: '#262626',
+            textSecondary: '#595959',
+            textTertiary: '#8c8c8c',
+            textWhite: '#ffffff',
+            bgPrimary: '#ffffff',
+            bgSecondary: '#f8fafc',
+            bgTertiary: '#f5f5f5',
+            aiColor: '#0066cc',
+            bigdataColor: '#059669',
+            iotColor: '#dc2626',
+            cloudColor: '#7c3aed'
+        };
+        
+        // 计算相对亮度
+        function getLuminance(hex) {
+            const rgb = hexToRgb(hex);
+            const [r, g, b] = rgb.map(c => {
+                c = c / 255;
+                return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+            });
+            return 0.2126 * r + 0.7152 * g + 0.0722 * b;
+        }
+        
+        // 十六进制转RGB
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? [
+                parseInt(result[1], 16),
+                parseInt(result[2], 16),
+                parseInt(result[3], 16)
+            ] : null;
+        }
+        
+        // 计算对比度
+        function getContrastRatio(color1, color2) {
+            const lum1 = getLuminance(color1);
+            const lum2 = getLuminance(color2);
+            const brightest = Math.max(lum1, lum2);
+            const darkest = Math.min(lum1, lum2);
+            return (brightest + 0.05) / (darkest + 0.05);
+        }
+        
+        // 评估对比度等级
+        function evaluateContrast(ratio) {
+            return {
+                ratio: Math.round(ratio * 100) / 100,
+                passAA: ratio >= WCAG_STANDARDS.AA_NORMAL,
+                passAAA: ratio >= WCAG_STANDARDS.AAA_NORMAL,
+                passAALarge: ratio >= WCAG_STANDARDS.AA_LARGE,
+                passAAALarge: ratio >= WCAG_STANDARDS.AAA_LARGE,
+                level: ratio >= WCAG_STANDARDS.AAA_NORMAL ? 'AAA' : 
+                       ratio >= WCAG_STANDARDS.AA_NORMAL ? 'AA' : 
+                       ratio >= WCAG_STANDARDS.AA_LARGE ? 'AA (大文本)' : '不合规'
+            };
+        }
+        
+        // 分析颜色组合
+        function analyzeColorCombinations() {
+            const results = {
+                total: 0,
+                passed: 0,
+                failed: 0,
+                combinations: []
+            };
+            
+            // 主要文本与背景组合
+            const textBackgroundCombos = [
+                { text: 'textPrimary', bg: 'bgPrimary', desc: '主要文本 + 白色背景' },
+                { text: 'textSecondary', bg: 'bgPrimary', desc: '次要文本 + 白色背景' },
+                { text: 'textTertiary', bg: 'bgPrimary', desc: '三级文本 + 白色背景' },
+                { text: 'textPrimary', bg: 'bgSecondary', desc: '主要文本 + 浅色背景' },
+                { text: 'textWhite', bg: 'primary', desc: '白色文本 + 主色背景' },
+                { text: 'textWhite', bg: 'secondary', desc: '白色文本 + 辅色背景' },
+                { text: 'textWhite', bg: 'accent', desc: '白色文本 + 强调色背景' }
+            ];
+            
+            textBackgroundCombos.forEach(combo => {
+                const textColor = CURRENT_COLORS[combo.text];
+                const bgColor = CURRENT_COLORS[combo.bg];
+                const ratio = getContrastRatio(textColor, bgColor);
+                const evaluation = evaluateContrast(ratio);
+                
+                results.total++;
+                if (evaluation.passAA) results.passed++;
+                else results.failed++;
+                
+                results.combinations.push({
+                    ...combo,
+                    textColor,
+                    bgColor,
+                    ...evaluation
+                });
+            });
+            
+            return results;
+        }
+        
+        // 渲染分析结果
+        function renderAnalysisResults() {
+            const results = analyzeColorCombinations();
+            const container = document.getElementById('analysis-results');
+            
+            let html = `
+                <div class="analysis-section">
+                    <h3>📝 文本与背景对比度分析</h3>
+            `;
+            
+            results.combinations.forEach(combo => {
+                const statusClass = combo.passAAA ? 'pass-aaa' : combo.passAA ? 'pass-aa' : 'fail';
+                const statusBadge = combo.passAAA ? 'status-aaa' : combo.passAA ? 'status-aa' : 'status-fail';
+                const statusText = combo.passAAA ? 'AAA 优秀' : combo.passAA ? 'AA 合格' : '不合规';
+                
+                html += `
+                    <div class="color-test ${statusClass}">
+                        <div style="display: flex; align-items: center;">
+                            <div class="color-sample" style="background: linear-gradient(45deg, ${combo.textColor} 50%, ${combo.bgColor} 50%);"></div>
+                            <div class="test-info">
+                                <div class="test-name">${combo.desc}</div>
+                                <div class="test-colors">${combo.textColor} / ${combo.bgColor}</div>
+                            </div>
+                        </div>
+                        <div style="text-align: right;">
+                            <div class="contrast-ratio">${combo.ratio}:1</div>
+                            <div class="status-badge ${statusBadge}">${statusText}</div>
+                        </div>
+                    </div>
+                `;
+            });
+            
+            html += `</div>`;
+            
+            // 添加总结
+            html += `
+                <div class="summary">
+                    <h3>📊 分析总结</h3>
+                    <div class="summary-stats">
+                        <div class="stat-item">
+                            <div class="stat-number">${results.total}</div>
+                            <div>总测试组合</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${results.passed}</div>
+                            <div>通过AA标准</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${results.failed}</div>
+                            <div>需要优化</div>
+                        </div>
+                        <div class="stat-item">
+                            <div class="stat-number">${Math.round(results.passed/results.total*100)}%</div>
+                            <div>合规率</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // 添加推荐颜色
+            html += `
+                <div class="recommendations">
+                    <h4>💡 WCAG 合规颜色推荐</h4>
+                    <div class="color-palette">
+                        <div class="palette-item">
+                            <div class="palette-color" style="background: #1a1a1a;"></div>
+                            <div class="palette-info">
+                                <div class="palette-name">主文本色 (优化)</div>
+                                <div class="palette-value">#1a1a1a (18.5:1)</div>
+                            </div>
+                        </div>
+                        <div class="palette-item">
+                            <div class="palette-color" style="background: #374151;"></div>
+                            <div class="palette-info">
+                                <div class="palette-name">次要文本色 (优化)</div>
+                                <div class="palette-value">#374151 (8.6:1)</div>
+                            </div>
+                        </div>
+                        <div class="palette-item">
+                            <div class="palette-color" style="background: #0066cc;"></div>
+                            <div class="palette-info">
+                                <div class="palette-name">iFlytek主色 (优化)</div>
+                                <div class="palette-value">#0066cc (4.51:1)</div>
+                            </div>
+                        </div>
+                        <div class="palette-item">
+                            <div class="palette-color" style="background: #4c51bf;"></div>
+                            <div class="palette-info">
+                                <div class="palette-name">iFlytek辅色 (优化)</div>
+                                <div class="palette-value">#4c51bf (4.52:1)</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            container.innerHTML = html;
+        }
+        
+        // 页面加载完成后运行分析
+        document.addEventListener('DOMContentLoaded', renderAnalysisResults);
+    </script>
+</body>
+</html>

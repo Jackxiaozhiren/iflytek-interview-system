@@ -1,0 +1,23 @@
+<svg width="120" height="120" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="avatarGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#4c51bf;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  
+  <!-- 背景圆 -->
+  <circle cx="60" cy="60" r="60" fill="url(#avatarGradient)"/>
+  
+  <!-- 头部 -->
+  <circle cx="60" cy="45" r="20" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- 身体 -->
+  <path d="M 30 85 Q 60 70 90 85 L 90 120 L 30 120 Z" fill="#ffffff" opacity="0.9"/>
+  
+  <!-- 文字标签 -->
+  <text x="60" y="105" text-anchor="middle" dominant-baseline="middle" 
+        fill="#4c51bf" font-size="10" font-family="Microsoft YaHei, Arial, sans-serif">
+    候选人头像
+  </text>
+</svg>

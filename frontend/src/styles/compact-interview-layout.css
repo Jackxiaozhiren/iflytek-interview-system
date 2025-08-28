@@ -1,0 +1,400 @@
+/**
+ * iFlytek 星火大模型智能面试系统 - 紧凑布局优化
+ * Compact Interview Layout Optimization for iFlytek Spark Interview System
+ * 
+ * 优化目标：
+ * - 减少不必要的空白区域
+ * - 提高屏幕空间利用率
+ * - 保持良好的视觉层次
+ * - 增强用户交互体验
+ */
+
+/* ===== 全局紧凑布局设置 ===== */
+
+/* 面试页面整体布局优化 */
+.modern-interview-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background: #f8fafc;
+  overflow-x: hidden;
+}
+
+/* 头部区域紧凑化 */
+.interview-header {
+  background: white;
+  border-bottom: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  padding: 12px 0;
+  flex-shrink: 0;
+}
+
+.header-container {
+  max-width: min(1200px, calc(100vw - 32px)) !important;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  min-height: 48px;
+}
+
+/* Logo和标题区域紧凑化 */
+.logo-section {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo {
+  height: 28px !important;
+  width: auto;
+}
+
+.interview-title h1 {
+  font-size: 1.125rem !important;
+  font-weight: 600;
+  margin: 0 !important;
+  line-height: 1.3;
+}
+
+.interview-title p {
+  font-size: 12px !important;
+  margin: 0 !important;
+  opacity: 0.7;
+}
+
+/* 进度条区域优化 */
+.interview-progress {
+  flex: 1;
+  max-width: 250px !important;
+  margin: 0 20px !important;
+}
+
+.progress-info {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 4px !important;
+  font-size: 12px;
+}
+
+.progress-bar {
+  height: 6px !important;
+}
+
+/* 计时器区域紧凑化 */
+.timer-display {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 2px !important;
+}
+
+.timer-text {
+  font-size: 1rem !important;
+  font-weight: 600;
+}
+
+.timer-status {
+  font-size: 11px !important;
+}
+
+/* ===== 主要面试区域优化 ===== */
+
+.interview-main {
+  flex: 1;
+  padding: 12px 0 !important;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.main-container {
+  max-width: min(1200px, calc(100vw - 32px)) !important;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px !important;
+  align-items: start;
+  min-height: calc(100vh - 140px) !important;
+}
+
+/* AI面试官卡片紧凑化 */
+.ai-card {
+  background: white;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #f1f5f9;
+  height: fit-content;
+}
+
+.ai-avatar {
+  display: flex;
+  align-items: center;
+  gap: 10px !important;
+  margin-bottom: 16px !important;
+}
+
+.ai-icon {
+  width: 40px !important;
+  height: 40px !important;
+  font-size: 20px !important;
+}
+
+.ai-info h3 {
+  font-size: 1rem !important;
+  margin: 0 0 2px 0 !important;
+}
+
+.ai-info p {
+  font-size: 12px !important;
+  margin: 0 !important;
+}
+
+/* 问题区域优化 */
+.question-area {
+  border-top: 1px solid #f1f5f9;
+  padding-top: 12px !important;
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px !important;
+}
+
+.question-label {
+  font-size: 12px !important;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.question-content {
+  margin-bottom: 12px !important;
+}
+
+.question-text {
+  font-size: 14px !important;
+  line-height: 1.5;
+  color: #2c3e50;
+  margin: 0 !important;
+}
+
+.question-actions {
+  display: flex;
+  gap: 8px !important;
+}
+
+/* 候选人交互区域紧凑化 */
+.candidate-section {
+  background: white;
+  border-radius: 8px !important;
+  padding: 16px !important;
+  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.06) !important;
+  border: 1px solid #f1f5f9;
+  height: fit-content;
+}
+
+/* 文本输入区域优化 */
+.text-interface {
+  display: flex;
+  flex-direction: column;
+  min-height: 300px;
+}
+
+.answer-textarea {
+  flex: 1;
+  margin-bottom: 12px !important;
+}
+
+.answer-textarea .el-textarea__inner {
+  min-height: 200px !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
+  padding: 12px !important;
+}
+
+.text-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.char-count {
+  font-size: 11px !important;
+  color: #94a3b8;
+}
+
+/* ===== 底部操作栏优化 ===== */
+
+.interview-footer {
+  background: white;
+  border-top: 1px solid #f1f5f9;
+  padding: 12px 0 !important;
+  flex-shrink: 0;
+}
+
+.footer-container {
+  max-width: min(1200px, calc(100vw - 32px)) !important;
+  margin: 0 auto !important;
+  padding: 0 16px !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.footer-left,
+.footer-right {
+  display: flex;
+  gap: 8px !important;
+}
+
+.control-btn {
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+}
+
+.next-btn {
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+}
+
+/* AI分析中心区域 */
+.footer-center {
+  flex: 1;
+  text-align: center;
+}
+
+.ai-analysis {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  font-size: 12px !important;
+  color: #64748b;
+}
+
+/* ===== AI洞察面板优化 ===== */
+
+.ai-insights-panel {
+  position: fixed;
+  top: 80px !important;
+  right: 12px !important;
+  width: 240px !important;
+  background: white;
+  border-radius: 6px !important;
+  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.1) !important;
+  border: 1px solid #e2e8f0;
+  z-index: 1000;
+  max-height: calc(100vh - 120px);
+  overflow-y: auto;
+}
+
+.insights-header {
+  padding: 10px 12px !important;
+  border-bottom: 1px solid #f1f5f9;
+}
+
+.insights-header h4 {
+  font-size: 12px !important;
+  margin: 0 !important;
+}
+
+.insights-content {
+  padding: 10px 12px !important;
+}
+
+.insight-item {
+  display: flex;
+  align-items: center;
+  gap: 8px !important;
+  margin-bottom: 8px !important;
+  padding: 6px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.insight-item:hover {
+  background-color: #f8fafc;
+}
+
+.insight-text {
+  font-size: 12px !important;
+  line-height: 1.4;
+}
+
+/* ===== 响应式优化 ===== */
+
+@media (max-width: 1024px) {
+  .main-container {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+  }
+  
+  .ai-insights-panel {
+    position: relative !important;
+    top: auto !important;
+    right: auto !important;
+    width: 100% !important;
+    margin-top: 12px;
+    border-radius: 8px !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    flex-direction: column !important;
+    gap: 8px !important;
+    min-height: auto !important;
+  }
+  
+  .interview-progress {
+    max-width: 100% !important;
+    margin: 0 !important;
+  }
+  
+  .main-container {
+    padding: 0 12px !important;
+    gap: 8px !important;
+  }
+  
+  .ai-card,
+  .candidate-section {
+    padding: 12px !important;
+  }
+  
+  .footer-container {
+    flex-direction: column !important;
+    gap: 8px !important;
+  }
+  
+  .footer-left,
+  .footer-right {
+    width: 100%;
+    justify-content: center;
+  }
+}
+
+/* ===== 性能优化 ===== */
+
+/* 减少重绘和回流 */
+.ai-card,
+.candidate-section,
+.ai-insights-panel {
+  contain: layout style;
+  will-change: transform;
+}
+
+/* 平滑滚动 */
+.interview-main {
+  scroll-behavior: smooth;
+}
+
+/* 硬件加速 */
+.ai-status-ring,
+.analysis-icon {
+  transform: translateZ(0);
+}

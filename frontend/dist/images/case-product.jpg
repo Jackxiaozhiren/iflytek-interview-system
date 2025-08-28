@@ -1,0 +1,24 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="productGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1890ff;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#52c41a;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#productGrad)"/>
+  <circle cx="80" cy="60" r="15" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="320" cy="240" r="18" fill="rgba(255,255,255,0.2)"/>
+  <rect x="60" y="110" width="280" height="90" rx="12" fill="rgba(255,255,255,0.15)"/>
+  <text x="200" y="140" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="24" font-weight="bold" font-family="Microsoft YaHei, Arial, sans-serif">
+    产品设计案例
+  </text>
+  <text x="200" y="170" text-anchor="middle" dominant-baseline="middle" 
+        fill="#e6f7ff" font-size="14" font-family="Microsoft YaHei, Arial, sans-serif">
+    多模态面试产品设计
+  </text>
+  <text x="200" y="260" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="12" font-family="Microsoft YaHei, Arial, sans-serif">
+    融合三大平台优势设计
+  </text>
+</svg>

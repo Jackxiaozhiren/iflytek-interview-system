@@ -1,0 +1,11 @@
+<svg width="300" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="300" height="200" fill="#764ba2"/>
+  <text x="150" y="100" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="20" font-family="Microsoft YaHei, Arial, sans-serif">
+    功能特性
+  </text>
+  <text x="150" y="130" text-anchor="middle" dominant-baseline="middle" 
+        fill="#e0e7ff" font-size="12" font-family="Microsoft YaHei, Arial, sans-serif">
+    iFlytek Spark
+  </text>
+</svg>

@@ -1,0 +1,19 @@
+<svg width="400" height="225" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+            <linearGradient id="grad" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" style="stop-color:#F44336;stop-opacity:1" />
+                <stop offset="100%" style="stop-color:#d62518;stop-opacity:1" />
+            </linearGradient>
+        </defs>
+        <rect width="400" height="225" fill="url(#grad)"/>
+        <text x="200" y="97.5" font-family="Arial, sans-serif" font-size="18" fill="white" text-anchor="middle" font-weight="bold">
+            大数据案例
+        </text>
+        <text x="200" y="127.5" font-family="Arial, sans-serif" font-size="14" fill="rgba(255,255,255,0.8)" text-anchor="middle">
+            多模态面试评估系统
+        </text>
+        <rect x="20" y="20" width="360" height="185" fill="none" stroke="rgba(255,255,255,0.3)" stroke-width="2" rx="5"/>
+        <circle cx="50" cy="50" r="8" fill="rgba(255,255,255,0.5)"/>
+        <circle cx="70" cy="50" r="8" fill="rgba(255,255,255,0.3)"/>
+        <circle cx="90" cy="50" r="8" fill="rgba(255,255,255,0.2)"/>
+    </svg>

@@ -1,0 +1,369 @@
+/**
+ * 首页显示问题修复 - iFlytek 多模态面试评估系统
+ * 修复字体、背景、布局和品牌一致性问题
+ */
+
+/* ===== iFlytek 品牌色彩系统 ===== */
+:root {
+  /* iFlytek 主品牌色 */
+  --iflytek-primary: #1890ff;
+  --iflytek-primary-light: #40a9ff;
+  --iflytek-primary-dark: #096dd9;
+  --iflytek-primary-hover: #40a9ff;
+  --iflytek-primary-active: #096dd9;
+  
+  /* iFlytek 辅助色 */
+  --iflytek-secondary: #667eea;
+  --iflytek-accent: #764ba2;
+  --iflytek-success: #52c41a;
+  --iflytek-warning: #faad14;
+  --iflytek-error: #ff4d4f;
+  
+  /* iFlytek 渐变色 */
+  --iflytek-gradient-primary: linear-gradient(135deg, #1890ff 0%, #667eea 100%);
+  --iflytek-gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --iflytek-gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  
+  /* 文字色彩 - WCAG 2.1 AA 合规 */
+  --text-primary: #262626;
+  --text-secondary: #595959;
+  --text-tertiary: #8c8c8c;
+  --text-white: #ffffff;
+  --text-white-secondary: rgba(255, 255, 255, 0.9);
+  --text-white-tertiary: rgba(255, 255, 255, 0.8);
+  
+  /* 背景色彩 */
+  --bg-primary: #ffffff;
+  --bg-secondary: #f8fafc;
+  --bg-tertiary: #f5f5f5;
+  --bg-card: #ffffff;
+  
+  /* 阴影系统 */
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --shadow-card: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* ===== 首页整体布局修复 ===== */
+.enterprise-homepage {
+  min-height: 100vh;
+  background: var(--bg-secondary) !important;
+  font-family: var(--font-family-chinese) !important;
+  color: var(--text-primary) !important;
+  line-height: 1.6;
+  /* 确保页面正确加载和显示 */
+  opacity: 1 !important;
+  visibility: visible !important;
+  transition: opacity 0.3s ease-in-out;
+}
+
+/* ===== 顶部导航修复 ===== */
+.enterprise-header {
+  background: var(--bg-primary);
+  box-shadow: var(--shadow-md);
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #e8e8e8;
+}
+
+.header-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 72px;
+}
+
+.brand-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--iflytek-primary);
+  font-family: var(--font-family-chinese-title);
+}
+
+.enterprise-nav .el-menu-item {
+  font-family: var(--font-family-chinese) !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+  border-bottom: none !important;
+}
+
+.enterprise-nav .el-menu-item:hover {
+  color: var(--iflytek-primary) !important;
+  background-color: rgba(24, 144, 255, 0.06) !important;
+}
+
+.enterprise-nav .el-menu-item.is-active {
+  color: var(--iflytek-primary) !important;
+  border-bottom: 2px solid var(--iflytek-primary) !important;
+}
+
+/* ===== 英雄区域修复 ===== */
+.hero-section {
+  background: var(--iflytek-gradient-hero);
+  padding: 80px 0 120px;
+  position: relative;
+  overflow: hidden;
+  min-height: 600px;
+}
+
+.hero-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+  z-index: 1;
+}
+
+.hero-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 24px;
+  position: relative;
+  z-index: 2;
+}
+
+.hero-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+
+.hero-title {
+  font-size: 3.5rem;
+  font-weight: 700;
+  color: var(--text-white);
+  line-height: 1.2;
+  margin-bottom: 24px;
+  font-family: var(--font-family-chinese-title);
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-text {
+  background: linear-gradient(45deg, #fff 0%, #e0e7ff 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  font-size: 1.25rem;
+  color: var(--text-white-secondary);
+  line-height: 1.6;
+  margin-bottom: 32px;
+  font-family: var(--font-family-chinese-body);
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+.hero-stats {
+  display: flex;
+  gap: 32px;
+  margin-bottom: 40px;
+}
+
+.stat-item {
+  text-align: center;
+  background: rgba(255, 255, 255, 0.1);
+  padding: 16px 20px;
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.stat-number {
+  display: block;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-white);
+  margin-bottom: 4px;
+  font-family: var(--font-family-chinese-title);
+}
+
+.stat-label {
+  font-size: 0.875rem;
+  color: var(--text-white-tertiary);
+  font-family: var(--font-family-chinese);
+}
+
+/* ===== 按钮样式修复 ===== */
+.hero-actions {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.primary-cta {
+  background: var(--bg-primary);
+  color: var(--iflytek-primary);
+  border: none;
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  font-family: var(--font-family-chinese);
+  box-shadow: var(--shadow-lg);
+  transition: all 0.3s ease;
+}
+
+.primary-cta:hover {
+  background: #f0f9ff;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-xl);
+}
+
+.secondary-cta {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--text-white);
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  padding: 16px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  border-radius: 12px;
+  font-family: var(--font-family-chinese);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.secondary-cta:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: translateY(-2px);
+}
+
+/* ===== 卡片样式修复 ===== */
+.floating-cards {
+  position: relative;
+  height: 400px;
+}
+
+.feature-card {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: var(--shadow-card);
+  animation: float 6s ease-in-out infinite;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.feature-card .feature-icon {
+  width: 40px;
+  height: 40px;
+  background: var(--iflytek-gradient-primary);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-white);
+  font-size: 18px;
+}
+
+.feature-card .feature-text {
+  font-family: var(--font-family-chinese);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--text-primary);
+}
+
+/* ===== 响应式设计修复 ===== */
+@media (max-width: 1024px) {
+  .hero-content {
+    grid-template-columns: 1fr;
+    gap: 40px;
+    text-align: center;
+  }
+  
+  .hero-title {
+    font-size: 2.5rem;
+  }
+  
+  .hero-stats {
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  .header-container {
+    padding: 0 16px;
+    height: 64px;
+  }
+  
+  .hero-section {
+    padding: 60px 0 80px;
+  }
+  
+  .hero-container {
+    padding: 0 16px;
+  }
+  
+  .hero-title {
+    font-size: 2rem;
+  }
+  
+  .hero-subtitle {
+    font-size: 1rem;
+  }
+  
+  .hero-stats {
+    flex-direction: column;
+    gap: 16px;
+    align-items: center;
+  }
+  
+  .stat-item {
+    width: 100%;
+    max-width: 200px;
+  }
+  
+  .hero-actions {
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .primary-cta,
+  .secondary-cta {
+    width: 100%;
+    max-width: 280px;
+  }
+}
+
+/* ===== 动画效果 ===== */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* ===== 高对比度模式支持 ===== */
+@media (prefers-contrast: high) {
+  .hero-section {
+    background: #4a0080;
+  }
+  
+  .hero-title,
+  .hero-subtitle {
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9);
+  }
+  
+  .feature-card {
+    border: 2px solid #333;
+  }
+}

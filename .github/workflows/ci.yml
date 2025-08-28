@@ -1,0 +1,304 @@
+name: 🚀 CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main ]
+
+env:
+  NODE_VERSION: '18'
+  PYTHON_VERSION: '3.9'
+
+jobs:
+  # 前端测试和构建
+  frontend-test:
+    name: 🎨 Frontend Tests
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        cache: 'npm'
+        cache-dependency-path: frontend/package-lock.json
+        
+    - name: 📦 Install dependencies
+      working-directory: frontend
+      run: npm ci
+      
+    - name: 🔍 Lint check
+      working-directory: frontend
+      run: npm run lint
+      
+    - name: 🧪 Run tests
+      working-directory: frontend
+      run: npm run test:run
+      
+    - name: 📊 Test coverage
+      working-directory: frontend
+      run: npm run test:coverage
+      
+    - name: 🏗️ Build project
+      working-directory: frontend
+      run: npm run build
+      
+    - name: 📤 Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: frontend-build
+        path: frontend/dist/
+
+  # 后端测试
+  backend-test:
+    name: 🔧 Backend Tests
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis:alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐍 Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ env.PYTHON_VERSION }}
+        cache: 'pip'
+        cache-dependency-path: backend/requirements.txt
+        
+    - name: 📦 Install dependencies
+      working-directory: backend
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov pytest-asyncio
+        
+    - name: 🔍 Code quality check
+      working-directory: backend
+      run: |
+        pip install black isort flake8
+        black --check .
+        isort --check-only .
+        flake8 .
+        
+    - name: 🧪 Run tests
+      working-directory: backend
+      run: |
+        pytest tests/ -v --cov=app --cov-report=xml --cov-report=html
+        
+    - name: 📊 Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: backend/coverage.xml
+        flags: backend
+        name: backend-coverage
+
+  # 安全扫描
+  security-scan:
+    name: 🔒 Security Scan
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🔍 Run Trivy vulnerability scanner
+      uses: aquasecurity/trivy-action@master
+      with:
+        scan-type: 'fs'
+        scan-ref: '.'
+        format: 'sarif'
+        output: 'trivy-results.sarif'
+        
+    - name: 📤 Upload Trivy scan results
+      uses: github/codeql-action/upload-sarif@v2
+      with:
+        sarif_file: 'trivy-results.sarif'
+        
+    - name: 🔍 Dependency vulnerability scan
+      working-directory: frontend
+      run: npm audit --audit-level moderate
+      
+    - name: 🔍 Python security scan
+      working-directory: backend
+      run: |
+        pip install safety bandit
+        safety check
+        bandit -r app/ -f json -o bandit-report.json
+
+  # Docker 构建
+  docker-build:
+    name: 🐳 Docker Build
+    runs-on: ubuntu-latest
+    needs: [frontend-test, backend-test]
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🐳 Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+      
+    - name: 🔑 Login to Docker Hub
+      if: github.event_name != 'pull_request'
+      uses: docker/login-action@v3
+      with:
+        username: ${{ secrets.DOCKER_USERNAME }}
+        password: ${{ secrets.DOCKER_PASSWORD }}
+        
+    - name: 📥 Download frontend build
+      uses: actions/download-artifact@v4
+      with:
+        name: frontend-build
+        path: frontend/dist/
+        
+    - name: 🏗️ Build and push backend image
+      uses: docker/build-push-action@v5
+      with:
+        context: backend
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/iflytek-interview-backend:latest
+          ${{ secrets.DOCKER_USERNAME }}/iflytek-interview-backend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+        
+    - name: 🏗️ Build and push frontend image
+      uses: docker/build-push-action@v5
+      with:
+        context: frontend
+        push: ${{ github.event_name != 'pull_request' }}
+        tags: |
+          ${{ secrets.DOCKER_USERNAME }}/iflytek-interview-frontend:latest
+          ${{ secrets.DOCKER_USERNAME }}/iflytek-interview-frontend:${{ github.sha }}
+        cache-from: type=gha
+        cache-to: type=gha,mode=max
+
+  # 部署到 Render
+  deploy-render:
+    name: 🚀 Deploy to Render
+    runs-on: ubuntu-latest
+    needs: [docker-build, security-scan]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 🚀 Deploy to Render
+      uses: johnbeynon/render-deploy-action@v0.0.8
+      with:
+        service-id: ${{ secrets.RENDER_SERVICE_ID }}
+        api-key: ${{ secrets.RENDER_API_KEY }}
+
+  # 性能测试
+  performance-test:
+    name: ⚡ Performance Test
+    runs-on: ubuntu-latest
+    needs: [deploy-render]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      
+    - name: 📦 Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ env.NODE_VERSION }}
+        
+    - name: 📦 Install Artillery
+      run: npm install -g artillery
+      
+    - name: ⚡ Run performance tests
+      run: |
+        artillery quick --count 10 --num 5 ${{ secrets.RENDER_APP_URL }}/health
+        
+    - name: 🔍 Lighthouse CI
+      uses: treosh/lighthouse-ci-action@v10
+      with:
+        urls: |
+          ${{ secrets.RENDER_APP_URL }}
+        uploadArtifacts: true
+        temporaryPublicStorage: true
+
+  # 通知
+  notify:
+    name: 📢 Notify
+    runs-on: ubuntu-latest
+    needs: [frontend-test, backend-test, security-scan, docker-build]
+    if: always()
+    
+    steps:
+    - name: 📧 Send notification
+      uses: 8398a7/action-slack@v3
+      with:
+        status: ${{ job.status }}
+        channel: '#ci-cd'
+        webhook_url: ${{ secrets.SLACK_WEBHOOK }}
+        fields: repo,message,commit,author,action,eventName,ref,workflow
+      if: always()
+
+  # 自动创建 Release
+  create-release:
+    name: 🏷️ Create Release
+    runs-on: ubuntu-latest
+    needs: [performance-test]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    
+    steps:
+    - name: 📥 Checkout code
+      uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+        
+    - name: 🏷️ Generate tag
+      id: tag
+      run: |
+        TAG=$(date +'%Y.%m.%d')-$(git rev-parse --short HEAD)
+        echo "tag=$TAG" >> $GITHUB_OUTPUT
+        
+    - name: 📝 Generate changelog
+      id: changelog
+      run: |
+        CHANGELOG=$(git log --pretty=format:"- %s" $(git describe --tags --abbrev=0)..HEAD)
+        echo "changelog<<EOF" >> $GITHUB_OUTPUT
+        echo "$CHANGELOG" >> $GITHUB_OUTPUT
+        echo "EOF" >> $GITHUB_OUTPUT
+        
+    - name: 🚀 Create Release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ steps.tag.outputs.tag }}
+        release_name: Release ${{ steps.tag.outputs.tag }}
+        body: |
+          ## 🎉 新版本发布
+          
+          ### 📋 更新内容
+          ${{ steps.changelog.outputs.changelog }}
+          
+          ### 🔗 部署地址
+          - 🌐 **在线演示**: ${{ secrets.RENDER_APP_URL }}
+          - 📚 **API文档**: ${{ secrets.RENDER_APP_URL }}/docs
+          
+          ### 🐳 Docker 镜像
+          - Backend: `${{ secrets.DOCKER_USERNAME }}/iflytek-interview-backend:${{ steps.tag.outputs.tag }}`
+          - Frontend: `${{ secrets.DOCKER_USERNAME }}/iflytek-interview-frontend:${{ steps.tag.outputs.tag }}`
+        draft: false
+        prerelease: false

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Process.env 修复验证测试</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-item {
+            margin: 20px 0;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            border-left: 4px solid #4CAF50;
+        }
+        .test-item.error {
+            border-left-color: #f44336;
+        }
+        .status {
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 5px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Process.env 修复验证测试</h1>
+        <p>此页面用于验证 <code>process.env</code> 到 <code>import.meta.env</code> 的修复是否成功</p>
+        
+        <div class="test-item">
+            <h3>📋 测试状态</h3>
+            <div id="test-status" class="status">正在检测...</div>
+        </div>
+
+        <div class="test-item">
+            <h3>🌐 环境变量访问测试</h3>
+            <div id="env-test-result">测试中...</div>
+        </div>
+
+        <div class="test-item">
+            <h3>🚀 iFlytek服务初始化测试</h3>
+            <div id="service-test-result">测试中...</div>
+        </div>
+
+        <div class="test-item">
+            <h3>📊 控制台错误监控</h3>
+            <div id="console-errors">监控中...</div>
+        </div>
+
+        <button onclick="runTests()">🔄 重新运行测试</button>
+        <button onclick="clearResults()">🧹 清除结果</button>
+    </div>
+
+    <script type="module">
+        let errorCount = 0;
+        const errors = [];
+
+        // 监控控制台错误
+        const originalError = console.error;
+        console.error = function(...args) {
+            errorCount++;
+            errors.push(args.join(' '));
+            updateErrorDisplay();
+            originalError.apply(console, args);
+        };
+
+        function updateErrorDisplay() {
+            const errorDiv = document.getElementById('console-errors');
+            if (errorCount === 0) {
+                errorDiv.innerHTML = '<span class="success">✅ 无控制台错误</span>';
+            } else {
+                errorDiv.innerHTML = `<span class="error">❌ 检测到 ${errorCount} 个错误</span>
+                    <pre>${errors.slice(-5).join('\n')}</pre>`;
+            }
+        }
+
+        async function testEnvironmentVariables() {
+            const envDiv = document.getElementById('env-test-result');
+            try {
+                // 测试 import.meta.env 是否可用
+                const metaEnv = import.meta?.env || {};
+                const isDev = metaEnv.DEV || 'undefined';
+                const mode = metaEnv.MODE || 'undefined';
+                const baseUrl = metaEnv.BASE_URL || 'undefined';
+                const iflytekUrl = metaEnv.VUE_APP_IFLYTEK_API_URL || 'undefined';
+
+                envDiv.innerHTML = `
+                    <span class="success">✅ import.meta.env 访问成功</span>
+                    <pre>DEV: ${isDev}
+MODE: ${mode}
+BASE_URL: ${baseUrl}
+IFLYTEK_API_URL: ${iflytekUrl}</pre>
+                `;
+            } catch (error) {
+                envDiv.innerHTML = `<span class="error">❌ 环境变量访问失败: ${error.message}</span>`;
+            }
+        }
+
+        async function testIflytekService() {
+            const serviceDiv = document.getElementById('service-test-result');
+            try {
+                // 动态导入 iFlytek 服务 - 导入实例而不是类
+                const serviceModule = await import('/src/services/enhancedIflytekSparkService.js');
+                const service = serviceModule.default; // 使用默认导出的实例
+
+                // 也可以测试类导入
+                const ServiceClass = serviceModule.EnhancedIflytekSparkService;
+                const newInstance = new ServiceClass();
+
+                serviceDiv.innerHTML = `
+                    <span class="success">✅ iFlytek服务初始化成功</span>
+                    <pre>实例API URL: ${service.config.baseUrl}
+实例模拟模式: ${service.config.appId === 'simulation_mode' ? '是' : '否'}
+类导入成功: ${ServiceClass ? '是' : '否'}
+新实例创建: ${newInstance ? '是' : '否'}</pre>
+                `;
+            } catch (error) {
+                serviceDiv.innerHTML = `<span class="error">❌ iFlytek服务初始化失败: ${error.message}</span>`;
+            }
+        }
+
+        async function runTests() {
+            document.getElementById('test-status').innerHTML = '<span class="info">🔄 正在运行测试...</span>';
+            
+            errorCount = 0;
+            errors.length = 0;
+            
+            await testEnvironmentVariables();
+            await testIflytekService();
+            
+            // 等待一秒钟收集可能的错误
+            setTimeout(() => {
+                updateErrorDisplay();
+                
+                const hasErrors = errorCount > 0;
+                const statusDiv = document.getElementById('test-status');
+                
+                if (hasErrors) {
+                    statusDiv.innerHTML = '<span class="error">❌ 测试发现问题</span>';
+                } else {
+                    statusDiv.innerHTML = '<span class="success">✅ 所有测试通过</span>';
+                }
+            }, 1000);
+        }
+
+        function clearResults() {
+            errorCount = 0;
+            errors.length = 0;
+            document.getElementById('test-status').innerHTML = '<span class="info">📋 已清除测试结果</span>';
+            document.getElementById('env-test-result').innerHTML = '等待测试...';
+            document.getElementById('service-test-result').innerHTML = '等待测试...';
+            document.getElementById('console-errors').innerHTML = '监控中...';
+        }
+
+        // 页面加载时自动运行测试
+        window.addEventListener('load', () => {
+            setTimeout(runTests, 500);
+        });
+
+        // 全局暴露函数
+        window.runTests = runTests;
+        window.clearResults = clearResults;
+    </script>
+</body>
+</html>

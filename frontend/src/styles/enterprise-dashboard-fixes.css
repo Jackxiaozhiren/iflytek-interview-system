@@ -1,0 +1,379 @@
+/* 企业管理界面布局修复样式 - iFlytek 多模态面试评估系统 */
+
+/* ===== 全局布局修复 ===== */
+
+/* 确保所有模块部分的一致性 */
+.module-section {
+  margin-bottom: 32px;
+  position: relative;
+}
+
+.module-section:last-child {
+  margin-bottom: 0;
+}
+
+/* 模块头部标准化 */
+.module-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 24px;
+  gap: 20px;
+}
+
+.module-header .header-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.module-header .header-title h3 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.module-header .header-title p {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.module-header .header-actions {
+  flex-shrink: 0;
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+/* ===== 数据洞察部分特殊修复 ===== */
+
+/* 洞察部分容器 */
+.insights-section {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-radius: 20px;
+  padding: 32px;
+  margin-bottom: 32px;
+  position: relative;
+  overflow: hidden;
+}
+
+.insights-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, #1890ff 0%, #667eea 50%, #764ba2 100%);
+}
+
+/* 洞察容器 */
+.insights-container {
+  background: white;
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  margin-top: 8px;
+}
+
+/* 洞察网格布局 */
+.insights-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+  align-items: start;
+}
+
+/* 洞察卡片统一样式 */
+.insight-card {
+  background: white;
+  border: 1px solid #f1f5f9;
+  border-radius: 12px;
+  padding: 20px;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  height: auto;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(135deg, #1890ff 0%, #0066cc 100%);
+  transition: width 0.3s ease;
+}
+
+.insight-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: #1890ff;
+}
+
+.insight-card:hover::before {
+  width: 6px;
+}
+
+/* 不同类型卡片的颜色标识 */
+.trend-card::before {
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+}
+
+.recommendation-card::before {
+  background: linear-gradient(135deg, #722ed1 0%, #531dab 100%);
+}
+
+.warning-card::before {
+  background: linear-gradient(135deg, #fa8c16 0%, #d46b08 100%);
+}
+
+/* 洞察卡片头部 */
+.insight-header {
+  display: flex;
+  align-items: flex-start;
+  margin-bottom: 16px;
+  gap: 12px;
+}
+
+.insight-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  color: white;
+  flex-shrink: 0;
+}
+
+.trend-icon {
+  background: linear-gradient(135deg, #52c41a 0%, #389e0d 100%);
+}
+
+.recommendation-icon {
+  background: linear-gradient(135deg, #722ed1 0%, #531dab 100%);
+}
+
+.warning-icon {
+  background: linear-gradient(135deg, #fa8c16 0%, #d46b08 100%);
+}
+
+.insight-title-section {
+  flex: 1;
+  min-width: 0;
+}
+
+.insight-title-section h4 {
+  font-size: 16px;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0 0 4px 0;
+  line-height: 1.3;
+}
+
+.insight-priority {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.insight-priority.high {
+  background: #fff2e8;
+  color: #fa8c16;
+}
+
+.insight-priority.medium {
+  background: #f6ffed;
+  color: #52c41a;
+}
+
+/* 洞察内容 */
+.insight-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.insight-content p {
+  font-size: 14px;
+  color: #64748b;
+  line-height: 1.6;
+  margin-bottom: 16px;
+  flex: 1;
+}
+
+/* 指标显示 */
+.insight-metrics {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 16px;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.metric-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  text-align: center;
+}
+
+.metric-label {
+  font-size: 11px;
+  color: #94a3b8;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 4px;
+}
+
+.metric-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #2c3e50;
+}
+
+.metric-value.positive {
+  color: #52c41a;
+}
+
+.metric-value.warning {
+  color: #fa8c16;
+}
+
+/* 洞察操作按钮 */
+.insight-action {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: auto;
+}
+
+/* ===== 响应式布局修复 ===== */
+
+/* 平板端适配 */
+@media (max-width: 768px) {
+  .insights-section {
+    padding: 24px 20px;
+    margin-bottom: 24px;
+  }
+  
+  .insights-section .module-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .insights-container {
+    padding: 20px;
+  }
+  
+  .insights-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  
+  .insight-card {
+    padding: 16px;
+    min-height: 180px;
+  }
+  
+  .insight-metrics {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .metric-item {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    text-align: left;
+  }
+  
+  .module-header .header-actions {
+    width: 100%;
+    justify-content: flex-start;
+  }
+}
+
+/* 手机端适配 */
+@media (max-width: 480px) {
+  .insights-section {
+    padding: 16px 12px;
+    margin-bottom: 16px;
+  }
+  
+  .insights-container {
+    padding: 16px;
+  }
+  
+  .insight-card {
+    padding: 12px;
+    min-height: 160px;
+  }
+  
+  .insight-header {
+    gap: 8px;
+  }
+  
+  .insight-icon {
+    width: 32px;
+    height: 32px;
+    font-size: 16px;
+  }
+  
+  .insight-title-section h4 {
+    font-size: 14px;
+  }
+  
+  .insight-content p {
+    font-size: 13px;
+  }
+  
+  .insight-metrics {
+    padding: 8px;
+    gap: 4px;
+  }
+}
+
+/* ===== 确保与iFlytek品牌一致性 ===== */
+
+/* iFlytek品牌色彩应用 */
+.insights-section .module-header .header-title h3 {
+  background: linear-gradient(135deg, #1890ff 0%, #667eea 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* 按钮样式统一 */
+.insight-action .el-button {
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.insight-action .el-button:hover {
+  transform: translateY(-1px);
+}
+
+/* 确保字体一致性 */
+.insights-section,
+.insights-section * {
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+}

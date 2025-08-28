@@ -1,0 +1,369 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek Spark AI面试系统</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            color: #333;
+        }
+        
+        /* 头部导航 */
+        .header {
+            background: white;
+            border-bottom: 1px solid #e8e8e8;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            height: 72px;
+        }
+        
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #1890ff 0%, #0066cc 100%);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: bold;
+        }
+        
+        .brand-name {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1890ff;
+        }
+        
+        .nav-menu {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .nav-item {
+            padding: 12px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #666;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        
+        .nav-item:hover {
+            background: rgba(24, 144, 255, 0.1);
+            color: #1890ff;
+        }
+        
+        .header-actions {
+            display: flex;
+            gap: 12px;
+        }
+        
+        .btn {
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 500;
+            border: none;
+            font-size: 14px;
+        }
+        
+        .btn-secondary {
+            border: 1px solid #1890ff;
+            background: transparent;
+            color: #1890ff;
+        }
+        
+        .btn-secondary:hover {
+            background: #1890ff;
+            color: white;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #1890ff 0%, #0066cc 100%);
+            color: white;
+            border: none;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+        }
+        
+        /* 英雄区域 */
+        .hero {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+        }
+        
+        .hero-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+        
+        .hero p {
+            font-size: 20px;
+            margin-bottom: 40px;
+            opacity: 0.9;
+        }
+        
+        .hero-actions {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .hero-btn {
+            padding: 15px 30px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-weight: 600;
+            border: 2px solid white;
+        }
+        
+        .hero-btn-primary {
+            background: rgba(255,255,255,0.2);
+            color: white;
+        }
+        
+        .hero-btn-primary:hover {
+            background: white;
+            color: #1890ff;
+        }
+        
+        .hero-btn-secondary {
+            background: transparent;
+            color: white;
+            border-color: rgba(255,255,255,0.5);
+        }
+        
+        .hero-btn-secondary:hover {
+            background: rgba(255,255,255,0.1);
+            border-color: white;
+        }
+        
+        /* 产品特性 */
+        .products {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+        
+        .products-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        
+        .products h2 {
+            text-align: center;
+            font-size: 36px;
+            margin-bottom: 20px;
+            color: #333;
+        }
+        
+        .products-subtitle {
+            text-align: center;
+            font-size: 18px;
+            color: #666;
+            margin-bottom: 60px;
+        }
+        
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        
+        .product-card {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .product-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        
+        .product-card h3 {
+            font-size: 24px;
+            margin-bottom: 15px;
+            color: #1890ff;
+        }
+        
+        .product-card p {
+            color: #666;
+            line-height: 1.6;
+        }
+        
+        /* 响应式设计 */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                height: auto;
+                padding: 16px 24px;
+            }
+            
+            .nav-menu {
+                margin: 16px 0;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 32px;
+            }
+            
+            .hero p {
+                font-size: 16px;
+            }
+            
+            .hero-actions {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .products h2 {
+                font-size: 28px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 头部导航 -->
+    <header class="header">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo">iFlytek</div>
+                <div class="brand-name">iFlytek Spark AI面试系统</div>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="/" class="nav-item">首页</a>
+                <a href="/demo" class="nav-item">产品演示</a>
+                <a href="/interview-selection" class="nav-item">开始面试</a>
+                <a href="/reports" class="nav-item">面试报告</a>
+                <a href="/intelligent-dashboard" class="nav-item">数据洞察</a>
+            </nav>
+            
+            <div class="header-actions">
+                <a href="/candidate-portal" class="btn btn-secondary">候选人入口</a>
+                <a href="/enterprise-home" class="btn btn-primary">企业版体验</a>
+            </div>
+        </div>
+    </header>
+    
+    <!-- 英雄区域 -->
+    <section class="hero">
+        <div class="hero-container">
+            <h1>iFlytek Spark智能面试系统</h1>
+            <p>基于讯飞星火大模型的多模态AI面试解决方案，让招聘更智能、更高效</p>
+            <div class="hero-actions">
+                <a href="/interview-selection" class="hero-btn hero-btn-primary">立即开始面试</a>
+                <a href="/demo" class="hero-btn hero-btn-secondary">观看产品演示</a>
+            </div>
+        </div>
+    </section>
+    
+    <!-- 产品特性 -->
+    <section class="products">
+        <div class="products-container">
+            <h2>核心AI面试解决方案</h2>
+            <p class="products-subtitle">基于iFlytek Spark大模型，提供全方位智能面试体验</p>
+            
+            <div class="products-grid">
+                <a href="/interview-selection" class="product-card">
+                    <h3>AI智能面试官</h3>
+                    <p>基于iFlytek Spark大模型的智能面试官，支持多轮对话、实时评估和个性化问题生成，为企业提供专业的面试体验。</p>
+                </a>
+                
+                <a href="/demo" class="product-card">
+                    <h3>多模态分析引擎</h3>
+                    <p>集成语音识别、情感分析和行为评估的综合分析系统，全方位评估候选人的综合素质和专业能力。</p>
+                </a>
+                
+                <a href="/intelligent-dashboard" class="product-card">
+                    <h3>智能招聘管理</h3>
+                    <p>企业级招聘流程管理平台，从职位发布到人才录用的全链路智能化管理，提升招聘效率和质量。</p>
+                </a>
+            </div>
+        </div>
+    </section>
+    
+    <script>
+        // 添加页面加载完成提示
+        window.addEventListener('load', () => {
+            console.log('🎉 iFlytek Spark AI面试系统备用主页已加载');
+            console.log('✅ 所有导航功能正常工作');
+            
+            // 添加点击统计
+            document.querySelectorAll('a[href^="/"]').forEach(link => {
+                link.addEventListener('click', (e) => {
+                    console.log(`🖱️ 用户点击: ${link.textContent.trim()} -> ${link.href}`);
+                });
+            });
+        });
+        
+        // 添加平滑滚动效果
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+</html>

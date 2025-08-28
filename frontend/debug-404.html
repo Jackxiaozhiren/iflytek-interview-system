@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>404问题诊断</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        .test-result {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.3);
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.3);
+            border-left: 4px solid #f44336;
+        }
+        .info {
+            background: rgba(33, 150, 243, 0.3);
+            border-left: 4px solid #2196F3;
+        }
+        button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #0066cc;
+        }
+        .url-list {
+            list-style: none;
+            padding: 0;
+        }
+        .url-list li {
+            margin: 5px 0;
+        }
+        .url-list a {
+            color: #87CEEB;
+            text-decoration: none;
+            padding: 5px 10px;
+            border-radius: 3px;
+            background: rgba(255, 255, 255, 0.1);
+            display: inline-block;
+        }
+        .url-list a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 iFlytek Spark 系统 404 问题诊断</h1>
+        
+        <div class="test-section">
+            <h3>📊 系统状态检查</h3>
+            <div id="system-status">
+                <div class="test-result info">正在检查系统状态...</div>
+            </div>
+            <button onclick="checkSystemStatus()">重新检查</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🌐 服务器连接测试</h3>
+            <div id="server-status">
+                <div class="test-result info">正在测试服务器连接...</div>
+            </div>
+            <button onclick="testServerConnection()">测试连接</button>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 可用路由列表</h3>
+            <div class="test-result info">
+                <p>以下是系统中配置的主要路由，请尝试访问：</p>
+                <ul class="url-list">
+                    <li><a href="http://localhost:5173/" target="_blank">首页 - /</a></li>
+                    <li><a href="http://localhost:5173/demo" target="_blank">产品演示 - /demo</a></li>
+                    <li><a href="http://localhost:5173/enhanced-demo" target="_blank">增强演示 - /enhanced-demo</a></li>
+                    <li><a href="http://localhost:5173/interview-selection" target="_blank">面试选择 - /interview-selection</a></li>
+                    <li><a href="http://localhost:5173/enterprise" target="_blank">企业端 - /enterprise</a></li>
+                    <li><a href="http://localhost:5173/candidate" target="_blank">候选人端 - /candidate</a></li>
+                    <li><a href="http://localhost:5173/enhanced-home" target="_blank">增强主页 - /enhanced-home</a></li>
+                    <li><a href="http://localhost:5173/status-check" target="_blank">状态检查 - /status-check</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🛠️ 快速修复建议</h3>
+            <div id="fix-suggestions">
+                <div class="test-result info">
+                    <h4>如果仍然看到404错误，请尝试：</h4>
+                    <ol>
+                        <li><strong>清除浏览器缓存：</strong> Ctrl+Shift+R 强制刷新</li>
+                        <li><strong>检查URL：</strong> 确保访问 http://localhost:5173/</li>
+                        <li><strong>重启开发服务器：</strong> 在终端按 Ctrl+C 停止，然后运行 npm run dev</li>
+                        <li><strong>检查端口：</strong> 确认5173端口没有被其他程序占用</li>
+                        <li><strong>尝试其他浏览器：</strong> 使用Chrome、Firefox或Edge</li>
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📝 错误报告</h3>
+            <div id="error-log">
+                <div class="test-result info">控制台错误信息将显示在这里...</div>
+            </div>
+            <button onclick="checkConsoleErrors()">检查控制台错误</button>
+        </div>
+    </div>
+
+    <script>
+        // 检查系统状态
+        function checkSystemStatus() {
+            const statusDiv = document.getElementById('system-status');
+            statusDiv.innerHTML = '<div class="test-result info">正在检查...</div>';
+            
+            const checks = [
+                { name: 'Vue.js 支持', test: () => typeof Vue !== 'undefined' || window.Vue },
+                { name: 'ES6 模块支持', test: () => typeof import !== 'undefined' },
+                { name: 'Fetch API 支持', test: () => typeof fetch !== 'undefined' },
+                { name: '本地存储支持', test: () => typeof localStorage !== 'undefined' },
+                { name: 'WebSocket 支持', test: () => typeof WebSocket !== 'undefined' }
+            ];
+            
+            let results = '';
+            checks.forEach(check => {
+                try {
+                    const result = check.test();
+                    results += `<div class="test-result ${result ? 'success' : 'error'}">
+                        ${check.name}: ${result ? '✅ 支持' : '❌ 不支持'}
+                    </div>`;
+                } catch (e) {
+                    results += `<div class="test-result error">
+                        ${check.name}: ❌ 检查失败 - ${e.message}
+                    </div>`;
+                }
+            });
+            
+            statusDiv.innerHTML = results;
+        }
+
+        // 测试服务器连接
+        async function testServerConnection() {
+            const statusDiv = document.getElementById('server-status');
+            statusDiv.innerHTML = '<div class="test-result info">正在测试连接...</div>';
+            
+            const endpoints = [
+                'http://localhost:5173/',
+                'http://localhost:5173/demo',
+                'http://localhost:5173/api/health'
+            ];
+            
+            let results = '';
+            
+            for (const endpoint of endpoints) {
+                try {
+                    const response = await fetch(endpoint, { 
+                        method: 'HEAD',
+                        mode: 'no-cors'
+                    });
+                    results += `<div class="test-result success">
+                        ${endpoint}: ✅ 可访问
+                    </div>`;
+                } catch (error) {
+                    results += `<div class="test-result error">
+                        ${endpoint}: ❌ 连接失败 - ${error.message}
+                    </div>`;
+                }
+            }
+            
+            statusDiv.innerHTML = results;
+        }
+
+        // 检查控制台错误
+        function checkConsoleErrors() {
+            const errorDiv = document.getElementById('error-log');
+            
+            // 捕获控制台错误
+            const originalError = console.error;
+            const errors = [];
+            
+            console.error = function(...args) {
+                errors.push(args.join(' '));
+                originalError.apply(console, args);
+            };
+            
+            // 检查现有错误
+            if (window.console && window.console.memory) {
+                errorDiv.innerHTML = `<div class="test-result info">
+                    内存使用: ${Math.round(window.console.memory.usedJSHeapSize / 1024 / 1024)}MB
+                </div>`;
+            }
+            
+            if (errors.length > 0) {
+                errorDiv.innerHTML += errors.map(error => 
+                    `<div class="test-result error">❌ ${error}</div>`
+                ).join('');
+            } else {
+                errorDiv.innerHTML += '<div class="test-result success">✅ 暂无控制台错误</div>';
+            }
+        }
+
+        // 页面加载时自动运行检查
+        window.addEventListener('load', function() {
+            checkSystemStatus();
+            setTimeout(testServerConnection, 1000);
+            setTimeout(checkConsoleErrors, 2000);
+        });
+
+        // 监听错误事件
+        window.addEventListener('error', function(e) {
+            const errorDiv = document.getElementById('error-log');
+            errorDiv.innerHTML += `<div class="test-result error">
+                ❌ JavaScript错误: ${e.message} (${e.filename}:${e.lineno})
+            </div>`;
+        });
+    </script>
+</body>
+</html>

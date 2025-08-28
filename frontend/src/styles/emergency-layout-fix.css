@@ -1,0 +1,261 @@
+/**
+ * iFlytek 星火大模型智能面试系统 - 紧急布局修复
+ * Emergency Layout Fix for iFlytek Spark Interview System
+ * 
+ * 修复目标：
+ * - 解决内容超出紫色背景区域的问题
+ * - 确保所有文字和元素都在容器内显示
+ * - 修复响应式布局问题
+ * - 保持iFlytek品牌视觉一致性
+ */
+
+/* ===== 全局溢出修复 ===== */
+
+/* 防止水平滚动条 */
+html, body {
+  overflow-x: hidden !important;
+  max-width: 100vw !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* 确保根容器不溢出 */
+#app {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== 页面级别修复 ===== */
+
+/* 主页面容器修复 */
+.homepage,
+.demo-page {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* 所有section容器修复 */
+section {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== 容器系统紧急修复 ===== */
+
+/* 主要容器类修复 */
+.container,
+.demo-container,
+.optimized-container,
+.section-container {
+  max-width: min(1200px, calc(100vw - 48px)) !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+/* 窄容器修复 */
+.optimized-container-narrow {
+  max-width: min(1000px, calc(100vw - 40px)) !important;
+  margin: 0 auto !important;
+  padding: 0 20px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+/* 宽容器修复 */
+.optimized-container-wide {
+  max-width: min(1400px, calc(100vw - 48px)) !important;
+  margin: 0 auto !important;
+  padding: 0 24px !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+}
+
+/* ===== 紫色背景区域特殊修复 ===== */
+
+/* Hero区域修复 */
+.hero-section,
+.gradient-hero-bg {
+  width: 100% !important;
+  max-width: 100vw !important;
+  overflow-x: hidden !important;
+  position: relative !important;
+}
+
+.hero-content {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  grid-template-columns: 1fr !important;
+  gap: clamp(20px, 5vw, 40px) !important;
+  text-align: center !important;
+}
+
+/* 统计数据区域修复 */
+.stats-display,
+.stats-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: clamp(12px, 3vw, 24px) !important;
+}
+
+.stat-item {
+  flex: 0 1 auto !important;
+  min-width: 100px !important;
+  max-width: 180px !important;
+  width: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== 网格布局修复 ===== */
+
+/* 功能网格修复 */
+.features-grid,
+.demo-features-container,
+.tech-grid,
+.optimized-grid,
+.optimized-grid-2,
+.optimized-grid-3,
+.optimized-grid-4 {
+  width: 100% !important;
+  max-width: 100% !important;
+  overflow: hidden !important;
+  grid-template-columns: repeat(auto-fit, minmax(min(280px, 100%), 1fr)) !important;
+  gap: clamp(16px, 3vw, 24px) !important;
+}
+
+/* 卡片元素修复 */
+.feature-card,
+.demo-feature-card,
+.tech-item,
+.optimized-card {
+  width: 100% !important;
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  overflow: hidden !important;
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+}
+
+/* ===== 文字内容修复 ===== */
+
+/* 标题文字修复 */
+.hero-title,
+.demo-title,
+.section-title {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  hyphens: auto !important;
+  max-width: 100% !important;
+}
+
+/* 描述文字修复 */
+.hero-subtitle,
+.demo-subtitle,
+.section-subtitle,
+.feature-description {
+  word-wrap: break-word !important;
+  overflow-wrap: break-word !important;
+  max-width: 100% !important;
+}
+
+/* ===== 按钮和交互元素修复 ===== */
+
+/* 按钮组修复 */
+.hero-actions,
+.cta-actions,
+.feature-actions {
+  display: flex !important;
+  justify-content: center !important;
+  flex-wrap: wrap !important;
+  gap: clamp(12px, 2vw, 16px) !important;
+  width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* 按钮元素修复 */
+.btn,
+.el-button,
+.feature-btn {
+  max-width: 100% !important;
+  box-sizing: border-box !important;
+  word-wrap: break-word !important;
+}
+
+/* ===== 响应式修复 ===== */
+
+/* 移动端特殊修复 */
+@media (max-width: 768px) {
+  .container,
+  .demo-container,
+  .optimized-container {
+    max-width: calc(100vw - 32px) !important;
+    padding: 0 16px !important;
+  }
+  
+  .hero-content {
+    gap: 20px !important;
+  }
+  
+  .stats-display,
+  .stats-grid {
+    flex-direction: column !important;
+    align-items: center !important;
+    gap: 12px !important;
+  }
+  
+  .stat-item {
+    width: 100% !important;
+    max-width: 200px !important;
+  }
+  
+  .features-grid,
+  .demo-features-container,
+  .tech-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}
+
+/* 平板端修复 */
+@media (max-width: 1024px) and (min-width: 769px) {
+  .container,
+  .demo-container,
+  .optimized-container {
+    max-width: calc(100vw - 40px) !important;
+    padding: 0 20px !important;
+  }
+  
+  .features-grid,
+  .demo-features-container,
+  .tech-grid {
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)) !important;
+  }
+}
+
+/* ===== 调试辅助 ===== */
+
+/* 开发环境边界显示（可选） */
+.debug-layout * {
+  outline: 1px solid rgba(255, 0, 0, 0.2) !important;
+}
+
+/* 强制显示所有隐藏的溢出内容 */
+.force-show-overflow * {
+  overflow: visible !important;
+  max-width: none !important;
+}

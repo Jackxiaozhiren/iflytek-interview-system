@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>链接问题诊断工具 - iFlytek面试系统</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+        }
+        
+        .diagnostic-section {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .diagnostic-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+            font-size: 14px;
+        }
+        
+        .diagnostic-button:hover {
+            background: #0066cc;
+        }
+        
+        .results {
+            margin-top: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            font-family: monospace;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .error {
+            color: #ff6b6b;
+        }
+        
+        .success {
+            color: #51cf66;
+        }
+        
+        .warning {
+            color: #ffd43b;
+        }
+        
+        .info {
+            color: #74c0fc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 链接问题诊断工具</h1>
+        
+        <div class="diagnostic-section">
+            <h3>📋 当前页面信息</h3>
+            <button class="diagnostic-button" onclick="checkCurrentPage()">
+                检查当前页面
+            </button>
+            <button class="diagnostic-button" onclick="scanAllLinks()">
+                扫描所有链接
+            </button>
+            <button class="diagnostic-button" onclick="checkEventListeners()">
+                检查事件监听器
+            </button>
+        </div>
+        
+        <div class="diagnostic-section">
+            <h3>🔧 修复工具</h3>
+            <button class="diagnostic-button" onclick="fixAllLinks()">
+                修复所有错误链接
+            </button>
+            <button class="diagnostic-button" onclick="preventDefaultClicks()">
+                阻止错误点击
+            </button>
+            <button class="diagnostic-button" onclick="redirectToCorrectPage()">
+                跳转到正确页面
+            </button>
+        </div>
+        
+        <div class="diagnostic-section">
+            <h3>🧪 测试工具</h3>
+            <button class="diagnostic-button" onclick="testVueRouter()">
+                测试Vue Router
+            </button>
+            <button class="diagnostic-button" onclick="testLocalhost()">
+                测试本地服务器
+            </button>
+            <button class="diagnostic-button" onclick="clearCache()">
+                清除缓存
+            </button>
+        </div>
+        
+        <div id="results" class="results" style="display: none;"></div>
+    </div>
+
+    <script>
+        function log(message, type = 'info') {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.style.display = 'block';
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const prefix = {
+                'error': '❌',
+                'success': '✅',
+                'warning': '⚠️',
+                'info': 'ℹ️'
+            }[type] || 'ℹ️';
+            
+            resultsDiv.innerHTML += `[${timestamp}] ${prefix} ${message}\n`;
+            resultsDiv.scrollTop = resultsDiv.scrollHeight;
+        }
+        
+        function checkCurrentPage() {
+            log('开始检查当前页面...', 'info');
+            log(`当前URL: ${window.location.href}`, 'info');
+            log(`协议: ${window.location.protocol}`, 'info');
+            log(`主机: ${window.location.host}`, 'info');
+            log(`路径: ${window.location.pathname}`, 'info');
+            log(`Hash: ${window.location.hash}`, 'info');
+            
+            // 检查是否是file://协议
+            if (window.location.protocol === 'file:') {
+                log('检测到file://协议，这可能是问题的根源！', 'error');
+                log('建议：请通过http://localhost:5173访问应用', 'warning');
+            } else {
+                log('协议正常', 'success');
+            }
+        }
+        
+        function scanAllLinks() {
+            log('开始扫描页面中的所有链接...', 'info');
+            
+            const links = document.querySelectorAll('a[href]');
+            log(`找到 ${links.length} 个链接`, 'info');
+            
+            let problemLinks = 0;
+            links.forEach((link, index) => {
+                const href = link.getAttribute('href');
+                if (href.includes('select-interview-mode') && !href.includes('#')) {
+                    log(`问题链接 ${index + 1}: ${href}`, 'error');
+                    problemLinks++;
+                }
+            });
+            
+            if (problemLinks === 0) {
+                log('未发现问题链接', 'success');
+            } else {
+                log(`发现 ${problemLinks} 个问题链接`, 'error');
+            }
+            
+            // 检查按钮的onclick事件
+            const buttons = document.querySelectorAll('button[onclick]');
+            log(`检查 ${buttons.length} 个按钮的onclick事件`, 'info');
+            
+            let problemButtons = 0;
+            buttons.forEach((button, index) => {
+                const onclick = button.getAttribute('onclick');
+                if (onclick && onclick.includes('select-interview-mode') && !onclick.includes('#')) {
+                    log(`问题按钮 ${index + 1}: ${onclick}`, 'error');
+                    problemButtons++;
+                }
+            });
+            
+            if (problemButtons === 0) {
+                log('未发现问题按钮', 'success');
+            } else {
+                log(`发现 ${problemButtons} 个问题按钮`, 'error');
+            }
+        }
+        
+        function checkEventListeners() {
+            log('检查事件监听器...', 'info');
+            
+            // 检查是否有Vue应用实例
+            if (window.Vue || window.__VUE__) {
+                log('检测到Vue应用', 'success');
+            } else {
+                log('未检测到Vue应用', 'warning');
+            }
+            
+            // 检查是否有Vue Router
+            if (window.VueRouter || (window.Vue && window.Vue.router)) {
+                log('检测到Vue Router', 'success');
+            } else {
+                log('未检测到Vue Router', 'warning');
+            }
+        }
+        
+        function fixAllLinks() {
+            log('开始修复所有错误链接...', 'info');
+            
+            let fixedCount = 0;
+            
+            // 修复a标签
+            const links = document.querySelectorAll('a[href]');
+            links.forEach(link => {
+                const href = link.getAttribute('href');
+                if (href.includes('select-interview-mode') && !href.includes('#')) {
+                    const newHref = href.replace('/select-interview-mode', '/#/select-interview-mode');
+                    link.setAttribute('href', newHref);
+                    log(`修复链接: ${href} -> ${newHref}`, 'success');
+                    fixedCount++;
+                }
+            });
+            
+            // 修复按钮onclick
+            const buttons = document.querySelectorAll('button[onclick]');
+            buttons.forEach(button => {
+                const onclick = button.getAttribute('onclick');
+                if (onclick && onclick.includes('select-interview-mode') && !onclick.includes('#')) {
+                    const newOnclick = onclick.replace('/select-interview-mode', '/#/select-interview-mode');
+                    button.setAttribute('onclick', newOnclick);
+                    log(`修复按钮: ${onclick} -> ${newOnclick}`, 'success');
+                    fixedCount++;
+                }
+            });
+            
+            log(`总共修复了 ${fixedCount} 个问题`, fixedCount > 0 ? 'success' : 'info');
+        }
+        
+        function preventDefaultClicks() {
+            log('设置点击事件拦截...', 'info');
+            
+            document.addEventListener('click', function(e) {
+                const target = e.target;
+                
+                // 检查链接
+                if (target.tagName === 'A') {
+                    const href = target.getAttribute('href');
+                    if (href && href.includes('select-interview-mode') && !href.includes('#')) {
+                        e.preventDefault();
+                        const correctUrl = 'http://localhost:5173/#/select-interview-mode';
+                        log(`拦截错误链接点击，重定向到: ${correctUrl}`, 'warning');
+                        window.open(correctUrl, '_blank');
+                        return false;
+                    }
+                }
+                
+                // 检查按钮
+                if (target.tagName === 'BUTTON') {
+                    const onclick = target.getAttribute('onclick');
+                    if (onclick && onclick.includes('select-interview-mode') && !onclick.includes('#')) {
+                        e.preventDefault();
+                        const correctUrl = 'http://localhost:5173/#/select-interview-mode';
+                        log(`拦截错误按钮点击，重定向到: ${correctUrl}`, 'warning');
+                        window.open(correctUrl, '_blank');
+                        return false;
+                    }
+                }
+            });
+            
+            log('点击事件拦截已设置', 'success');
+        }
+        
+        function redirectToCorrectPage() {
+            log('跳转到正确的面试模式选择页面...', 'info');
+            const correctUrl = 'http://localhost:5173/#/select-interview-mode';
+            window.open(correctUrl, '_blank');
+            log(`已打开: ${correctUrl}`, 'success');
+        }
+        
+        function testVueRouter() {
+            log('测试Vue Router连接...', 'info');
+            
+            fetch('http://localhost:5173')
+                .then(response => {
+                    if (response.ok) {
+                        log('Vue应用服务器连接正常', 'success');
+                        return fetch('http://localhost:5173/#/select-interview-mode');
+                    } else {
+                        throw new Error(`服务器响应错误: ${response.status}`);
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        log('面试模式选择页面可访问', 'success');
+                    } else {
+                        log('面试模式选择页面访问失败', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`连接测试失败: ${error.message}`, 'error');
+                    log('请确保开发服务器正在运行: npm run dev', 'warning');
+                });
+        }
+        
+        function testLocalhost() {
+            log('测试本地服务器状态...', 'info');
+            
+            const testUrls = [
+                'http://localhost:5173',
+                'http://localhost:5173/#/',
+                'http://localhost:5173/#/select-interview-mode'
+            ];
+            
+            testUrls.forEach(url => {
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            log(`✅ ${url} - 可访问`, 'success');
+                        } else {
+                            log(`❌ ${url} - 响应错误: ${response.status}`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        log(`❌ ${url} - 连接失败: ${error.message}`, 'error');
+                    });
+            });
+        }
+        
+        function clearCache() {
+            log('清除浏览器缓存...', 'info');
+            
+            if ('caches' in window) {
+                caches.keys().then(names => {
+                    names.forEach(name => {
+                        caches.delete(name);
+                    });
+                    log('Service Worker缓存已清除', 'success');
+                });
+            }
+            
+            // 清除localStorage
+            try {
+                localStorage.clear();
+                log('localStorage已清除', 'success');
+            } catch (e) {
+                log('localStorage清除失败', 'warning');
+            }
+            
+            // 清除sessionStorage
+            try {
+                sessionStorage.clear();
+                log('sessionStorage已清除', 'success');
+            } catch (e) {
+                log('sessionStorage清除失败', 'warning');
+            }
+            
+            log('建议手动刷新页面或重启浏览器', 'info');
+        }
+        
+        // 页面加载时自动检查
+        window.addEventListener('load', () => {
+            log('诊断工具已加载', 'success');
+            log('点击上方按钮开始诊断...', 'info');
+            
+            // 自动检查当前页面
+            setTimeout(() => {
+                checkCurrentPage();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

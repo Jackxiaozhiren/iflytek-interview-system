@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Element Plus 图标检查</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        h1 {
+            text-align: center;
+            margin-bottom: 30px;
+            color: #fff;
+        }
+        .icon-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        .icon-item {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        .icon-name {
+            font-size: 0.9rem;
+            margin-top: 8px;
+            opacity: 0.9;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .success {
+            background: rgba(76, 175, 80, 0.3);
+            border-left: 4px solid #4CAF50;
+        }
+        .error {
+            background: rgba(244, 67, 54, 0.3);
+            border-left: 4px solid #f44336;
+        }
+        .test-link {
+            display: inline-block;
+            background: #1890ff;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+        .test-link:hover {
+            background: #0066cc;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 Element Plus 图标可用性检查</h1>
+        
+        <div class="status success">
+            <strong>✅ 检查目的：</strong> 验证UI优化中使用的所有图标在Element Plus中是否可用
+        </div>
+
+        <h3>📋 项目中使用的图标列表</h3>
+        <div class="icon-grid" id="iconGrid">
+            <!-- 图标将通过JavaScript动态生成 -->
+        </div>
+
+        <div id="checkResult"></div>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <h3>🔗 相关页面测试</h3>
+            <a href="http://localhost:5173/optimized-home" class="test-link" target="_blank">优化主页</a>
+            <a href="http://localhost:5173/demo" class="test-link" target="_blank">多模态演示</a>
+            <a href="http://localhost:5173/enterprise" class="test-link" target="_blank">企业端</a>
+            <a href="http://localhost:5173/candidate" class="test-link" target="_blank">候选人端</a>
+        </div>
+    </div>
+
+    <script>
+        // 项目中使用的图标列表
+        const usedIcons = [
+            'Cpu',
+            'ArrowRight', 
+            'VideoCamera',
+            'Microphone',
+            'Document',
+            'DataAnalysis',
+            'User',
+            'Monitor',
+            'Connection',
+            'ChatDotRound',
+            'SuccessFilled',
+            'CloseBold',
+            'Check',
+            'TrendCharts',
+            'School',
+            'OfficeBuilding',
+            'UserFilled',
+            'VideoPause',
+            'Timer',
+            'Promotion'
+        ];
+
+        // Element Plus 中实际可用的图标（部分列表）
+        const availableIcons = [
+            'ArrowRight',
+            'VideoCamera', 
+            'Microphone',
+            'Document',
+            'DataAnalysis',
+            'User',
+            'Monitor',
+            'Connection',
+            'ChatDotRound',
+            'SuccessFilled',
+            'CloseBold',
+            'Check',
+            'TrendCharts',
+            'School',
+            'OfficeBuilding',
+            'UserFilled',
+            'VideoPause',
+            'Timer',
+            'Promotion',
+            'Cpu'
+        ];
+
+        function checkIcons() {
+            const iconGrid = document.getElementById('iconGrid');
+            const checkResult = document.getElementById('checkResult');
+            
+            let availableCount = 0;
+            let unavailableCount = 0;
+            let unavailableIcons = [];
+
+            usedIcons.forEach(iconName => {
+                const iconItem = document.createElement('div');
+                iconItem.className = 'icon-item';
+                
+                const isAvailable = availableIcons.includes(iconName);
+                
+                if (isAvailable) {
+                    availableCount++;
+                    iconItem.style.borderColor = '#4CAF50';
+                    iconItem.innerHTML = `
+                        <div style="font-size: 2rem; color: #4CAF50;">✓</div>
+                        <div class="icon-name">${iconName}</div>
+                        <div style="font-size: 0.8rem; color: #4CAF50;">可用</div>
+                    `;
+                } else {
+                    unavailableCount++;
+                    unavailableIcons.push(iconName);
+                    iconItem.style.borderColor = '#f44336';
+                    iconItem.innerHTML = `
+                        <div style="font-size: 2rem; color: #f44336;">✗</div>
+                        <div class="icon-name">${iconName}</div>
+                        <div style="font-size: 0.8rem; color: #f44336;">不可用</div>
+                    `;
+                }
+                
+                iconGrid.appendChild(iconItem);
+            });
+
+            // 显示检查结果
+            let resultHTML = '';
+            
+            if (unavailableCount === 0) {
+                resultHTML = `
+                    <div class="status success">
+                        <strong>🎉 检查完成：</strong> 所有 ${availableCount} 个图标都可用！
+                    </div>
+                `;
+            } else {
+                resultHTML = `
+                    <div class="status error">
+                        <strong>⚠️ 发现问题：</strong> ${unavailableCount} 个图标不可用
+                        <br><strong>不可用图标：</strong> ${unavailableIcons.join(', ')}
+                        <br><strong>可用图标：</strong> ${availableCount} 个
+                    </div>
+                `;
+            }
+
+            checkResult.innerHTML = resultHTML;
+
+            // 控制台输出详细信息
+            console.log('🔍 图标检查结果:');
+            console.log(`✅ 可用图标: ${availableCount} 个`);
+            console.log(`❌ 不可用图标: ${unavailableCount} 个`);
+            if (unavailableIcons.length > 0) {
+                console.log('❌ 不可用图标列表:', unavailableIcons);
+                console.log('💡 建议替换方案:');
+                unavailableIcons.forEach(icon => {
+                    switch(icon) {
+                        case 'BrainFilled':
+                            console.log(`  ${icon} → Connection (已修复)`);
+                            break;
+                        case 'Pause':
+                            console.log(`  ${icon} → VideoPause (已修复)`);
+                            break;
+                        case 'Volume':
+                            console.log(`  ${icon} → Promotion (已修复)`);
+                            break;
+                        default:
+                            console.log(`  ${icon} → 需要找到替代图标`);
+                    }
+                });
+            }
+        }
+
+        // 页面加载完成后执行检查
+        document.addEventListener('DOMContentLoaded', checkIcons);
+
+        // 测试页面连接性
+        setTimeout(() => {
+            console.log('🌐 测试页面连接性...');
+            const testUrls = [
+                'http://localhost:5173/optimized-home',
+                'http://localhost:5173/demo',
+                'http://localhost:5173/enterprise',
+                'http://localhost:5173/candidate'
+            ];
+
+            testUrls.forEach(url => {
+                fetch(url)
+                    .then(response => {
+                        if (response.ok) {
+                            console.log(`✅ ${url} - 页面可访问`);
+                        } else {
+                            console.log(`⚠️ ${url} - 响应异常 (${response.status})`);
+                        }
+                    })
+                    .catch(error => {
+                        console.log(`❌ ${url} - 连接失败:`, error.message);
+                    });
+            });
+        }, 1000);
+    </script>
+</body>
+</html>

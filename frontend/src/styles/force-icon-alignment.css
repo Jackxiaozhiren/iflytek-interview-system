@@ -1,0 +1,378 @@
+/**
+ * iFlytek 星火大模型智能面试系统 - 强制图标对齐修复
+ * Force Icon Alignment Fixes for iFlytek Spark Interview System
+ *
+ * 版本: 3.0
+ * 更新: 2025-07-20
+ * 优先级: 终极 (!important)
+ *
+ * 使用最强制的方式修复所有图标对齐问题
+ */
+
+/* ===== 全局图标重置 ===== */
+
+/* 重置所有可能的图标元素 */
+.el-icon,
+i.el-icon,
+svg.el-icon,
+.icon,
+.btn-icon,
+.meta-icon,
+.control-icon,
+.feature-icon,
+.nav-icon,
+.header-icon,
+.cta-icon,
+.assistance-icon,
+[class*="icon"],
+i[class*="el-icon"],
+svg[class*="el-icon"] {
+  /* 强制重置所有可能影响对齐的属性 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  outline: none !important;
+  background: transparent !important;
+  
+  /* 强制基线对齐 */
+  position: relative !important;
+  top: -0.1em !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  
+  /* 确保尺寸一致 */
+  width: auto !important;
+  height: auto !important;
+  min-width: auto !important;
+  min-height: auto !important;
+  max-width: none !important;
+  max-height: none !important;
+}
+
+/* ===== 按钮内图标特殊处理 ===== */
+
+/* 所有按钮内的图标 */
+.el-button .el-icon,
+.el-button .btn-icon,
+.el-button .icon,
+.el-button i,
+.el-button svg,
+button .el-icon,
+button .btn-icon,
+button .icon,
+button i,
+button svg {
+  /* 重置margin */
+  margin: 0 6px 0 0 !important;
+  
+  /* 强制对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  
+  /* 基线微调 */
+  position: relative !important;
+  top: -0.08em !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+
+/* 按钮内最后一个图标 */
+.el-button .el-icon:last-child,
+.el-button .btn-icon:last-child,
+.el-button .icon:last-child,
+button .el-icon:last-child,
+button .btn-icon:last-child,
+button .icon:last-child {
+  margin: 0 0 0 6px !important;
+}
+
+/* 按钮内唯一图标 */
+.el-button .el-icon:only-child,
+.el-button .btn-icon:only-child,
+.el-button .icon:only-child,
+button .el-icon:only-child,
+button .btn-icon:only-child,
+button .icon:only-child {
+  margin: 0 !important;
+}
+
+/* ===== 按钮本身的强制对齐 ===== */
+
+/* 所有按钮元素 */
+.el-button,
+button,
+.control-btn,
+.ai-btn {
+  /* 强制flex布局 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 文本对齐 */
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  
+  /* 防止换行 */
+  white-space: nowrap !important;
+  
+  /* 盒模型 */
+  box-sizing: border-box !important;
+  
+  /* 重置可能影响对齐的属性 */
+  text-decoration: none !important;
+  border-collapse: separate !important;
+}
+
+/* 按钮内文本 */
+.el-button span,
+button span,
+.control-btn span,
+.ai-btn span {
+  /* 文本对齐 */
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  
+  /* 中文字体微调 */
+  position: relative !important;
+  top: 0.02em !important;
+}
+
+/* ===== 元数据区域强制对齐 ===== */
+
+/* 元数据容器 */
+.meta-item,
+.interview-meta .meta-item,
+.interview-header .meta-item {
+  /* 强制flex布局 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  
+  /* 间距控制 */
+  gap: 6px !important;
+  padding: 8px 12px !important;
+  
+  /* 高度控制 */
+  min-height: 36px !important;
+  
+  /* 盒模型 */
+  box-sizing: border-box !important;
+}
+
+/* 元数据图标 */
+.meta-item .el-icon,
+.meta-item .meta-icon,
+.interview-meta .meta-item .el-icon,
+.interview-header .meta-item .el-icon {
+  /* 强制尺寸和对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 固定尺寸 */
+  width: 14px !important;
+  height: 14px !important;
+  font-size: 14px !important;
+  
+  /* 颜色 */
+  color: #1890ff !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  
+  /* 位置重置 */
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+}
+
+/* 元数据文本 */
+.meta-label,
+.meta-value {
+  /* 文本对齐 */
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  
+  /* 重置margin */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+.meta-label {
+  font-size: 12px !important;
+  color: #666 !important;
+  margin-right: 4px !important;
+}
+
+.meta-value {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+}
+
+/* ===== 卡片标题强制对齐 ===== */
+
+/* 卡片标题容器 */
+.el-card__header,
+.card-header,
+.panel-header {
+  /* 强制flex布局 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  
+  /* 间距 */
+  gap: 8px !important;
+  
+  /* 文本对齐 */
+  line-height: 1.2 !important;
+}
+
+/* 卡片标题图标 */
+.el-card__header .el-icon,
+.card-header .el-icon,
+.panel-header .el-icon {
+  /* 强制对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 间距 */
+  margin-right: 8px !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  
+  /* 位置 */
+  position: relative !important;
+  top: 0 !important;
+}
+
+/* ===== 技术特性卡片强制对齐 ===== */
+
+/* 技术图标容器 */
+.tech-icon {
+  /* 强制居中 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 固定尺寸 */
+  width: 60px !important;
+  height: 60px !important;
+  
+  /* 间距 */
+  margin: 0 auto 16px !important;
+  
+  /* 形状 */
+  border-radius: 50% !important;
+}
+
+/* 技术图标 */
+.tech-icon .el-icon,
+.tech-icon .feature-icon {
+  /* 强制对齐 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 尺寸 */
+  font-size: 24px !important;
+  
+  /* 颜色 */
+  color: white !important;
+  
+  /* 位置重置 */
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+}
+
+/* ===== 导航菜单强制对齐 ===== */
+
+/* 菜单项 */
+.el-menu-item {
+  /* 强制flex布局 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  
+  /* 高度和间距 */
+  min-height: 56px !important;
+  padding: 0 20px !important;
+  
+  /* 文本对齐 */
+  line-height: 1.2 !important;
+}
+
+/* 菜单项图标 */
+.el-menu-item .el-icon {
+  /* 强制对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 间距 */
+  margin-right: 8px !important;
+  
+  /* 尺寸 */
+  font-size: 16px !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  
+  /* 位置重置 */
+  position: relative !important;
+  top: 0 !important;
+}
+
+/* ===== 响应式强制修复 ===== */
+
+/* 平板端 */
+@media (max-width: 768px) {
+  .el-button .el-icon,
+  .el-button .btn-icon {
+    margin-right: 4px !important;
+    font-size: 12px !important;
+    top: -0.06em !important;
+  }
+  
+  .meta-item .el-icon,
+  .meta-item .meta-icon {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* 手机端 */
+@media (max-width: 480px) {
+  .el-button .el-icon,
+  .el-button .btn-icon {
+    margin-right: 3px !important;
+    font-size: 11px !important;
+    top: -0.05em !important;
+  }
+  
+  .meta-item .el-icon,
+  .meta-item .meta-icon {
+    width: 11px !important;
+    height: 11px !important;
+    font-size: 11px !important;
+  }
+}

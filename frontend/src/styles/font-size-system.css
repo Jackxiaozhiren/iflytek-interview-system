@@ -1,0 +1,330 @@
+/* 🔤 iFlytek多模态AI面试系统 - 字体大小调整系统 */
+/* 支持小、中、大三种字体大小，确保响应式设计兼容性 */
+
+:root {
+  /* 基础字体大小变量 */
+  --base-font-size: 14px;
+  --small-font-size: 12px;
+  --medium-font-size: 14px;
+  --large-font-size: 16px;
+  
+  /* 标题字体大小比例 */
+  --h1-scale: 2.5;
+  --h2-scale: 2.0;
+  --h3-scale: 1.75;
+  --h4-scale: 1.5;
+  --h5-scale: 1.25;
+  --h6-scale: 1.1;
+  
+  /* 行高比例 */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* 字间距 */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+}
+
+/* ===== 小字体模式 ===== */
+.font-size-small {
+  --current-font-size: var(--small-font-size);
+  font-size: var(--small-font-size);
+}
+
+.font-size-small h1 {
+  font-size: calc(var(--small-font-size) * var(--h1-scale));
+  line-height: var(--line-height-tight);
+}
+
+.font-size-small h2 {
+  font-size: calc(var(--small-font-size) * var(--h2-scale));
+  line-height: var(--line-height-tight);
+}
+
+.font-size-small h3 {
+  font-size: calc(var(--small-font-size) * var(--h3-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-small h4 {
+  font-size: calc(var(--small-font-size) * var(--h4-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-small h5 {
+  font-size: calc(var(--small-font-size) * var(--h5-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-small h6 {
+  font-size: calc(var(--small-font-size) * var(--h6-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-small p,
+.font-size-small span,
+.font-size-small div {
+  font-size: var(--small-font-size);
+  line-height: var(--line-height-normal);
+}
+
+.font-size-small .el-button {
+  font-size: var(--small-font-size);
+  padding: 6px 12px;
+}
+
+.font-size-small .el-input__inner {
+  font-size: var(--small-font-size);
+  height: 32px;
+}
+
+.font-size-small .el-table {
+  font-size: var(--small-font-size);
+}
+
+.font-size-small .el-menu-item {
+  font-size: var(--small-font-size);
+  height: 48px;
+  line-height: 48px;
+}
+
+/* ===== 中等字体模式（默认） ===== */
+.font-size-medium,
+body {
+  --current-font-size: var(--medium-font-size);
+  font-size: var(--medium-font-size);
+}
+
+.font-size-medium h1 {
+  font-size: calc(var(--medium-font-size) * var(--h1-scale));
+  line-height: var(--line-height-tight);
+}
+
+.font-size-medium h2 {
+  font-size: calc(var(--medium-font-size) * var(--h2-scale));
+  line-height: var(--line-height-tight);
+}
+
+.font-size-medium h3 {
+  font-size: calc(var(--medium-font-size) * var(--h3-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-medium h4 {
+  font-size: calc(var(--medium-font-size) * var(--h4-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-medium h5 {
+  font-size: calc(var(--medium-font-size) * var(--h5-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-medium h6 {
+  font-size: calc(var(--medium-font-size) * var(--h6-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-medium p,
+.font-size-medium span,
+.font-size-medium div {
+  font-size: var(--medium-font-size);
+  line-height: var(--line-height-normal);
+}
+
+.font-size-medium .el-button {
+  font-size: var(--medium-font-size);
+  padding: 8px 16px;
+}
+
+.font-size-medium .el-input__inner {
+  font-size: var(--medium-font-size);
+  height: 36px;
+}
+
+.font-size-medium .el-table {
+  font-size: var(--medium-font-size);
+}
+
+.font-size-medium .el-menu-item {
+  font-size: var(--medium-font-size);
+  height: 56px;
+  line-height: 56px;
+}
+
+/* ===== 大字体模式 ===== */
+.font-size-large {
+  --current-font-size: var(--large-font-size);
+  font-size: var(--large-font-size);
+}
+
+.font-size-large h1 {
+  font-size: calc(var(--large-font-size) * var(--h1-scale));
+  line-height: var(--line-height-tight);
+}
+
+.font-size-large h2 {
+  font-size: calc(var(--large-font-size) * var(--h2-scale));
+  line-height: var(--line-height-tight);
+}
+
+.font-size-large h3 {
+  font-size: calc(var(--large-font-size) * var(--h3-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-large h4 {
+  font-size: calc(var(--large-font-size) * var(--h4-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-large h5 {
+  font-size: calc(var(--large-font-size) * var(--h5-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-large h6 {
+  font-size: calc(var(--large-font-size) * var(--h6-scale));
+  line-height: var(--line-height-normal);
+}
+
+.font-size-large p,
+.font-size-large span,
+.font-size-large div {
+  font-size: var(--large-font-size);
+  line-height: var(--line-height-relaxed);
+}
+
+.font-size-large .el-button {
+  font-size: var(--large-font-size);
+  padding: 10px 20px;
+}
+
+.font-size-large .el-input__inner {
+  font-size: var(--large-font-size);
+  height: 40px;
+}
+
+.font-size-large .el-table {
+  font-size: var(--large-font-size);
+}
+
+.font-size-large .el-menu-item {
+  font-size: var(--large-font-size);
+  height: 64px;
+  line-height: 64px;
+}
+
+/* ===== 响应式字体大小 ===== */
+@media (max-width: 768px) {
+  .font-size-small {
+    --small-font-size: 11px;
+  }
+  
+  .font-size-medium {
+    --medium-font-size: 13px;
+  }
+  
+  .font-size-large {
+    --large-font-size: 15px;
+  }
+  
+  /* 移动端标题缩放调整 */
+  .font-size-small h1,
+  .font-size-medium h1,
+  .font-size-large h1 {
+    --h1-scale: 2.0;
+  }
+  
+  .font-size-small h2,
+  .font-size-medium h2,
+  .font-size-large h2 {
+    --h2-scale: 1.75;
+  }
+}
+
+@media (max-width: 480px) {
+  .font-size-small {
+    --small-font-size: 10px;
+  }
+  
+  .font-size-medium {
+    --medium-font-size: 12px;
+  }
+  
+  .font-size-large {
+    --large-font-size: 14px;
+  }
+  
+  /* 超小屏幕标题缩放调整 */
+  .font-size-small h1,
+  .font-size-medium h1,
+  .font-size-large h1 {
+    --h1-scale: 1.75;
+  }
+  
+  .font-size-small h2,
+  .font-size-medium h2,
+  .font-size-large h2 {
+    --h2-scale: 1.5;
+  }
+}
+
+/* ===== Element Plus 组件字体大小适配 ===== */
+.font-size-small .el-card__header {
+  font-size: calc(var(--small-font-size) * 1.2);
+  font-weight: 600;
+}
+
+.font-size-medium .el-card__header {
+  font-size: calc(var(--medium-font-size) * 1.2);
+  font-weight: 600;
+}
+
+.font-size-large .el-card__header {
+  font-size: calc(var(--large-font-size) * 1.2);
+  font-weight: 600;
+}
+
+/* 表单标签字体大小 */
+.font-size-small .el-form-item__label {
+  font-size: var(--small-font-size);
+}
+
+.font-size-medium .el-form-item__label {
+  font-size: var(--medium-font-size);
+}
+
+.font-size-large .el-form-item__label {
+  font-size: var(--large-font-size);
+}
+
+/* 消息提示字体大小 */
+.font-size-small .el-message {
+  font-size: var(--small-font-size);
+}
+
+.font-size-medium .el-message {
+  font-size: var(--medium-font-size);
+}
+
+.font-size-large .el-message {
+  font-size: var(--large-font-size);
+}
+
+/* 确保中文字体渲染质量 */
+.font-size-small,
+.font-size-medium,
+.font-size-large {
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', 'SimSun', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* 字体大小切换动画 */
+* {
+  transition: font-size 0.3s ease, padding 0.3s ease, height 0.3s ease;
+}

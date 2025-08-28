@@ -1,0 +1,16 @@
+<svg width="240" height="240" xmlns="http://www.w3.org/2000/svg">
+  <rect width="240" height="240" fill="#764ba2"/>
+  <circle cx="120" cy="80" r="25" fill="#ffffff" opacity="0.9"/>
+  <rect x="70" y="120" width="100" height="40" rx="8" fill="#ffffff" opacity="0.9"/>
+  <circle cx="85" cy="135" r="8" fill="#764ba2"/>
+  <circle cx="120" cy="135" r="8" fill="#764ba2"/>
+  <circle cx="155" cy="135" r="8" fill="#764ba2"/>
+  <text x="120" y="200" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="16" font-family="Microsoft YaHei, Arial, sans-serif">
+    核心功能
+  </text>
+  <text x="120" y="220" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="10" font-family="Microsoft YaHei, Arial, sans-serif" opacity="0.8">
+    iFlytek Spark AI 特性
+  </text>
+</svg>

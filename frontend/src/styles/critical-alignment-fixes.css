@@ -1,0 +1,383 @@
+/**
+ * iFlytek 星火大模型智能面试系统 - 关键对齐问题修复
+ * Critical Alignment Fixes for iFlytek Spark Interview System
+ *
+ * 版本: 2.0
+ * 更新: 2025-07-20
+ * 优先级: 最高 (!important)
+ *
+ * 针对浏览器中发现的具体对齐问题进行强制修复
+ */
+
+/* ===== 强制图标与文本对齐修复 ===== */
+
+/* 所有图标的基础对齐 - 最高优先级 */
+.el-icon,
+i[class*="el-icon"],
+svg.el-icon,
+.icon,
+[class*="icon"] {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  /* 强制基线对齐 */
+  position: relative !important;
+  top: -0.125em !important;
+}
+
+/* Element Plus 按钮图标强制对齐 */
+.el-button .el-icon,
+.el-button .btn-icon,
+.el-button i,
+.el-button svg {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  margin-right: 6px !important;
+  position: relative !important;
+  top: -0.1em !important;
+  flex-shrink: 0 !important;
+}
+
+.el-button .el-icon:last-child,
+.el-button .btn-icon:last-child {
+  margin-right: 0 !important;
+  margin-left: 6px !important;
+}
+
+.el-button .el-icon:only-child,
+.el-button .btn-icon:only-child {
+  margin: 0 !important;
+}
+
+/* 按钮文本强制居中 */
+.el-button {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  box-sizing: border-box !important;
+}
+
+.el-button span {
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+}
+
+/* 大尺寸按钮特殊处理 */
+.el-button--large {
+  min-height: 48px !important;
+  padding: 12px 24px !important;
+  font-size: 16px !important;
+  line-height: 1 !important;
+}
+
+.el-button--large .el-icon,
+.el-button--large .btn-icon {
+  font-size: 18px !important;
+  margin-right: 8px !important;
+  top: -0.08em !important;
+}
+
+/* 默认尺寸按钮 */
+.el-button--default {
+  min-height: 40px !important;
+  padding: 8px 16px !important;
+  font-size: 14px !important;
+  line-height: 1 !important;
+}
+
+.el-button--default .el-icon,
+.el-button--default .btn-icon {
+  font-size: 14px !important;
+  margin-right: 6px !important;
+  top: -0.1em !important;
+}
+
+/* 小尺寸按钮 */
+.el-button--small {
+  min-height: 32px !important;
+  padding: 6px 12px !important;
+  font-size: 12px !important;
+  line-height: 1 !important;
+}
+
+.el-button--small .el-icon,
+.el-button--small .btn-icon {
+  font-size: 12px !important;
+  margin-right: 4px !important;
+  top: -0.12em !important;
+}
+
+/* ===== 卡片组件图标对齐修复 ===== */
+
+/* 卡片标题图标对齐 */
+.el-card__header .el-icon,
+.card-header .el-icon,
+.card-title .el-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 8px !important;
+  vertical-align: middle !important;
+  position: relative !important;
+  top: -0.1em !important;
+  flex-shrink: 0 !important;
+}
+
+/* 卡片标题文本对齐 */
+.el-card__header,
+.card-header {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1.2 !important;
+}
+
+/* ===== 面试页面专用对齐修复 ===== */
+
+/* 面试元数据区域强制对齐 */
+.interview-meta .meta-item,
+.interview-header .meta-item {
+  display: flex !important;
+  align-items: center !important;
+  gap: 6px !important;
+  padding: 8px 12px !important;
+  border-radius: 6px !important;
+  min-height: 36px !important;
+  box-sizing: border-box !important;
+}
+
+.interview-meta .meta-item .el-icon,
+.interview-header .meta-item .el-icon,
+.meta-item .meta-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  color: #1890ff !important;
+  flex-shrink: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.meta-label {
+  font-size: 12px !important;
+  color: #666 !important;
+  line-height: 1.2 !important;
+  margin-right: 4px !important;
+}
+
+.meta-value {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  line-height: 1.2 !important;
+}
+
+/* 控制按钮强制对齐 */
+.control-btn {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+  padding: 10px 16px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  cursor: pointer !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  min-height: 40px !important;
+  line-height: 1 !important;
+  box-sizing: border-box !important;
+}
+
+.control-btn .el-icon,
+.control-btn .control-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 14px !important;
+  flex-shrink: 0 !important;
+  width: 14px !important;
+  height: 14px !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.control-btn span {
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+  display: inline-block !important;
+}
+
+/* ===== 导航菜单图标对齐修复 ===== */
+
+/* Element Plus 菜单项图标对齐 */
+.el-menu-item {
+  display: flex !important;
+  align-items: center !important;
+  line-height: 1.2 !important;
+  padding: 0 20px !important;
+  min-height: 56px !important;
+}
+
+.el-menu-item .el-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 8px !important;
+  font-size: 16px !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.el-menu-item span {
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+}
+
+/* 移动端导航链接对齐 */
+.ai-mobile-nav-link {
+  display: flex !important;
+  align-items: center !important;
+  padding: 12px 16px !important;
+  text-decoration: none !important;
+  line-height: 1.2 !important;
+}
+
+.ai-mobile-nav-link .el-icon,
+.ai-mobile-nav-link .nav-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  margin-right: 8px !important;
+  font-size: 16px !important;
+  flex-shrink: 0 !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+/* ===== 中文字体强制优化 ===== */
+
+/* Microsoft YaHei 字体强制应用 */
+body,
+.el-button,
+.el-menu-item,
+.el-card__header,
+h1, h2, h3, h4, h5, h6,
+.meta-label,
+.meta-value,
+.control-btn {
+  font-family: 'Microsoft YaHei', 'PingFang SC', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  text-rendering: optimizeLegibility !important;
+  -webkit-font-smoothing: antialiased !important;
+  -moz-osx-font-smoothing: grayscale !important;
+}
+
+/* 中文文本垂直居中微调 */
+.el-button span,
+.meta-label,
+.meta-value,
+.control-btn span {
+  position: relative !important;
+  top: 0.05em !important;
+}
+
+/* ===== 技术特性卡片对齐修复 ===== */
+
+/* 技术特性图标容器 */
+.tech-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 60px !important;
+  height: 60px !important;
+  margin: 0 auto 16px !important;
+  border-radius: 50% !important;
+}
+
+.tech-icon .el-icon,
+.tech-icon .feature-icon {
+  font-size: 24px !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  position: relative !important;
+  top: 0 !important;
+}
+
+.tech-item {
+  text-align: center !important;
+  padding: 24px !important;
+}
+
+.tech-item h4 {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #333 !important;
+  margin: 0 0 8px 0 !important;
+  line-height: 1.3 !important;
+  text-align: center !important;
+}
+
+.tech-item p {
+  font-size: 14px !important;
+  color: #666 !important;
+  line-height: 1.4 !important;
+  margin: 0 !important;
+  text-align: center !important;
+}
+
+/* ===== 响应式对齐优化 ===== */
+
+/* 平板端强制对齐 */
+@media (max-width: 768px) {
+  .el-button .el-icon,
+  .el-button .btn-icon {
+    margin-right: 4px !important;
+    font-size: 12px !important;
+  }
+  
+  .interview-meta .meta-item,
+  .interview-header .meta-item {
+    padding: 6px 10px !important;
+    gap: 4px !important;
+  }
+  
+  .control-btn {
+    padding: 8px 12px !important;
+    min-height: 36px !important;
+  }
+}
+
+/* 手机端强制对齐 */
+@media (max-width: 480px) {
+  .el-button .el-icon,
+  .el-button .btn-icon {
+    margin-right: 3px !important;
+    font-size: 11px !important;
+  }
+  
+  .interview-meta .meta-item,
+  .interview-header .meta-item {
+    padding: 4px 8px !important;
+    gap: 3px !important;
+  }
+  
+  .control-btn {
+    padding: 6px 10px !important;
+    min-height: 32px !important;
+    font-size: 12px !important;
+  }
+}

@@ -1,0 +1,16 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <rect width="400" height="300" fill="#4c51bf"/>
+  <rect x="50" y="50" width="300" height="150" rx="12" fill="#ffffff" opacity="0.9"/>
+  <circle cx="100" cy="100" r="15" fill="#667eea"/>
+  <rect x="130" y="90" width="150" height="8" rx="4" fill="#667eea"/>
+  <rect x="130" y="110" width="100" height="6" rx="3" fill="#a0aec0"/>
+  <rect x="130" y="125" width="120" height="6" rx="3" fill="#a0aec0"/>
+  <text x="200" y="250" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="20" font-family="Microsoft YaHei, Arial, sans-serif">
+    应用案例
+  </text>
+  <text x="200" y="275" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="12" font-family="Microsoft YaHei, Arial, sans-serif" opacity="0.8">
+    iFlytek Spark 成功案例展示
+  </text>
+</svg>

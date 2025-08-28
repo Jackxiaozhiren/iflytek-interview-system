@@ -1,0 +1,25 @@
+<svg width="400" height="300" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="algoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#fa8c16;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#faad14;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="400" height="300" fill="url(#algoGrad)"/>
+  <circle cx="85" cy="65" r="14" fill="rgba(255,255,255,0.3)"/>
+  <circle cx="315" cy="235" r="17" fill="rgba(255,255,255,0.25)"/>
+  <circle cx="340" cy="90" r="11" fill="rgba(255,255,255,0.35)"/>
+  <rect x="65" y="120" width="270" height="80" rx="12" fill="rgba(255,255,255,0.15)"/>
+  <text x="200" y="150" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="24" font-weight="bold" font-family="Microsoft YaHei, Arial, sans-serif">
+    算法工程案例
+  </text>
+  <text x="200" y="180" text-anchor="middle" dominant-baseline="middle" 
+        fill="#fff7e6" font-size="14" font-family="Microsoft YaHei, Arial, sans-serif">
+    AI算法面试技术评估
+  </text>
+  <text x="200" y="250" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="12" font-family="Microsoft YaHei, Arial, sans-serif">
+    iFlytek Spark 算法驱动
+  </text>
+</svg>

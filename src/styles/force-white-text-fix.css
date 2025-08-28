@@ -1,0 +1,157 @@
+/* 强制白色文字修复 - 最高优先级 */
+/* 这个文件专门用于强制修复紫色背景上的文字颜色问题 */
+
+/* ==================== 全局强制修复 ==================== */
+/* 使用最高特异性选择器确保样式应用 */
+
+html body #app .advantage-icon,
+html body #app .advantage-icon *,
+html body #app .advantage-icon svg,
+html body #app .advantage-icon svg *,
+html body #app .advantage-icon i,
+html body #app .advantage-icon span,
+html body #app .feature-icon,
+html body #app .feature-icon *,
+html body #app .feature-icon svg,
+html body #app .feature-icon svg *,
+html body #app .feature-icon i,
+html body #app .feature-icon span,
+html body #app .feature-tag,
+html body #app .feature-tag *,
+html body #app .feature-tag span,
+html body #app .el-tag.feature-tag,
+html body #app .el-tag.feature-tag *,
+html body #app .el-tag.feature-tag span {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* ==================== 针对所有Element Plus标签 ==================== */
+html body #app .el-tag,
+html body #app .el-tag *,
+html body #app .el-tag span {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==================== 针对所有紫色背景元素 ==================== */
+html body #app [style*="background"][style*="#4c51bf"],
+html body #app [style*="background"][style*="#4c51bf"] *,
+html body #app [style*="background"][style*="#6b21a8"],
+html body #app [style*="background"][style*="#6b21a8"] *,
+html body #app [style*="linear-gradient"],
+html body #app [style*="linear-gradient"] * {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==================== 针对特定类名模式 ==================== */
+html body #app [class*="advantage"],
+html body #app [class*="advantage"] *,
+html body #app [class*="feature"],
+html body #app [class*="feature"] *,
+html body #app [class*="icon"],
+html body #app [class*="icon"] *,
+html body #app [class*="tag"],
+html body #app [class*="tag"] * {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* ==================== 针对Vue组件内的元素 ==================== */
+html body #app .home-page .advantage-icon,
+html body #app .home-page .advantage-icon *,
+html body #app .home-page .feature-icon,
+html body #app .home-page .feature-icon *,
+html body #app .home-page .feature-tag,
+html body #app .home-page .feature-tag * {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* ==================== 覆盖Element Plus CSS变量 ==================== */
+html body #app {
+    --el-tag-text-color: #ffffff !important;
+    --el-tag-bg-color: linear-gradient(45deg, #4c51bf, #6b21a8) !important;
+    --el-tag-border-color: transparent !important;
+    --el-color-primary: #4c51bf !important;
+    --el-color-primary-light-3: #6b21a8 !important;
+}
+
+/* ==================== 强制覆盖所有可能的样式 ==================== */
+/* 使用属性选择器匹配所有可能的元素 */
+html body #app [class],
+html body #app [class] * {
+    color: inherit;
+}
+
+html body #app [class*="advantage-icon"],
+html body #app [class*="advantage-icon"] *,
+html body #app [class*="feature-icon"],
+html body #app [class*="feature-icon"] *,
+html body #app [class*="feature-tag"],
+html body #app [class*="feature-tag"] * {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+    fill: #ffffff !important;
+    stroke: #ffffff !important;
+}
+
+/* ==================== 最后的保险措施 ==================== */
+/* 如果以上都不生效，使用通配符选择器 */
+html body #app * {
+    /* 只对有紫色背景的元素应用 */
+}
+
+html body #app *[style*="#4c51bf"],
+html body #app *[style*="#4c51bf"] *,
+html body #app *[style*="#6b21a8"],
+html body #app *[style*="#6b21a8"] * {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==================== 动画和过渡状态 ==================== */
+html body #app .advantage-icon:hover,
+html body #app .advantage-icon:hover *,
+html body #app .feature-icon:hover,
+html body #app .feature-icon:hover *,
+html body #app .feature-tag:hover,
+html body #app .feature-tag:hover * {
+    color: #ffffff !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* ==================== 媒体查询确保响应式 ==================== */
+@media screen and (max-width: 768px) {
+    html body #app .advantage-icon,
+    html body #app .advantage-icon *,
+    html body #app .feature-icon,
+    html body #app .feature-icon *,
+    html body #app .feature-tag,
+    html body #app .feature-tag * {
+        color: #ffffff !important;
+        text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+        fill: #ffffff !important;
+        stroke: #ffffff !important;
+    }
+}
+
+/* ==================== 打印样式 ==================== */
+@media print {
+    .advantage-icon,
+    .advantage-icon *,
+    .feature-icon,
+    .feature-icon *,
+    .feature-tag,
+    .feature-tag * {
+        color: #000000 !important;
+        text-shadow: none !important;
+    }
+}

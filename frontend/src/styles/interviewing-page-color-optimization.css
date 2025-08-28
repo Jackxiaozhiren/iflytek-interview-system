@@ -1,0 +1,586 @@
+/* 面试页面色彩优化 - iFlytek 多模态面试评估系统 */
+
+/* 面试页面主容器 */
+.interviewing-page {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  min-height: 100vh;
+  color: var(--iflytek-text-primary);
+}
+
+/* 面试页面头部 */
+.interviewing-header {
+  background: var(--iflytek-gradient-primary);
+  color: white;
+  padding: 20px 24px;
+  box-shadow: var(--iflytek-shadow-md);
+  position: relative;
+  overflow: hidden;
+}
+
+.interviewing-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat;
+  opacity: 0.3;
+}
+
+.interviewing-title {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-bold);
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.interviewing-subtitle {
+  font-size: var(--font-size-base);
+  margin: 8px 0 0 0;
+  opacity: 0.9;
+  position: relative;
+  z-index: 1;
+}
+
+/* 面试进度条 */
+.interview-progress {
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
+  height: 8px;
+  margin-top: 16px;
+  overflow: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.interview-progress-bar {
+  background: white;
+  height: 100%;
+  border-radius: 8px;
+  transition: width 0.6s ease;
+  box-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+/* 面试主要内容区域 */
+.interviewing-main {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  padding: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* 面试视频区域 */
+.interview-video-section {
+  background: var(--iflytek-bg-primary);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--iflytek-shadow-lg);
+  border: 1px solid var(--iflytek-border-secondary);
+}
+
+.interview-video-container {
+  position: relative;
+  background: #000000;
+  border-radius: 12px;
+  overflow: hidden;
+  aspect-ratio: 16/9;
+  margin-bottom: 20px;
+}
+
+.interview-video {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.interview-video-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg, transparent 0%, rgba(0, 0, 0, 0.3) 100%);
+  display: flex;
+  align-items: flex-end;
+  padding: 20px;
+}
+
+.interview-video-status {
+  background: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 8px 16px;
+  border-radius: 20px;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.interview-recording-indicator {
+  width: 8px;
+  height: 8px;
+  background: #ef4444;
+  border-radius: 50%;
+  animation: recordingPulse 1.5s infinite;
+}
+
+@keyframes recordingPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* 面试控制按钮 */
+.interview-controls {
+  display: flex;
+  justify-content: center;
+  gap: 16px;
+  margin-bottom: 20px;
+}
+
+.interview-control-btn {
+  background: var(--iflytek-bg-secondary);
+  border: 2px solid var(--iflytek-border-primary);
+  color: var(--iflytek-text-primary);
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.interview-control-btn:hover {
+  background: var(--iflytek-primary);
+  color: white;
+  border-color: var(--iflytek-primary);
+  transform: translateY(-2px);
+  box-shadow: var(--iflytek-shadow-md);
+}
+
+.interview-control-btn.active {
+  background: var(--iflytek-primary);
+  color: white;
+  border-color: var(--iflytek-primary);
+}
+
+.interview-control-btn.danger {
+  border-color: var(--iflytek-error);
+  color: var(--iflytek-error);
+}
+
+.interview-control-btn.danger:hover {
+  background: var(--iflytek-error);
+  color: white;
+}
+
+/* 面试问题区域 */
+.interview-question-section {
+  background: var(--iflytek-bg-primary);
+  border-radius: 16px;
+  padding: 24px;
+  box-shadow: var(--iflytek-shadow-lg);
+  border: 1px solid var(--iflytek-border-secondary);
+  height: fit-content;
+}
+
+.interview-question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--iflytek-border-secondary);
+}
+
+.interview-question-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+.interview-question-number {
+  background: var(--iflytek-primary);
+  color: white;
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+}
+
+.interview-question-content {
+  background: var(--iflytek-bg-secondary);
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 4px solid var(--iflytek-primary);
+}
+
+.interview-question-text {
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+.interview-question-meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid var(--iflytek-border-secondary);
+  font-size: var(--font-size-sm);
+  color: var(--iflytek-text-secondary);
+}
+
+.interview-question-difficulty {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.interview-difficulty-badge {
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+}
+
+.interview-difficulty-badge.easy {
+  background: rgba(34, 197, 94, 0.1);
+  color: #059669;
+  border: 1px solid #059669;
+}
+
+.interview-difficulty-badge.medium {
+  background: rgba(251, 191, 36, 0.1);
+  color: #d97706;
+  border: 1px solid #d97706;
+}
+
+.interview-difficulty-badge.hard {
+  background: rgba(239, 68, 68, 0.1);
+  color: #dc2626;
+  border: 1px solid #dc2626;
+}
+
+/* 面试回答区域 */
+.interview-answer-section {
+  margin-top: 24px;
+}
+
+.interview-answer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.interview-answer-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+.interview-answer-timer {
+  background: var(--iflytek-bg-tertiary);
+  color: var(--iflytek-text-secondary);
+  padding: 6px 12px;
+  border-radius: 16px;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: monospace;
+}
+
+.interview-answer-input {
+  width: 100%;
+  min-height: 120px;
+  padding: 16px;
+  border: 2px solid var(--iflytek-border-primary);
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  resize: vertical;
+  transition: all 0.3s ease;
+  background: var(--iflytek-bg-primary);
+  color: var(--iflytek-text-primary);
+}
+
+.interview-answer-input:focus {
+  outline: none;
+  border-color: var(--iflytek-primary);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+.interview-answer-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 16px;
+}
+
+.interview-answer-submit {
+  background: var(--iflytek-gradient-primary);
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.interview-answer-submit:hover {
+  background: var(--iflytek-gradient-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--iflytek-shadow-md);
+}
+
+.interview-answer-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* 面试分析面板 */
+.interview-analysis-panel {
+  background: var(--iflytek-bg-primary);
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 24px;
+  box-shadow: var(--iflytek-shadow-md);
+  border: 1px solid var(--iflytek-border-secondary);
+}
+
+.interview-analysis-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.interview-analysis-icon {
+  width: 24px;
+  height: 24px;
+  color: var(--iflytek-primary);
+}
+
+.interview-analysis-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+.interview-analysis-content {
+  background: var(--iflytek-bg-secondary);
+  border-radius: 8px;
+  padding: 16px;
+  border-left: 4px solid var(--iflytek-primary);
+}
+
+.interview-analysis-text {
+  font-size: var(--font-size-sm);
+  line-height: 1.6;
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+/* 面试状态指示器 */
+.interview-status-bar {
+  background: var(--iflytek-bg-primary);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 24px;
+  box-shadow: var(--iflytek-shadow-sm);
+  border: 1px solid var(--iflytek-border-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.interview-status-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: var(--font-size-sm);
+  color: var(--iflytek-text-secondary);
+}
+
+.interview-status-indicator {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--iflytek-text-quaternary);
+}
+
+.interview-status-indicator.active {
+  background: var(--iflytek-success);
+  animation: statusPulse 2s infinite;
+}
+
+.interview-status-indicator.warning {
+  background: var(--iflytek-warning);
+}
+
+.interview-status-indicator.error {
+  background: var(--iflytek-error);
+}
+
+@keyframes statusPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+/* 响应式设计 */
+@media (max-width: 1024px) {
+  .interviewing-main {
+    grid-template-columns: 1fr;
+    gap: 20px;
+    padding: 20px 16px;
+  }
+  
+  .interview-video-section,
+  .interview-question-section {
+    padding: 20px;
+  }
+  
+  .interviewing-header {
+    padding: 16px 20px;
+  }
+  
+  .interviewing-title {
+    font-size: var(--font-size-xl);
+  }
+}
+
+@media (max-width: 768px) {
+  .interviewing-main {
+    padding: 16px 12px;
+    gap: 16px;
+  }
+  
+  .interview-video-section,
+  .interview-question-section {
+    padding: 16px;
+  }
+  
+  .interview-controls {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+  
+  .interview-control-btn {
+    flex: 1;
+    min-width: 120px;
+    justify-content: center;
+  }
+  
+  .interview-question-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+  
+  .interview-answer-actions {
+    flex-direction: column;
+    gap: 12px;
+  }
+  
+  .interview-answer-submit {
+    width: 100%;
+  }
+  
+  .interview-status-bar {
+    flex-direction: column;
+    gap: 12px;
+    align-items: flex-start;
+  }
+}
+
+/* 面试页面动画 */
+.interview-fade-in {
+  animation: interviewFadeIn 0.6s ease-out;
+}
+
+@keyframes interviewFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 面试页面加载状态 */
+.interview-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  color: var(--iflytek-text-secondary);
+}
+
+.interview-loading-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--iflytek-bg-tertiary);
+  border-top: 4px solid var(--iflytek-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.interview-loading-text {
+  font-size: var(--font-size-base);
+  text-align: center;
+}
+
+/* 面试页面错误状态 */
+.interview-error {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid var(--iflytek-error);
+  border-radius: 8px;
+  padding: 16px;
+  color: var(--iflytek-error);
+  text-align: center;
+}
+
+.interview-error-icon {
+  font-size: 32px;
+  margin-bottom: 12px;
+}
+
+.interview-error-message {
+  font-size: var(--font-size-base);
+  margin-bottom: 16px;
+}
+
+.interview-error-retry {
+  background: var(--iflytek-error);
+  color: white;
+  border: none;
+  padding: 8px 16px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: var(--font-size-sm);
+  transition: all 0.3s ease;
+}
+
+.interview-error-retry:hover {
+  background: #b91c1c;
+}

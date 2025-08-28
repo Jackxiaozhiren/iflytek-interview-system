@@ -1,0 +1,383 @@
+/* 🧩 组件样式系统 */
+/* 融合三个竞品的组件设计优势 */
+
+/* 🔘 按钮组件 - 借鉴OfferMore的现代按钮设计 */
+.ai-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-6);
+  border: 1px solid transparent;
+  border-radius: var(--radius-lg);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+  text-decoration: none;
+  cursor: pointer;
+  transition: all var(--duration-200) var(--ease-out);
+  user-select: none;
+  white-space: nowrap;
+}
+
+.ai-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+/* 按钮变体 */
+.ai-btn-primary {
+  background: var(--primary-500);
+  color: var(--text-inverse);
+  box-shadow: var(--shadow-sm);
+}
+
+.ai-btn-primary:hover {
+  background: var(--primary-600);
+  box-shadow: var(--shadow-md);
+  transform: translateY(-1px);
+}
+
+.ai-btn-secondary {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  border-color: var(--border-base);
+}
+
+.ai-btn-secondary:hover {
+  background: var(--bg-secondary);
+  border-color: var(--primary-500);
+  color: var(--primary-500);
+}
+
+.ai-btn-enterprise {
+  background: var(--enterprise-color);
+  color: var(--text-inverse);
+}
+
+.ai-btn-enterprise:hover {
+  background: color-mix(in srgb, var(--enterprise-color) 85%, black);
+}
+
+.ai-btn-candidate {
+  background: var(--candidate-color);
+  color: var(--text-inverse);
+}
+
+.ai-btn-candidate:hover {
+  background: color-mix(in srgb, var(--candidate-color) 85%, black);
+}
+
+/* 按钮尺寸 */
+.ai-btn-sm {
+  padding: var(--space-2) var(--space-4);
+  font-size: var(--text-sm);
+}
+
+.ai-btn-lg {
+  padding: var(--space-4) var(--space-8);
+  font-size: var(--text-lg);
+}
+
+.ai-btn-xl {
+  padding: var(--space-5) var(--space-10);
+  font-size: var(--text-xl);
+}
+
+/* 🃏 卡片组件 - 借鉴Hina的专业卡片设计 */
+.ai-card {
+  background: var(--bg-primary);
+  border: 1px solid var(--border-light);
+  border-radius: var(--radius-2xl);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--duration-300) var(--ease-out);
+  overflow: hidden;
+}
+
+.ai-card:hover {
+  box-shadow: var(--shadow-lg);
+  transform: translateY(-2px);
+}
+
+.ai-card-header {
+  padding: var(--space-6);
+  border-bottom: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+}
+
+.ai-card-body {
+  padding: var(--space-6);
+}
+
+.ai-card-footer {
+  padding: var(--space-6);
+  border-top: 1px solid var(--border-light);
+  background: var(--bg-secondary);
+}
+
+.ai-card-title {
+  font-size: var(--text-xl);
+  font-weight: 600;
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.ai-card-subtitle {
+  font-size: var(--text-base);
+  color: var(--text-tertiary);
+  margin: var(--space-2) 0 0 0;
+}
+
+/* 🏷️ 标签组件 */
+.ai-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: var(--space-1) var(--space-3);
+  border-radius: var(--radius-full);
+  font-size: var(--text-sm);
+  font-weight: 500;
+  line-height: var(--leading-tight);
+}
+
+.ai-tag-primary {
+  background: var(--primary-100);
+  color: var(--primary-700);
+}
+
+.ai-tag-enterprise {
+  background: color-mix(in srgb, var(--enterprise-color) 15%, white);
+  color: var(--enterprise-color);
+}
+
+.ai-tag-candidate {
+  background: color-mix(in srgb, var(--candidate-color) 15%, white);
+  color: var(--candidate-color);
+}
+
+.ai-tag-success {
+  background: color-mix(in srgb, var(--success-color) 15%, white);
+  color: var(--success-color);
+}
+
+.ai-tag-warning {
+  background: color-mix(in srgb, var(--warning-color) 15%, white);
+  color: var(--warning-color);
+}
+
+.ai-tag-error {
+  background: color-mix(in srgb, var(--error-color) 15%, white);
+  color: var(--error-color);
+}
+
+/* 📊 进度条组件 - 借鉴Dayee的数据展示 */
+.ai-progress {
+  width: 100%;
+  height: 8px;
+  background: var(--gray-200);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+}
+
+.ai-progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary-500), var(--primary-400));
+  border-radius: var(--radius-full);
+  transition: width var(--duration-500) var(--ease-out);
+}
+
+.ai-progress-enterprise .ai-progress-bar {
+  background: linear-gradient(90deg, var(--enterprise-color), color-mix(in srgb, var(--enterprise-color) 80%, white));
+}
+
+.ai-progress-candidate .ai-progress-bar {
+  background: linear-gradient(90deg, var(--candidate-color), color-mix(in srgb, var(--candidate-color) 80%, white));
+}
+
+/* 📝 输入框组件 */
+.ai-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--border-base);
+  border-radius: var(--radius-lg);
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: var(--leading-normal);
+  color: var(--text-primary);
+  background: var(--bg-primary);
+  transition: all var(--duration-200) var(--ease-out);
+}
+
+.ai-input:focus {
+  outline: none;
+  border-color: var(--primary-500);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--primary-500) 15%, transparent);
+}
+
+.ai-input:disabled {
+  background: var(--bg-tertiary);
+  color: var(--text-disabled);
+  cursor: not-allowed;
+}
+
+.ai-input-error {
+  border-color: var(--error-color);
+}
+
+.ai-input-error:focus {
+  border-color: var(--error-color);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--error-color) 15%, transparent);
+}
+
+/* 🔔 通知组件 */
+.ai-alert {
+  padding: var(--space-4);
+  border-radius: var(--radius-lg);
+  border: 1px solid transparent;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+}
+
+.ai-alert-info {
+  background: color-mix(in srgb, var(--info-color) 10%, white);
+  border-color: color-mix(in srgb, var(--info-color) 30%, white);
+  color: var(--info-color);
+}
+
+.ai-alert-success {
+  background: color-mix(in srgb, var(--success-color) 10%, white);
+  border-color: color-mix(in srgb, var(--success-color) 30%, white);
+  color: var(--success-color);
+}
+
+.ai-alert-warning {
+  background: color-mix(in srgb, var(--warning-color) 10%, white);
+  border-color: color-mix(in srgb, var(--warning-color) 30%, white);
+  color: var(--warning-color);
+}
+
+.ai-alert-error {
+  background: color-mix(in srgb, var(--error-color) 10%, white);
+  border-color: color-mix(in srgb, var(--error-color) 30%, white);
+  color: var(--error-color);
+}
+
+/* 🎭 头像组件 */
+.ai-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--gray-200);
+  color: var(--text-tertiary);
+  font-weight: 500;
+  overflow: hidden;
+}
+
+.ai-avatar-sm {
+  width: 32px;
+  height: 32px;
+  font-size: var(--text-sm);
+}
+
+.ai-avatar-md {
+  width: 40px;
+  height: 40px;
+  font-size: var(--text-base);
+}
+
+.ai-avatar-lg {
+  width: 48px;
+  height: 48px;
+  font-size: var(--text-lg);
+}
+
+.ai-avatar-xl {
+  width: 64px;
+  height: 64px;
+  font-size: var(--text-xl);
+}
+
+.ai-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 🎨 徽章组件 */
+.ai-badge {
+  position: relative;
+  display: inline-block;
+}
+
+.ai-badge-dot {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 8px;
+  height: 8px;
+  background: var(--error-color);
+  border: 2px solid var(--bg-primary);
+  border-radius: var(--radius-full);
+  transform: translate(50%, -50%);
+}
+
+.ai-badge-count {
+  position: absolute;
+  top: 0;
+  right: 0;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--space-2);
+  background: var(--error-color);
+  color: var(--text-inverse);
+  font-size: var(--text-xs);
+  font-weight: 500;
+  line-height: 20px;
+  text-align: center;
+  border-radius: var(--radius-full);
+  transform: translate(50%, -50%);
+}
+
+/* 🔄 加载组件 */
+.ai-loading {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--gray-300);
+  border-top: 2px solid var(--primary-500);
+  border-radius: var(--radius-full);
+  animation: spin var(--duration-1000) linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.ai-loading-lg {
+  width: 32px;
+  height: 32px;
+  border-width: 3px;
+}
+
+/* 📱 响应式组件调整 */
+@media (max-width: 768px) {
+  .ai-btn {
+    padding: var(--space-2) var(--space-4);
+    font-size: var(--text-sm);
+  }
+  
+  .ai-card {
+    border-radius: var(--radius-xl);
+  }
+  
+  .ai-card-header,
+  .ai-card-body,
+  .ai-card-footer {
+    padding: var(--space-4);
+  }
+}

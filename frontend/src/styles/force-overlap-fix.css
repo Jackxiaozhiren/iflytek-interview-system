@@ -1,0 +1,308 @@
+/**
+ * iFlytek Spark 面试系统 - 强制重叠修复样式
+ * Force Overlap Fix for iFlytek Spark Interview System
+ * 
+ * 版本: 2.0
+ * 更新: 2025-07-18
+ * 
+ * 此文件使用最高优先级的CSS规则强制修复所有重叠问题
+ */
+
+/* ===== 强制修复导出对话框重叠问题 ===== */
+
+/* 导出对话框容器 */
+.el-dialog .export-options {
+  padding: 24px 0 !important;
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+}
+
+/* 导出格式选择组 - 强制修复 */
+.el-dialog .export-format-group {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 20px !important;
+  margin-bottom: 28px !important;
+  padding: 0 8px !important;
+}
+
+/* 单选按钮选项 - 完全重构布局 */
+.el-dialog .export-format-option {
+  width: 100% !important;
+  margin: 0 !important;
+  position: relative !important;
+  display: block !important;
+}
+
+/* 单选按钮输入框 - 绝对定位避免重叠 */
+.el-dialog .export-format-option .el-radio__input {
+  position: absolute !important;
+  top: 24px !important;
+  left: 24px !important;
+  z-index: 10 !important;
+  margin: 0 !important;
+  transform: none !important;
+}
+
+/* 单选按钮标签 - 移除默认padding */
+.el-dialog .export-format-option .el-radio__label {
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+  display: block !important;
+}
+
+/* 格式选项容器 - 为单选按钮留出空间 */
+.el-dialog .format-option {
+  display: flex !important;
+  align-items: center !important;
+  gap: 20px !important;
+  padding: 24px 24px 24px 70px !important;
+  border: 2px solid #e5e7eb !important;
+  border-radius: 12px !important;
+  transition: all 0.3s ease !important;
+  cursor: pointer !important;
+  min-height: 88px !important;
+  box-sizing: border-box !important;
+  background: #ffffff !important;
+}
+
+/* 选中状态的格式选项 */
+.el-dialog .export-format-option.is-checked .format-option {
+  border-color: #0066cc !important;
+  background: #f0f7ff !important;
+  box-shadow: 0 2px 8px rgba(0, 102, 204, 0.15) !important;
+}
+
+/* 格式图标 */
+.el-dialog .format-icon {
+  width: 52px !important;
+  height: 52px !important;
+  border-radius: 12px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 26px !important;
+  color: white !important;
+  flex-shrink: 0 !important;
+}
+
+/* 格式信息容器 */
+.el-dialog .format-info {
+  flex: 1 !important;
+  min-width: 0 !important;
+  padding-right: 8px !important;
+}
+
+/* 格式名称 */
+.el-dialog .format-name {
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  margin-bottom: 6px !important;
+  line-height: 1.4 !important;
+  word-wrap: break-word !important;
+}
+
+/* 格式描述 */
+.el-dialog .format-desc {
+  font-size: 13px !important;
+  color: #6b7280 !important;
+  line-height: 1.5 !important;
+  word-wrap: break-word !important;
+}
+
+/* ===== 强制修复所有Element Plus组件重叠问题 ===== */
+
+/* 强制修复所有单选按钮 */
+html body .el-radio {
+  margin-right: 0 !important;
+  margin-bottom: 8px !important;
+  position: relative !important;
+  min-height: 32px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+}
+
+html body .el-radio__input {
+  margin-top: 4px !important;
+  margin-right: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+html body .el-radio__label {
+  padding-left: 8px !important;
+  line-height: 1.5 !important;
+  word-wrap: break-word !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+/* 强制修复所有复选框 */
+html body .el-checkbox {
+  margin-right: 0 !important;
+  margin-bottom: 8px !important;
+  display: flex !important;
+  align-items: flex-start !important;
+  min-height: 32px !important;
+}
+
+html body .el-checkbox__input {
+  margin-top: 4px !important;
+  margin-right: 12px !important;
+  flex-shrink: 0 !important;
+}
+
+html body .el-checkbox__label {
+  padding-left: 8px !important;
+  line-height: 1.5 !important;
+  word-wrap: break-word !important;
+  flex: 1 !important;
+  min-width: 0 !important;
+}
+
+/* 强制修复所有按钮 */
+html body .el-button {
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+  padding: 12px 20px !important;
+  line-height: 1.4 !important;
+  border-radius: 8px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 6px !important;
+}
+
+html body .el-button .el-icon {
+  margin-right: 0 !important;
+  vertical-align: middle !important;
+  flex-shrink: 0 !important;
+}
+
+/* 强制修复所有标签 */
+html body .el-tag {
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+  padding: 6px 12px !important;
+  line-height: 1.4 !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+  margin-right: 8px !important;
+  margin-bottom: 4px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  word-wrap: break-word !important;
+  min-height: 24px !important;
+}
+
+/* 强制修复所有表单项 */
+html body .el-form-item {
+  margin-bottom: 24px !important;
+}
+
+html body .el-form-item__label {
+  padding-bottom: 8px !important;
+  line-height: 1.4 !important;
+  font-weight: 500 !important;
+  color: #374151 !important;
+}
+
+html body .el-form-item__content {
+  line-height: 1.5 !important;
+}
+
+/* 强制修复所有输入框 */
+html body .el-input,
+html body .el-textarea,
+html body .el-select {
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+}
+
+html body .el-input__inner,
+html body .el-textarea__inner {
+  padding: 12px 16px !important;
+  line-height: 1.5 !important;
+  font-size: 14px !important;
+}
+
+/* 强制修复对话框 */
+html body .el-dialog {
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+}
+
+html body .el-dialog__header {
+  padding: 24px 24px 16px !important;
+}
+
+html body .el-dialog__title {
+  font-size: 18px !important;
+  font-weight: 600 !important;
+  color: #1f2937 !important;
+  line-height: 1.4 !important;
+  word-wrap: break-word !important;
+}
+
+html body .el-dialog__body {
+  padding: 8px 24px 24px !important;
+  line-height: 1.6 !important;
+}
+
+html body .el-dialog__footer {
+  padding: 16px 24px 24px !important;
+  text-align: right !important;
+}
+
+/* ===== 移动端强制修复 ===== */
+@media (max-width: 768px) {
+  html body .el-dialog {
+    width: 90% !important;
+    margin: 5vh auto !important;
+  }
+
+  .el-dialog .format-option {
+    padding: 20px 20px 20px 60px !important;
+    min-height: 80px !important;
+  }
+
+  .el-dialog .export-format-option .el-radio__input {
+    top: 20px !important;
+    left: 20px !important;
+  }
+
+  .el-dialog .format-icon {
+    width: 48px !important;
+    height: 48px !important;
+    font-size: 24px !important;
+  }
+
+  .el-dialog .format-name {
+    font-size: 15px !important;
+  }
+
+  .el-dialog .format-desc {
+    font-size: 12px !important;
+  }
+}
+
+/* ===== 强制清除缓存和确保加载 ===== */
+html body * {
+  box-sizing: border-box !important;
+}
+
+/* 确保中文字体在所有元素上生效 */
+html body,
+html body * {
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+}
+
+/* 强制刷新样式 */
+html body .el-radio,
+html body .el-checkbox,
+html body .el-button,
+html body .el-tag,
+html body .el-dialog {
+  animation: forceRefresh 0.01s !important;
+}
+
+@keyframes forceRefresh {
+  0% { opacity: 0.999; }
+  100% { opacity: 1; }
+}

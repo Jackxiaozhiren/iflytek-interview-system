@@ -1,0 +1,250 @@
+/**
+ * 多模态面试评估系统 - 响应式图标样式
+ * Responsive Icon Styles for Multimodal Interview Assessment System
+ * 
+ * 确保图标在不同屏幕尺寸下的最佳显示效果
+ * 维护中文界面的视觉一致性和可访问性
+ */
+
+/* ===== 基础响应式断点 ===== */
+:root {
+  /* 图标尺寸变量 */
+  --icon-xs: 12px;
+  --icon-sm: 14px;
+  --icon-md: 16px;
+  --icon-lg: 20px;
+  --icon-xl: 24px;
+  --icon-xxl: 32px;
+  
+  /* 间距变量 */
+  --icon-margin-xs: 4px;
+  --icon-margin-sm: 6px;
+  --icon-margin-md: 8px;
+  --icon-margin-lg: 12px;
+}
+
+/* ===== 桌面端 (>1200px) ===== */
+@media (min-width: 1201px) {
+  .el-icon {
+    font-size: var(--icon-md);
+  }
+  
+  /* 大型显示区域图标 */
+  .hero-section .el-icon,
+  .stats-section .el-icon {
+    font-size: var(--icon-xxl);
+  }
+  
+  /* 导航图标 */
+  .ai-nav-link .el-icon {
+    font-size: var(--icon-md);
+    margin-right: var(--icon-margin-md);
+  }
+  
+  /* 按钮图标 */
+  .btn-primary .el-icon,
+  .btn-secondary .el-icon {
+    font-size: var(--icon-md);
+    margin-right: var(--icon-margin-md);
+  }
+}
+
+/* ===== 笔记本电脑 (769px - 1200px) ===== */
+@media (min-width: 769px) and (max-width: 1200px) {
+  .el-icon {
+    font-size: var(--icon-sm);
+  }
+  
+  /* 大型显示区域图标 */
+  .hero-section .el-icon,
+  .stats-section .el-icon {
+    font-size: var(--icon-xl);
+  }
+  
+  /* 导航图标 */
+  .ai-nav-link .el-icon {
+    font-size: var(--icon-sm);
+    margin-right: var(--icon-margin-sm);
+  }
+  
+  /* 按钮图标 */
+  .btn-primary .el-icon,
+  .btn-secondary .el-icon {
+    font-size: var(--icon-sm);
+    margin-right: var(--icon-margin-sm);
+  }
+  
+  /* 面试页面特殊调整 */
+  .interviewing-page .panel-header .el-icon {
+    font-size: var(--icon-md);
+  }
+  
+  .interviewing-page .control-action-btn .el-icon {
+    font-size: var(--icon-sm);
+  }
+}
+
+/* ===== 平板端 (481px - 768px) ===== */
+@media (min-width: 481px) and (max-width: 768px) {
+  .el-icon {
+    font-size: var(--icon-xs);
+  }
+  
+  /* 大型显示区域图标 */
+  .hero-section .el-icon,
+  .stats-section .el-icon {
+    font-size: var(--icon-lg);
+  }
+  
+  /* 导航图标 */
+  .ai-nav-link .el-icon,
+  .ai-mobile-nav-link .el-icon {
+    font-size: var(--icon-sm);
+    margin-right: var(--icon-margin-sm);
+  }
+  
+  /* 按钮图标 */
+  .btn-primary .el-icon,
+  .btn-secondary .el-icon {
+    font-size: var(--icon-sm);
+    margin-right: var(--icon-margin-sm);
+  }
+  
+  /* 面试页面调整 */
+  .interviewing-page .panel-header .el-icon {
+    font-size: var(--icon-sm);
+  }
+  
+  .interviewing-page .control-action-btn .el-icon {
+    font-size: var(--icon-xs);
+  }
+  
+  .interviewing-page .quick-btn .el-icon {
+    font-size: var(--icon-md);
+  }
+  
+  .interviewing-page .avatar-icon .el-icon {
+    font-size: var(--icon-lg);
+  }
+  
+  /* 减少间距 */
+  .meta-item .el-icon {
+    margin-right: var(--icon-margin-xs);
+  }
+}
+
+/* ===== 手机端 (≤480px) ===== */
+@media (max-width: 480px) {
+  .el-icon {
+    font-size: var(--icon-xs);
+  }
+  
+  /* 大型显示区域图标 */
+  .hero-section .el-icon,
+  .stats-section .el-icon {
+    font-size: var(--icon-md);
+  }
+  
+  /* 导航图标 */
+  .ai-nav-link .el-icon,
+  .ai-mobile-nav-link .el-icon {
+    font-size: var(--icon-xs);
+    margin-right: var(--icon-margin-xs);
+  }
+  
+  /* 移动端菜单按钮 */
+  .ai-mobile-menu-btn .el-icon {
+    font-size: var(--icon-lg);
+  }
+  
+  /* 按钮图标 */
+  .btn-primary .el-icon,
+  .btn-secondary .el-icon {
+    font-size: var(--icon-xs);
+    margin-right: var(--icon-margin-xs);
+  }
+  
+  /* 面试页面手机端优化 */
+  .interviewing-page .panel-header .el-icon {
+    font-size: var(--icon-xs);
+  }
+  
+  .interviewing-page .control-action-btn .el-icon {
+    font-size: var(--icon-xs);
+  }
+  
+  .interviewing-page .quick-btn .el-icon {
+    font-size: var(--icon-sm);
+  }
+  
+  .interviewing-page .avatar-icon .el-icon {
+    font-size: var(--icon-md);
+  }
+  
+  /* 最小间距 */
+  .meta-item .el-icon,
+  .feature-tag .el-icon {
+    margin-right: var(--icon-margin-xs);
+  }
+  
+  /* 确保点击区域足够大 */
+  .quick-btn,
+  .control-btn {
+    min-width: 44px;
+    min-height: 44px;
+  }
+}
+
+/* ===== 中文字体优化 ===== */
+/* 确保图标与中文字体协调 */
+.el-icon {
+  font-family: 'Element Plus Icons', 'Microsoft YaHei', sans-serif;
+  line-height: 1;
+  vertical-align: middle;
+}
+
+/* 中文文本与图标的对齐优化 */
+.ai-nav-link,
+.ai-mobile-nav-link,
+.btn-primary,
+.btn-secondary,
+.meta-item,
+.feature-tag {
+  display: flex;
+  align-items: center;
+}
+
+/* ===== 高DPI屏幕优化 ===== */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .el-icon {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* ===== 可访问性增强 ===== */
+/* 确保在所有尺寸下都符合WCAG标准 */
+@media (max-width: 768px) {
+  .quick-btn,
+  .control-btn,
+  .ai-mobile-menu-btn {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  .el-icon {
+    filter: contrast(1.5);
+    font-weight: bold;
+  }
+}
+
+/* 减少动画偏好 */
+@media (prefers-reduced-motion: reduce) {
+  .el-icon {
+    transition: none;
+  }
+}

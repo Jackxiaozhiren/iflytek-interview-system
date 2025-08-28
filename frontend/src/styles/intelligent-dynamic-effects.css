@@ -1,0 +1,270 @@
+/* iFlytek Spark 智能动态效果系统 */
+
+/* 基础动画变量 */
+:root {
+  --animation-duration-fast: 0.2s;
+  --animation-duration-normal: 0.3s;
+  --animation-duration-slow: 0.5s;
+  --animation-easing: cubic-bezier(0.4, 0, 0.2, 1);
+  --animation-easing-bounce: cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+/* 智能加载动画 */
+@keyframes sparkLoading {
+  0% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.1) rotate(180deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(360deg);
+    opacity: 0.8;
+  }
+}
+
+@keyframes pulseGlow {
+  0%, 100% {
+    box-shadow: 0 0 5px rgba(24, 144, 255, 0.3);
+  }
+  50% {
+    box-shadow: 0 0 20px rgba(24, 144, 255, 0.6);
+  }
+}
+
+@keyframes slideInFromTop {
+  from {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+@keyframes fadeInScale {
+  from {
+    transform: scale(0.9);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* 智能悬停效果 */
+.intelligent-hover {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+  position: relative;
+  overflow: hidden;
+}
+
+.intelligent-hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+  transition: left var(--animation-duration-slow) var(--animation-easing);
+}
+
+.intelligent-hover:hover::before {
+  left: 100%;
+}
+
+.intelligent-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+/* 智能按钮动效 */
+.smart-button {
+  position: relative;
+  overflow: hidden;
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+}
+
+.smart-button::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+  transition: width var(--animation-duration-normal), height var(--animation-duration-normal);
+}
+
+.smart-button:active::after {
+  width: 300px;
+  height: 300px;
+}
+
+/* 智能卡片动效 */
+.smart-card {
+  transition: all var(--animation-duration-normal) var(--animation-easing);
+  transform-style: preserve-3d;
+}
+
+.smart-card:hover {
+  transform: rotateY(5deg) rotateX(5deg);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+}
+
+/* 智能文字动效 */
+.smart-text-reveal {
+  overflow: hidden;
+  position: relative;
+}
+
+.smart-text-reveal::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent 0%, #1890ff 50%, transparent 100%);
+  transform: translateX(-100%);
+  animation: textReveal 2s var(--animation-easing) infinite;
+}
+
+@keyframes textReveal {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 智能进度动效 */
+.smart-progress {
+  position: relative;
+  overflow: hidden;
+  background: rgba(24, 144, 255, 0.1);
+  border-radius: 10px;
+}
+
+.smart-progress::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: linear-gradient(90deg, #1890ff, #667eea);
+  border-radius: 10px;
+  transition: width var(--animation-duration-slow) var(--animation-easing);
+}
+
+/* 智能加载状态 */
+.smart-loading {
+  animation: sparkLoading 2s var(--animation-easing) infinite;
+}
+
+.smart-pulse {
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* 智能入场动画 */
+.smart-enter-top {
+  animation: slideInFromTop var(--animation-duration-normal) var(--animation-easing);
+}
+
+.smart-enter-bottom {
+  animation: slideInFromBottom var(--animation-duration-normal) var(--animation-easing);
+}
+
+.smart-enter-scale {
+  animation: fadeInScale var(--animation-duration-normal) var(--animation-easing);
+}
+
+/* 智能响应式动效 */
+@media (max-width: 768px) {
+  .intelligent-hover:hover {
+    transform: none;
+  }
+  
+  .smart-card:hover {
+    transform: none;
+  }
+  
+  :root {
+    --animation-duration-fast: 0.15s;
+    --animation-duration-normal: 0.2s;
+    --animation-duration-slow: 0.3s;
+  }
+}
+
+/* 减少动画偏好设置 */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* 智能焦点指示器 */
+.smart-focus:focus {
+  outline: 2px solid #1890ff;
+  outline-offset: 2px;
+  box-shadow: 0 0 0 4px rgba(24, 144, 255, 0.2);
+}
+
+/* 智能状态指示器 */
+.smart-status-success {
+  background: linear-gradient(45deg, #52c41a, #73d13d);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.smart-status-warning {
+  background: linear-gradient(45deg, #faad14, #ffc53d);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+.smart-status-error {
+  background: linear-gradient(45deg, #ff4d4f, #ff7875);
+  animation: pulseGlow 2s ease-in-out infinite;
+}
+
+/* 智能交互反馈 */
+.smart-interactive {
+  cursor: pointer;
+  user-select: none;
+  transition: all var(--animation-duration-fast) var(--animation-easing);
+}
+
+.smart-interactive:active {
+  transform: scale(0.98);
+}
+
+/* 智能滚动指示器 */
+.smart-scroll-indicator {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1890ff, #667eea);
+  z-index: 9999;
+  transition: width var(--animation-duration-fast) var(--animation-easing);
+}

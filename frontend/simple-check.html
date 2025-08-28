@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单检查工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .check-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .check-title {
+            color: #1890ff;
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .check-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 14px;
+        }
+        
+        .check-button:hover {
+            background: #0066cc;
+        }
+        
+        .code-block {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+<body>
+    <div class="check-container">
+        <h1 class="check-title">🔍 简单页面检查工具</h1>
+        
+        <div style="margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;">
+            <h3>🚀 快速访问</h3>
+            <button class="check-button" onclick="window.open('http://localhost:5173/enterprise', '_blank')">
+                打开企业管理界面
+            </button>
+        </div>
+        
+        <div style="margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;">
+            <h3>🔍 简单检查脚本</h3>
+            <p>请在企业管理界面的控制台中运行以下脚本：</p>
+            
+            <div class="code-block">
+// 简单检查脚本
+console.log('🔍 开始简单检查...');
+
+// 1. 检查页面基本状态
+console.log('📄 页面状态:', document.readyState);
+console.log('📍 当前URL:', window.location.href);
+
+// 2. 检查主要容器
+const app = document.querySelector('#app');
+console.log('⚛️ Vue应用:', app ? '存在' : '不存在');
+
+const dashboard = document.querySelector('.enterprise-dashboard');
+console.log('🏢 企业管理界面:', dashboard ? '存在' : '不存在');
+
+// 3. 等待页面完全加载后再检查
+setTimeout(() => {
+    console.log('\n⏰ 延迟检查（3秒后）:');
+    
+    // 检查洞察模块
+    const insights = document.querySelector('.insights-section');
+    console.log('🧠 洞察模块:', insights ? '存在' : '不存在');
+    
+    if (insights) {
+        console.log('✅ 找到洞察模块!');
+        console.log('- 类名:', insights.className);
+        console.log('- 文本内容:', insights.textContent.substring(0, 100) + '...');
+        
+        // 检查样式
+        const styles = window.getComputedStyle(insights);
+        console.log('- margin-bottom:', styles.marginBottom);
+        console.log('- padding:', styles.padding);
+    } else {
+        console.log('❌ 未找到洞察模块');
+        
+        // 查找所有模块
+        const allModules = document.querySelectorAll('.module-section');
+        console.log('📦 所有模块数量:', allModules.length);
+        
+        allModules.forEach((module, index) => {
+            const title = module.querySelector('h3')?.textContent || '未知';
+            console.log(`  模块 ${index + 1}: ${title}`);
+        });
+    }
+}, 3000);
+
+console.log('⏰ 将在3秒后进行延迟检查...');
+            </div>
+            
+            <button class="check-button" onclick="copySimpleScript()">
+                复制检查脚本
+            </button>
+        </div>
+        
+        <div style="margin-bottom: 30px; padding: 20px; border: 1px solid #e0e0e0; border-radius: 8px; background: #fafafa;">
+            <h3>📋 手动检查步骤</h3>
+            <div style="background: #e6f7ff; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <h4>请按以下步骤检查：</h4>
+                <ol>
+                    <li>点击"打开企业管理界面"按钮</li>
+                    <li>等待页面完全加载（看到完整的企业管理界面）</li>
+                    <li>向下滚动页面，查找"AI智能洞察"部分</li>
+                    <li>按F12打开开发者工具</li>
+                    <li>复制并运行上面的检查脚本</li>
+                    <li>等待3秒后查看延迟检查结果</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #f0f9ff; border-radius: 8px;">
+            <h3 style="color: #1890ff; margin-bottom: 10px;">💡 提示</h3>
+            <p style="color: #64748b; margin: 0;">
+                如果页面加载很慢或显示不完整，可能是组件渲染问题。<br>
+                请将检查脚本的完整输出发送给我进行分析。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copySimpleScript() {
+            const scriptText = document.querySelector('.code-block').textContent;
+            navigator.clipboard.writeText(scriptText).then(function() {
+                alert('检查脚本已复制到剪贴板！请在企业管理界面的控制台中粘贴运行。');
+            });
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,526 @@
+/**
+ * iFlytek 多模态面试系统 - 增强渐变背景系统
+ * 
+ * 设计理念：
+ * - 与iFlytek品牌色系完美融合
+ * - 135度角渐变方向（左上到右下）
+ * - 确保文字可读性（对比度≥4.5:1）
+ * - 功能主题色彩呼应
+ */
+
+/* ===== iFlytek品牌色彩变量 ===== */
+:root {
+  /* 主品牌色 */
+  --iflytek-primary: #1890ff;
+  --iflytek-secondary: #667eea;
+  --iflytek-accent: #0066cc;
+  --iflytek-purple: #764ba2;
+  --iflytek-success: #52c41a;
+  --iflytek-warning: #faad14;
+  --iflytek-error: #ff4d4f;
+
+  /* 渐变透明度 */
+  --gradient-alpha-light: 0.1;
+  --gradient-alpha-medium: 0.15;
+  --gradient-alpha-strong: 0.25;
+
+  /* 文字对比色 */
+  --text-on-gradient: #ffffff;
+  --text-on-light: #2c3e50;
+  --text-secondary: rgba(255, 255, 255, 0.85);
+}
+
+/* ===== 核心功能模块渐变 ===== */
+
+/* 首页渐变 - 蓝色系 */
+.homepage-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-primary) 0%,
+    rgba(24, 144, 255, var(--gradient-alpha-light)) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.homepage-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(24, 144, 255, 0.05) 0%,
+    rgba(102, 126, 234, 0.03) 50%,
+    rgba(0, 102, 204, 0.05) 100%
+  );
+  pointer-events: none;
+}
+
+/* 企业端渐变 - 紫色系 */
+.enterprise-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-secondary) 0%,
+    rgba(102, 126, 234, var(--gradient-alpha-light)) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.enterprise-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.08) 0%,
+    rgba(118, 75, 162, 0.05) 50%,
+    rgba(102, 126, 234, 0.03) 100%
+  );
+  pointer-events: none;
+}
+
+/* 求职者端渐变 - 青色系 */
+.candidate-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-accent) 0%,
+    rgba(0, 102, 204, var(--gradient-alpha-light)) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.candidate-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 102, 204, 0.06) 0%,
+    rgba(24, 144, 255, 0.04) 50%,
+    rgba(0, 102, 204, 0.02) 100%
+  );
+  pointer-events: none;
+}
+
+/* 报告中心渐变 - 绿色系 */
+.report-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-success) 0%,
+    rgba(82, 196, 26, var(--gradient-alpha-light)) 100%
+  );
+  position: relative;
+  overflow: hidden;
+}
+
+.report-gradient::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(82, 196, 26, 0.05) 0%,
+    rgba(56, 158, 13, 0.03) 50%,
+    rgba(82, 196, 26, 0.02) 100%
+  );
+  pointer-events: none;
+}
+
+/* ===== 板块专用渐变 ===== */
+
+/* AI智能面试官板块 */
+.ai-interviewer-gradient {
+  background: linear-gradient(
+    135deg,
+    #667eea 0%,
+    rgba(102, 126, 234, 0.15) 100%
+  );
+  color: var(--text-on-gradient);
+}
+
+/* 多模态分析引擎板块 */
+.multimodal-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-primary) 0%,
+    rgba(24, 144, 255, 0.15) 100%
+  );
+  color: var(--text-on-gradient);
+}
+
+/* 智能招聘管理板块 */
+.recruitment-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-success) 0%,
+    rgba(82, 196, 26, 0.15) 100%
+  );
+  color: var(--text-on-gradient);
+}
+
+/* 数据分析板块 */
+.analytics-gradient {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-purple) 0%,
+    rgba(118, 75, 162, 0.15) 100%
+  );
+  color: var(--text-on-gradient);
+}
+
+/* ===== 渐变淡出效果 ===== */
+
+/* 顶部淡出 - 通用版本 */
+.gradient-fade-top {
+  position: relative;
+}
+
+.gradient-fade-top::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.7) 30%,
+    rgba(255, 255, 255, 0.3) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 底部淡出 - 通用版本 */
+.gradient-fade-bottom {
+  position: relative;
+}
+
+.gradient-fade-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.95) 0%,
+    rgba(255, 255, 255, 0.7) 30%,
+    rgba(255, 255, 255, 0.3) 70%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 侧边淡出 - 通用版本 */
+.gradient-fade-sides {
+  position: relative;
+}
+
+.gradient-fade-sides::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.4) 0%,
+    rgba(255, 255, 255, 0.1) 15%,
+    rgba(255, 255, 255, 0) 25%,
+    rgba(255, 255, 255, 0) 75%,
+    rgba(255, 255, 255, 0.1) 85%,
+    rgba(255, 255, 255, 0.4) 100%
+  );
+  pointer-events: none;
+  z-index: 5;
+}
+
+/* ===== 主题特定的渐变淡出效果 ===== */
+
+/* 首页主题淡出 */
+.homepage-gradient-fade {
+  position: relative;
+}
+
+.homepage-gradient-fade::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(24, 144, 255, 0.1) 0%,
+    rgba(24, 144, 255, 0.05) 30%,
+    rgba(24, 144, 255, 0.02) 70%,
+    rgba(24, 144, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.homepage-gradient-fade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 企业端主题淡出 */
+.enterprise-gradient-fade {
+  position: relative;
+}
+
+.enterprise-gradient-fade::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(102, 126, 234, 0.1) 0%,
+    rgba(102, 126, 234, 0.05) 30%,
+    rgba(102, 126, 234, 0.02) 70%,
+    rgba(102, 126, 234, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.enterprise-gradient-fade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 候选人端主题淡出 */
+.candidate-gradient-fade {
+  position: relative;
+}
+
+.candidate-gradient-fade::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(0, 102, 204, 0.1) 0%,
+    rgba(0, 102, 204, 0.05) 30%,
+    rgba(0, 102, 204, 0.02) 70%,
+    rgba(0, 102, 204, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.candidate-gradient-fade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 报告中心主题淡出 */
+.report-gradient-fade {
+  position: relative;
+}
+
+.report-gradient-fade::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(82, 196, 26, 0.1) 0%,
+    rgba(82, 196, 26, 0.05) 30%,
+    rgba(82, 196, 26, 0.02) 70%,
+    rgba(82, 196, 26, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 1;
+}
+
+.report-gradient-fade::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(
+    0deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    rgba(255, 255, 255, 0.6) 40%,
+    rgba(255, 255, 255, 0.2) 80%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ===== 动态渐变效果 ===== */
+
+/* 动画渐变背景 */
+.gradient-animated {
+  background: linear-gradient(
+    -45deg,
+    var(--iflytek-primary),
+    var(--iflytek-secondary),
+    var(--iflytek-accent),
+    var(--iflytek-success)
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 脉冲渐变效果 */
+.gradient-pulse {
+  background: linear-gradient(
+    135deg,
+    var(--iflytek-primary) 0%,
+    rgba(24, 144, 255, 0.1) 100%
+  );
+  animation: gradientPulse 3s ease-in-out infinite;
+}
+
+@keyframes gradientPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+/* ===== 文字可读性优化 ===== */
+
+/* 渐变背景上的文字 */
+.gradient-text-overlay {
+  position: relative;
+  z-index: 2;
+}
+
+.gradient-text-overlay h1,
+.gradient-text-overlay h2,
+.gradient-text-overlay h3 {
+  color: var(--text-on-gradient);
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-text-overlay p,
+.gradient-text-overlay span {
+  color: var(--text-secondary);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* 高对比度文字背景 */
+.text-contrast-bg {
+  background: rgba(255, 255, 255, 0.95);
+  color: var(--text-on-light);
+  padding: var(--spacing-md);
+  border-radius: 8px;
+  backdrop-filter: blur(10px);
+}
+
+/* ===== 响应式渐变调整 ===== */
+
+/* 移动端渐变优化 */
+@media (max-width: 767px) {
+  .homepage-gradient,
+  .enterprise-gradient,
+  .candidate-gradient,
+  .report-gradient {
+    background-attachment: scroll;
+  }
+  
+  .gradient-animated {
+    animation-duration: 20s;
+  }
+}
+
+/* 高性能模式 */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-animated,
+  .gradient-pulse {
+    animation: none;
+  }
+}
+
+/* 暗色主题适配 */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --text-on-gradient: #ffffff;
+    --text-on-light: #ffffff;
+    --text-secondary: rgba(255, 255, 255, 0.7);
+  }
+  
+  .text-contrast-bg {
+    background: rgba(0, 0, 0, 0.8);
+    color: var(--text-on-gradient);
+  }
+}

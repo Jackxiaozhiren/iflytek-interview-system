@@ -1,0 +1,342 @@
+/* 中文字体系统 - 针对 iFlytek 多模态面试评估系统 */
+
+/* 中文字体定义 */
+@font-face {
+  font-family: 'Microsoft YaHei';
+  src: local('Microsoft YaHei'),
+       local('微软雅黑'),
+       local('Microsoft YaHei UI');
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'SimHei';
+  src: local('SimHei'),
+       local('黑体');
+  font-display: swap;
+}
+
+/* 字体变量定义 */
+:root {
+  /* 主要中文字体栈 */
+  --font-family-chinese: 'Microsoft YaHei', '微软雅黑', 'SimHei', '黑体', 'PingFang SC', 'Hiragino Sans GB', 'Heiti SC', 'WenQuanYi Micro Hei', sans-serif;
+  
+  /* 等宽中文字体 */
+  --font-family-chinese-mono: 'Consolas', 'Microsoft YaHei', '微软雅黑', 'Courier New', monospace;
+  
+  /* 标题字体 */
+  --font-family-chinese-heading: 'Microsoft YaHei', '微软雅黑', 'PingFang SC', 'Hiragino Sans GB', 'Source Han Sans CN', 'Noto Sans CJK SC', sans-serif;
+  
+  /* 字体大小 */
+  --font-size-xs: 12px;
+  --font-size-sm: 14px;
+  --font-size-base: 16px;
+  --font-size-lg: 18px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-size-3xl: 30px;
+  --font-size-4xl: 36px;
+  --font-size-5xl: 48px;
+  
+  /* 行高 */
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.5;
+  --line-height-relaxed: 1.75;
+  
+  /* 字重 */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* 字间距 */
+  --letter-spacing-tight: -0.025em;
+  --letter-spacing-normal: 0;
+  --letter-spacing-wide: 0.025em;
+}
+
+/* 全局字体设置 */
+html {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--iflytek-text-primary);
+}
+
+/* 标题字体 */
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+  font-family: var(--font-family-chinese-heading);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+h1, .h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+}
+
+h2, .h2 {
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+h3, .h3 {
+  font-size: var(--font-size-2xl);
+  font-weight: var(--font-weight-semibold);
+}
+
+h4, .h4 {
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-medium);
+}
+
+h5, .h5 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+}
+
+h6, .h6 {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+}
+
+/* 段落和文本 */
+p {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--iflytek-text-primary);
+  margin: 0 0 16px 0;
+}
+
+/* 小号文本 */
+small, .small {
+  font-size: var(--font-size-sm);
+  color: var(--iflytek-text-secondary);
+}
+
+/* 大号文本 */
+.large {
+  font-size: var(--font-size-lg);
+}
+
+/* 超大文本 */
+.extra-large {
+  font-size: var(--font-size-xl);
+}
+
+/* 代码字体 */
+code, kbd, pre, samp {
+  font-family: var(--font-family-chinese-mono);
+  font-size: var(--font-size-sm);
+}
+
+/* 引用文本 */
+blockquote {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-lg);
+  font-style: italic;
+  line-height: var(--line-height-relaxed);
+  color: var(--iflytek-text-secondary);
+  border-left: 4px solid var(--iflytek-primary);
+  padding-left: 16px;
+  margin: 16px 0;
+}
+
+/* 列表 */
+ul, ol {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--iflytek-text-primary);
+}
+
+/* 链接 */
+a {
+  font-family: var(--font-family-chinese);
+  color: var(--iflytek-primary);
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+a:hover {
+  color: var(--iflytek-primary-dark);
+  text-decoration: underline;
+}
+
+/* 表格 */
+table {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-sm);
+}
+
+th {
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+}
+
+td {
+  color: var(--iflytek-text-primary);
+}
+
+/* 表单元素 */
+input, textarea, select, button {
+  font-family: var(--font-family-chinese);
+  font-size: var(--font-size-base);
+}
+
+/* 按钮文本 */
+button, .btn {
+  font-family: var(--font-family-chinese);
+  font-weight: var(--font-weight-medium);
+  letter-spacing: var(--letter-spacing-wide);
+}
+
+/* 标签文本 */
+label {
+  font-family: var(--font-family-chinese);
+  font-weight: var(--font-weight-medium);
+  color: var(--iflytek-text-primary);
+}
+
+/* 占位符文本 */
+::placeholder {
+  font-family: var(--font-family-chinese);
+  color: var(--iflytek-text-tertiary);
+  opacity: 1;
+}
+
+/* 工具类 */
+.font-chinese {
+  font-family: var(--font-family-chinese);
+}
+
+.font-chinese-mono {
+  font-family: var(--font-family-chinese-mono);
+}
+
+.font-chinese-heading {
+  font-family: var(--font-family-chinese-heading);
+}
+
+/* 字体大小工具类 */
+.text-xs { font-size: var(--font-size-xs); }
+.text-sm { font-size: var(--font-size-sm); }
+.text-base { font-size: var(--font-size-base); }
+.text-lg { font-size: var(--font-size-lg); }
+.text-xl { font-size: var(--font-size-xl); }
+.text-2xl { font-size: var(--font-size-2xl); }
+.text-3xl { font-size: var(--font-size-3xl); }
+.text-4xl { font-size: var(--font-size-4xl); }
+.text-5xl { font-size: var(--font-size-5xl); }
+
+/* 字重工具类 */
+.font-light { font-weight: var(--font-weight-light); }
+.font-normal { font-weight: var(--font-weight-normal); }
+.font-medium { font-weight: var(--font-weight-medium); }
+.font-semibold { font-weight: var(--font-weight-semibold); }
+.font-bold { font-weight: var(--font-weight-bold); }
+
+/* 行高工具类 */
+.leading-tight { line-height: var(--line-height-tight); }
+.leading-normal { line-height: var(--line-height-normal); }
+.leading-relaxed { line-height: var(--line-height-relaxed); }
+
+/* 字间距工具类 */
+.tracking-tight { letter-spacing: var(--letter-spacing-tight); }
+.tracking-normal { letter-spacing: var(--letter-spacing-normal); }
+.tracking-wide { letter-spacing: var(--letter-spacing-wide); }
+
+/* 文本对齐 */
+.text-left { text-align: left; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+.text-justify { text-align: justify; }
+
+/* 文本颜色 */
+.text-primary { color: var(--iflytek-text-primary); }
+.text-secondary { color: var(--iflytek-text-secondary); }
+.text-tertiary { color: var(--iflytek-text-tertiary); }
+.text-quaternary { color: var(--iflytek-text-quaternary); }
+.text-brand { color: var(--iflytek-primary); }
+.text-success { color: var(--iflytek-success); }
+.text-warning { color: var(--iflytek-warning); }
+.text-error { color: var(--iflytek-error); }
+.text-white { color: #ffffff; }
+
+/* 文本装饰 */
+.text-underline { text-decoration: underline; }
+.text-line-through { text-decoration: line-through; }
+.text-no-underline { text-decoration: none; }
+
+/* 文本转换 */
+.text-uppercase { text-transform: uppercase; }
+.text-lowercase { text-transform: lowercase; }
+.text-capitalize { text-transform: capitalize; }
+
+/* 文本溢出处理 */
+.text-ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.text-ellipsis-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.text-ellipsis-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* 响应式字体 */
+@media (max-width: 768px) {
+  html {
+    font-size: 14px;
+  }
+  
+  h1, .h1 { font-size: var(--font-size-3xl); }
+  h2, .h2 { font-size: var(--font-size-2xl); }
+  h3, .h3 { font-size: var(--font-size-xl); }
+  h4, .h4 { font-size: var(--font-size-lg); }
+  h5, .h5 { font-size: var(--font-size-base); }
+  h6, .h6 { font-size: var(--font-size-sm); }
+}
+
+/* 高分辨率屏幕优化 */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  body {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+/* 打印样式 */
+@media print {
+  * {
+    font-family: var(--font-family-chinese) !important;
+    color: #000 !important;
+    background: transparent !important;
+  }
+}

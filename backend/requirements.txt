@@ -1,0 +1,38 @@
+# FastAPI 和 Web 服务器
+fastapi>=0.100.0
+uvicorn[standard]>=0.20.0
+python-multipart
+
+# 数据库
+sqlalchemy>=2.0.0
+alembic
+
+# 数据验证和序列化
+pydantic>=2.0.0
+pydantic-settings
+
+# HTTP 客户端和工具
+httpx
+requests
+aiohttp
+
+# WebSocket 支持
+websocket-client
+websockets
+
+# 环境变量管理
+python-dotenv
+
+# 基础数据处理
+numpy
+scipy
+
+# 图像处理
+Pillow
+
+# 异步支持
+aiofiles
+
+# 工具库
+typing-extensions
+python-dateutil

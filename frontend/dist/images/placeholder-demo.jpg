@@ -1,0 +1,11 @@
+<svg width="600" height="400" xmlns="http://www.w3.org/2000/svg">
+  <rect width="600" height="400" fill="#667eea"/>
+  <text x="300" y="200" text-anchor="middle" dominant-baseline="middle" 
+        fill="#ffffff" font-size="28" font-family="Microsoft YaHei, Arial, sans-serif">
+    功能演示
+  </text>
+  <text x="300" y="240" text-anchor="middle" dominant-baseline="middle" 
+        fill="#e0e7ff" font-size="16" font-family="Microsoft YaHei, Arial, sans-serif">
+    多模态面试评估系统
+  </text>
+</svg>

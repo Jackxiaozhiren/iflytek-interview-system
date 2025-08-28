@@ -1,0 +1,52 @@
+{
+  "timestamp": "2025-07-06T14:52:39.055Z",
+  "api_key_status": true,
+  "service_status": true,
+  "configuration_tests": [
+    {
+      "success": false,
+      "config": "基础配置",
+      "result": {
+        "status": "error",
+        "message": "A server error occurred. Please try again later."
+      },
+      "status": 200
+    },
+    {
+      "success": false,
+      "config": "标准SD配置",
+      "result": {
+        "status": "error",
+        "message": "A server error occurred. Please try again later."
+      },
+      "status": 200
+    },
+    {
+      "success": false,
+      "config": "简化配置",
+      "result": {
+        "status": "error",
+        "message": "A server error occurred. Please try again later."
+      },
+      "status": 200
+    },
+    {
+      "success": false,
+      "config": "中文测试配置",
+      "result": {
+        "status": "error",
+        "message": "A server error occurred. Please try again later."
+      },
+      "status": 200
+    }
+  ],
+  "recommendations": [
+    "所有配置测试失败，建议使用备用图片生成方案"
+  ],
+  "alternative_solutions": [
+    "使用Hugging Face Stable Diffusion API",
+    "使用OpenAI DALL-E API",
+    "使用本地Stable Diffusion",
+    "使用高质量模拟图片"
+  ]
+}

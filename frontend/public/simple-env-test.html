@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单环境变量测试</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+    </style>
+</head>
+<body>
+    <h1>🧪 简单环境变量测试</h1>
+    
+    <div class="test-box">
+        <h3>1. import.meta 对象检查</h3>
+        <div id="meta-check"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>2. 环境变量详情</h3>
+        <div id="env-details"></div>
+    </div>
+    
+    <div class="test-box">
+        <h3>3. iFlytek服务测试</h3>
+        <div id="service-test"></div>
+    </div>
+
+    <script type="module">
+        // 1. 检查 import.meta 对象
+        function checkImportMeta() {
+            const metaDiv = document.getElementById('meta-check');
+            
+            console.log('import.meta:', import.meta);
+            console.log('import.meta.env:', import.meta.env);
+            
+            if (typeof import.meta !== 'undefined') {
+                metaDiv.innerHTML = `
+                    <span class="success">✅ import.meta 可用</span>
+                    <pre>import.meta: ${JSON.stringify(import.meta, null, 2)}</pre>
+                `;
+            } else {
+                metaDiv.innerHTML = '<span class="error">❌ import.meta 不可用</span>';
+            }
+        }
+        
+        // 2. 检查环境变量
+        function checkEnvironmentVariables() {
+            const envDiv = document.getElementById('env-details');
+            
+            try {
+                const env = import.meta.env;
+                console.log('Environment variables:', env);
+                
+                envDiv.innerHTML = `
+                    <span class="success">✅ 环境变量访问成功</span>
+                    <pre>${JSON.stringify(env, null, 2)}</pre>
+                `;
+            } catch (error) {
+                envDiv.innerHTML = `
+                    <span class="error">❌ 环境变量访问失败</span>
+                    <pre>${error.message}</pre>
+                `;
+            }
+        }
+        
+        // 3. 测试 iFlytek 服务
+        async function testIflytekService() {
+            const serviceDiv = document.getElementById('service-test');
+            
+            try {
+                serviceDiv.innerHTML = '<span class="info">🔄 正在导入服务...</span>';
+                
+                const module = await import('/src/services/enhancedIflytekSparkService.js');
+                console.log('Service module:', module);
+                
+                const service = module.default;
+                const ServiceClass = module.EnhancedIflytekSparkService;
+                
+                serviceDiv.innerHTML = `
+                    <span class="success">✅ 服务导入成功</span>
+                    <pre>默认导出: ${service ? '✅' : '❌'}
+类导出: ${ServiceClass ? '✅' : '❌'}
+配置: ${JSON.stringify(service?.config, null, 2)}</pre>
+                `;
+            } catch (error) {
+                serviceDiv.innerHTML = `
+                    <span class="error">❌ 服务导入失败</span>
+                    <pre>${error.message}
+${error.stack}</pre>
+                `;
+            }
+        }
+        
+        // 页面加载时运行测试
+        window.addEventListener('load', () => {
+            checkImportMeta();
+            checkEnvironmentVariables();
+            testIflytekService();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,1506 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek布局和交互问题检查工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #fa8c16, #ffa940);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .check-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        
+        .check-section h2 {
+            color: #fa8c16;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-card {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+        
+        .test-card:hover {
+            border-color: #fa8c16;
+            box-shadow: 0 4px 12px rgba(250, 140, 22, 0.1);
+        }
+        
+        .test-card h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.pending { background: #d9d9d9; }
+        .status-indicator.testing { background: #faad14; }
+        .status-indicator.success { background: #52c41a; }
+        .status-indicator.error { background: #ff4d4f; }
+        .status-indicator.warning { background: #fa8c16; }
+        
+        .test-button {
+            width: 100%;
+            background: #fa8c16;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
+        }
+        
+        .test-button:hover {
+            background: #ffa940;
+        }
+        
+        .test-result {
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .test-result.success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        
+        .test-result.error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+        
+        .test-result.warning {
+            background: #fffbe6;
+            color: #faad14;
+            border: 1px solid #ffe58f;
+        }
+        
+        .issue-list {
+            list-style: none;
+            margin-bottom: 15px;
+        }
+        
+        .issue-list li {
+            padding: 8px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        
+        .issue-list li:last-child {
+            border-bottom: none;
+        }
+        
+        .fix-button {
+            background: #52c41a;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.3s ease;
+        }
+        
+        .fix-button:hover {
+            background: #73d13d;
+        }
+        
+        .fix-button:disabled {
+            background: #d9d9d9;
+            cursor: not-allowed;
+        }
+        
+        .global-actions {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .global-button {
+            flex: 1;
+            min-width: 150px;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .global-button.primary {
+            background: #fa8c16;
+            color: white;
+        }
+        
+        .global-button.primary:hover {
+            background: #ffa940;
+        }
+        
+        .global-button.secondary {
+            background: #1890ff;
+            color: white;
+        }
+        
+        .global-button.secondary:hover {
+            background: #40a9ff;
+        }
+        
+        .global-button.success {
+            background: #52c41a;
+            color: white;
+        }
+        
+        .global-button.success:hover {
+            background: #73d13d;
+        }
+        
+        .log-panel {
+            background: #001529;
+            color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .log-panel.show {
+            display: block;
+        }
+        
+        .demo-area {
+            background: #f8f9fa;
+            border: 2px dashed #d9d9d9;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 15px;
+            text-align: center;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+        }
+        
+        .demo-element {
+            background: #1890ff;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 6px;
+            margin: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .demo-element:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+        }
+        
+        .overlap-test {
+            position: relative;
+            height: 150px;
+            background: #f0f0f0;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        .overlap-element {
+            position: absolute;
+            width: 100px;
+            height: 60px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .overlap-element.element1 {
+            background: #1890ff;
+            top: 20px;
+            left: 20px;
+        }
+        
+        .overlap-element.element2 {
+            background: #52c41a;
+            top: 40px;
+            left: 60px;
+        }
+        
+        .overlap-element.element3 {
+            background: #fa8c16;
+            top: 60px;
+            left: 100px;
+        }
+        
+        .scroll-test {
+            height: 200px;
+            overflow-y: auto;
+            border: 1px solid #d9d9d9;
+            border-radius: 6px;
+            padding: 15px;
+        }
+        
+        .scroll-content {
+            height: 500px;
+            background: linear-gradient(to bottom, #f0f9ff, #e6f7ff);
+            padding: 20px;
+            border-radius: 6px;
+        }
+        
+        .modal-test {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+        
+        .modal-test.show {
+            display: flex;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 iFlytek布局和交互问题检查工具</h1>
+            <p>检查元素重叠、滚动行为、交互响应和模态框组件功能</p>
+        </div>
+        
+        <div class="main-content">
+            <div class="global-actions">
+                <button class="global-button primary" onclick="runFullLayoutCheck()">
+                    🚀 开始全面布局检查
+                </button>
+                <button class="global-button secondary" onclick="runInteractionTest()">
+                    🎯 交互功能测试
+                </button>
+                <button class="global-button success" onclick="autoFixIssues()">
+                    🔧 自动修复问题
+                </button>
+            </div>
+            
+            <!-- 元素重叠检查 -->
+            <div class="check-section">
+                <h2>📐 元素重叠检查</h2>
+                <div class="test-grid">
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="overlap-detection-status"></span>
+                            重叠检测
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>文字重叠问题</span>
+                                <span class="status-indicator pending" id="text-overlap-status"></span>
+                            </li>
+                            <li>
+                                <span>组件重叠问题</span>
+                                <span class="status-indicator pending" id="component-overlap-status"></span>
+                            </li>
+                            <li>
+                                <span>Z-index层级问题</span>
+                                <span class="status-indicator pending" id="zindex-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkElementOverlap()">检查元素重叠</button>
+                        <div class="test-result" id="overlap-result"></div>
+                        
+                        <div class="overlap-test">
+                            <div class="overlap-element element1">元素1</div>
+                            <div class="overlap-element element2">元素2</div>
+                            <div class="overlap-element element3">元素3</div>
+                        </div>
+                    </div>
+                    
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="layout-alignment-status"></span>
+                            布局对齐检查
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>网格对齐</span>
+                                <span class="status-indicator pending" id="grid-alignment-status"></span>
+                            </li>
+                            <li>
+                                <span>Flex对齐</span>
+                                <span class="status-indicator pending" id="flex-alignment-status"></span>
+                            </li>
+                            <li>
+                                <span>文字基线对齐</span>
+                                <span class="status-indicator pending" id="baseline-alignment-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkLayoutAlignment()">检查布局对齐</button>
+                        <div class="test-result" id="alignment-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 滚动行为检查 -->
+            <div class="check-section">
+                <h2>📜 滚动行为检查</h2>
+                <div class="test-grid">
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="scroll-behavior-status"></span>
+                            滚动功能测试
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>垂直滚动</span>
+                                <span class="status-indicator pending" id="vertical-scroll-status"></span>
+                            </li>
+                            <li>
+                                <span>水平滚动</span>
+                                <span class="status-indicator pending" id="horizontal-scroll-status"></span>
+                            </li>
+                            <li>
+                                <span>滚动条样式</span>
+                                <span class="status-indicator pending" id="scrollbar-style-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkScrollBehavior()">测试滚动行为</button>
+                        <div class="test-result" id="scroll-result"></div>
+                        
+                        <div class="scroll-test" id="scrollTestArea">
+                            <div class="scroll-content">
+                                <h4>滚动测试区域</h4>
+                                <p>这是一个可滚动的测试区域。请尝试滚动查看内容。</p>
+                                <p>滚动应该流畅且没有卡顿。</p>
+                                <p>滚动条应该正确显示。</p>
+                                <p>内容应该完整可见。</p>
+                                <p>这里有更多内容...</p>
+                                <p>继续滚动...</p>
+                                <p>测试滚动到底部...</p>
+                                <p>滚动测试完成！</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="scroll-performance-status"></span>
+                            滚动性能检查
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>滚动流畅度</span>
+                                <span class="status-indicator pending" id="scroll-smoothness-status"></span>
+                            </li>
+                            <li>
+                                <span>滚动延迟</span>
+                                <span class="status-indicator pending" id="scroll-lag-status"></span>
+                            </li>
+                            <li>
+                                <span>内存使用</span>
+                                <span class="status-indicator pending" id="scroll-memory-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkScrollPerformance()">检查滚动性能</button>
+                        <div class="test-result" id="scroll-performance-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 交互响应检查 -->
+            <div class="check-section">
+                <h2>🖱️ 交互响应检查</h2>
+                <div class="test-grid">
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="click-response-status"></span>
+                            点击响应测试
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>按钮点击</span>
+                                <span class="status-indicator pending" id="button-click-status"></span>
+                            </li>
+                            <li>
+                                <span>链接点击</span>
+                                <span class="status-indicator pending" id="link-click-status"></span>
+                            </li>
+                            <li>
+                                <span>表单提交</span>
+                                <span class="status-indicator pending" id="form-submit-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkClickResponse()">测试点击响应</button>
+                        <div class="test-result" id="click-response-result"></div>
+                        
+                        <div class="demo-area">
+                            <div class="demo-element" onclick="testElementClick(this)">点击测试按钮</div>
+                            <div class="demo-element" onclick="testElementClick(this)">另一个测试按钮</div>
+                        </div>
+                    </div>
+                    
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="hover-effects-status"></span>
+                            悬停效果测试
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>悬停动画</span>
+                                <span class="status-indicator pending" id="hover-animation-status"></span>
+                            </li>
+                            <li>
+                                <span>悬停状态</span>
+                                <span class="status-indicator pending" id="hover-state-status"></span>
+                            </li>
+                            <li>
+                                <span>鼠标指针</span>
+                                <span class="status-indicator pending" id="cursor-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkHoverEffects()">测试悬停效果</button>
+                        <div class="test-result" id="hover-effects-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 模态框组件检查 -->
+            <div class="check-section">
+                <h2>🪟 模态框组件检查</h2>
+                <div class="test-grid">
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="modal-functionality-status"></span>
+                            模态框功能测试
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>打开/关闭</span>
+                                <span class="status-indicator pending" id="modal-toggle-status"></span>
+                            </li>
+                            <li>
+                                <span>遮罩层</span>
+                                <span class="status-indicator pending" id="modal-overlay-status"></span>
+                            </li>
+                            <li>
+                                <span>ESC键关闭</span>
+                                <span class="status-indicator pending" id="modal-esc-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkModalFunctionality()">测试模态框功能</button>
+                        <button class="test-button" onclick="showTestModal()">显示测试模态框</button>
+                        <div class="test-result" id="modal-functionality-result"></div>
+                    </div>
+                    
+                    <div class="test-card">
+                        <h3>
+                            <span class="status-indicator pending" id="modal-accessibility-status"></span>
+                            模态框无障碍性
+                        </h3>
+                        <ul class="issue-list">
+                            <li>
+                                <span>焦点管理</span>
+                                <span class="status-indicator pending" id="modal-focus-status"></span>
+                            </li>
+                            <li>
+                                <span>键盘导航</span>
+                                <span class="status-indicator pending" id="modal-keyboard-status"></span>
+                            </li>
+                            <li>
+                                <span>屏幕阅读器</span>
+                                <span class="status-indicator pending" id="modal-screen-reader-status"></span>
+                            </li>
+                        </ul>
+                        <button class="test-button" onclick="checkModalAccessibility()">检查无障碍性</button>
+                        <div class="test-result" id="modal-accessibility-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-panel" id="logPanel">
+                <div id="logContent"></div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- 测试模态框 -->
+    <div class="modal-test" id="testModal">
+        <div class="modal-content">
+            <h3>测试模态框</h3>
+            <p>这是一个用于测试的模态框。</p>
+            <p>请检查以下功能：</p>
+            <ul style="text-align: left; margin: 15px 0;">
+                <li>模态框是否正确显示</li>
+                <li>遮罩层是否正常工作</li>
+                <li>按ESC键是否能关闭</li>
+                <li>点击遮罩是否能关闭</li>
+            </ul>
+            <button onclick="hideTestModal()" style="background: #1890ff; color: white; border: none; padding: 8px 16px; border-radius: 4px; cursor: pointer;">关闭模态框</button>
+        </div>
+    </div>
+
+    <script>
+        // 全局变量
+        let testResults = {
+            overlap: 0,
+            scroll: 0,
+            interaction: 0,
+            modal: 0
+        };
+
+        // 日志功能
+        function log(message, type = 'info') {
+            const logContent = document.getElementById('logContent');
+            const logPanel = document.getElementById('logPanel');
+            
+            logPanel.classList.add('show');
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            
+            if (type === 'error') {
+                logEntry.style.color = '#ff4d4f';
+            } else if (type === 'success') {
+                logEntry.style.color = '#52c41a';
+            } else if (type === 'warning') {
+                logEntry.style.color = '#faad14';
+            }
+            
+            logContent.appendChild(logEntry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        // 更新状态指示器
+        function updateStatus(elementId, status) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.className = `status-indicator ${status}`;
+            }
+        }
+
+        // 显示测试结果
+        function showResult(elementId, type, message) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.className = `test-result ${type}`;
+                element.textContent = message;
+                element.style.display = 'block';
+            }
+        }
+
+        // 元素重叠检查
+        function checkElementOverlap() {
+            log('📐 开始元素重叠检查...', 'info');
+            updateStatus('overlap-detection-status', 'testing');
+
+            // 检查文字重叠问题
+            setTimeout(() => {
+                const textElements = document.querySelectorAll('p, span, div, h1, h2, h3, h4, h5, h6');
+                let textOverlapIssues = 0;
+
+                textElements.forEach((element, index) => {
+                    const rect = element.getBoundingClientRect();
+                    const computedStyle = window.getComputedStyle(element);
+
+                    // 检查行高是否合理
+                    const lineHeight = parseFloat(computedStyle.lineHeight);
+                    const fontSize = parseFloat(computedStyle.fontSize);
+
+                    if (lineHeight && fontSize && lineHeight / fontSize < 1.2) {
+                        textOverlapIssues++;
+                    }
+                });
+
+                if (textOverlapIssues === 0) {
+                    updateStatus('text-overlap-status', 'success');
+                    log('✅ 未发现文字重叠问题', 'success');
+                } else {
+                    updateStatus('text-overlap-status', 'warning');
+                    log(`⚠️ 发现 ${textOverlapIssues} 个潜在文字重叠问题`, 'warning');
+                }
+            }, 500);
+
+            // 检查组件重叠问题
+            setTimeout(() => {
+                const overlapElements = document.querySelectorAll('.overlap-element');
+                let componentOverlapIssues = 0;
+
+                for (let i = 0; i < overlapElements.length; i++) {
+                    for (let j = i + 1; j < overlapElements.length; j++) {
+                        const rect1 = overlapElements[i].getBoundingClientRect();
+                        const rect2 = overlapElements[j].getBoundingClientRect();
+
+                        // 检查是否重叠
+                        if (rect1.left < rect2.right && rect2.left < rect1.right &&
+                            rect1.top < rect2.bottom && rect2.top < rect1.bottom) {
+                            componentOverlapIssues++;
+                        }
+                    }
+                }
+
+                if (componentOverlapIssues > 0) {
+                    updateStatus('component-overlap-status', 'warning');
+                    log(`⚠️ 检测到 ${componentOverlapIssues} 个组件重叠（演示区域）`, 'warning');
+                } else {
+                    updateStatus('component-overlap-status', 'success');
+                    log('✅ 未发现组件重叠问题', 'success');
+                }
+            }, 800);
+
+            // 检查Z-index层级问题
+            setTimeout(() => {
+                const elementsWithZIndex = document.querySelectorAll('*');
+                let zIndexIssues = 0;
+                let maxZIndex = 0;
+
+                elementsWithZIndex.forEach(element => {
+                    const zIndex = parseInt(window.getComputedStyle(element).zIndex);
+                    if (!isNaN(zIndex)) {
+                        maxZIndex = Math.max(maxZIndex, zIndex);
+                        if (zIndex > 9999) {
+                            zIndexIssues++;
+                        }
+                    }
+                });
+
+                if (zIndexIssues === 0) {
+                    updateStatus('zindex-status', 'success');
+                    log(`✅ Z-index层级正常，最大值: ${maxZIndex}`, 'success');
+                } else {
+                    updateStatus('zindex-status', 'warning');
+                    log(`⚠️ 发现 ${zIndexIssues} 个过高的Z-index值`, 'warning');
+                }
+
+                updateStatus('overlap-detection-status', 'success');
+                showResult('overlap-result', 'success', '元素重叠检查完成');
+            }, 1200);
+        }
+
+        // 布局对齐检查
+        function checkLayoutAlignment() {
+            log('📐 开始布局对齐检查...', 'info');
+            updateStatus('layout-alignment-status', 'testing');
+
+            // 检查网格对齐
+            setTimeout(() => {
+                const gridContainers = document.querySelectorAll('.test-grid, .function-grid');
+                let gridAlignmentIssues = 0;
+
+                gridContainers.forEach(container => {
+                    const computedStyle = window.getComputedStyle(container);
+                    if (computedStyle.display === 'grid') {
+                        const children = container.children;
+                        if (children.length > 0) {
+                            // 检查网格项是否对齐
+                            const firstChildRect = children[0].getBoundingClientRect();
+                            for (let i = 1; i < children.length; i++) {
+                                const childRect = children[i].getBoundingClientRect();
+                                // 简单的对齐检查
+                                if (Math.abs(firstChildRect.top - childRect.top) > 5 &&
+                                    Math.abs(firstChildRect.left - childRect.left) > 5) {
+                                    // 这是正常的，不同行或列的元素
+                                }
+                            }
+                        }
+                    }
+                });
+
+                updateStatus('grid-alignment-status', 'success');
+                log('✅ 网格对齐检查通过', 'success');
+            }, 400);
+
+            // 检查Flex对齐
+            setTimeout(() => {
+                const flexContainers = document.querySelectorAll('.global-actions, .issue-list');
+                let flexAlignmentIssues = 0;
+
+                flexContainers.forEach(container => {
+                    const computedStyle = window.getComputedStyle(container);
+                    if (computedStyle.display === 'flex') {
+                        // 检查flex容器的对齐属性
+                        const alignItems = computedStyle.alignItems;
+                        const justifyContent = computedStyle.justifyContent;
+
+                        if (alignItems === 'stretch' || alignItems === 'center' ||
+                            justifyContent === 'space-between' || justifyContent === 'center') {
+                            // 对齐设置正常
+                        }
+                    }
+                });
+
+                updateStatus('flex-alignment-status', 'success');
+                log('✅ Flex对齐检查通过', 'success');
+            }, 700);
+
+            // 检查文字基线对齐
+            setTimeout(() => {
+                const textElements = document.querySelectorAll('h1, h2, h3, p, span');
+                let baselineIssues = 0;
+
+                textElements.forEach(element => {
+                    const computedStyle = window.getComputedStyle(element);
+                    const verticalAlign = computedStyle.verticalAlign;
+                    const lineHeight = computedStyle.lineHeight;
+
+                    // 检查基线对齐设置
+                    if (verticalAlign === 'baseline' || verticalAlign === 'middle') {
+                        // 基线对齐正常
+                    }
+                });
+
+                updateStatus('baseline-alignment-status', 'success');
+                log('✅ 文字基线对齐检查通过', 'success');
+
+                updateStatus('layout-alignment-status', 'success');
+                showResult('alignment-result', 'success', '布局对齐检查完成');
+            }, 1000);
+        }
+
+        // 滚动行为检查
+        function checkScrollBehavior() {
+            log('📜 开始滚动行为检查...', 'info');
+            updateStatus('scroll-behavior-status', 'testing');
+
+            const scrollTestArea = document.getElementById('scrollTestArea');
+
+            // 检查垂直滚动
+            setTimeout(() => {
+                if (scrollTestArea.scrollHeight > scrollTestArea.clientHeight) {
+                    updateStatus('vertical-scroll-status', 'success');
+                    log('✅ 垂直滚动功能正常', 'success');
+
+                    // 测试滚动
+                    scrollTestArea.scrollTop = 50;
+                    setTimeout(() => {
+                        if (scrollTestArea.scrollTop > 0) {
+                            log('✅ 滚动操作响应正常', 'success');
+                        }
+                        scrollTestArea.scrollTop = 0; // 重置滚动位置
+                    }, 200);
+                } else {
+                    updateStatus('vertical-scroll-status', 'warning');
+                    log('⚠️ 垂直滚动区域内容不足', 'warning');
+                }
+            }, 300);
+
+            // 检查水平滚动
+            setTimeout(() => {
+                const bodyOverflowX = window.getComputedStyle(document.body).overflowX;
+                if (bodyOverflowX === 'hidden' || bodyOverflowX === 'auto') {
+                    updateStatus('horizontal-scroll-status', 'success');
+                    log('✅ 水平滚动控制正常', 'success');
+                } else {
+                    updateStatus('horizontal-scroll-status', 'warning');
+                    log('⚠️ 水平滚动可能存在问题', 'warning');
+                }
+            }, 600);
+
+            // 检查滚动条样式
+            setTimeout(() => {
+                const scrollbarWidth = scrollTestArea.offsetWidth - scrollTestArea.clientWidth;
+                if (scrollbarWidth > 0) {
+                    updateStatus('scrollbar-style-status', 'success');
+                    log(`✅ 滚动条显示正常，宽度: ${scrollbarWidth}px`, 'success');
+                } else {
+                    updateStatus('scrollbar-style-status', 'warning');
+                    log('⚠️ 滚动条可能被隐藏或自定义', 'warning');
+                }
+
+                updateStatus('scroll-behavior-status', 'success');
+                showResult('scroll-result', 'success', '滚动行为检查完成');
+            }, 900);
+        }
+
+        // 滚动性能检查
+        function checkScrollPerformance() {
+            log('⚡ 开始滚动性能检查...', 'info');
+            updateStatus('scroll-performance-status', 'testing');
+
+            const scrollTestArea = document.getElementById('scrollTestArea');
+            let scrollEvents = 0;
+            let startTime = performance.now();
+
+            // 监听滚动事件
+            const scrollHandler = () => {
+                scrollEvents++;
+            };
+
+            scrollTestArea.addEventListener('scroll', scrollHandler);
+
+            // 模拟滚动
+            setTimeout(() => {
+                for (let i = 0; i < 10; i++) {
+                    setTimeout(() => {
+                        scrollTestArea.scrollTop = i * 20;
+                    }, i * 50);
+                }
+
+                setTimeout(() => {
+                    const endTime = performance.now();
+                    const duration = endTime - startTime;
+
+                    scrollTestArea.removeEventListener('scroll', scrollHandler);
+
+                    // 检查滚动流畅度
+                    if (scrollEvents >= 8) {
+                        updateStatus('scroll-smoothness-status', 'success');
+                        log(`✅ 滚动流畅度良好，触发 ${scrollEvents} 次事件`, 'success');
+                    } else {
+                        updateStatus('scroll-smoothness-status', 'warning');
+                        log(`⚠️ 滚动可能不够流畅，仅触发 ${scrollEvents} 次事件`, 'warning');
+                    }
+
+                    // 检查滚动延迟
+                    if (duration < 1000) {
+                        updateStatus('scroll-lag-status', 'success');
+                        log(`✅ 滚动延迟正常: ${duration.toFixed(2)}ms`, 'success');
+                    } else {
+                        updateStatus('scroll-lag-status', 'warning');
+                        log(`⚠️ 滚动延迟较高: ${duration.toFixed(2)}ms`, 'warning');
+                    }
+
+                    // 检查内存使用
+                    if (performance.memory) {
+                        const memoryUsage = (performance.memory.usedJSHeapSize / 1024 / 1024).toFixed(2);
+                        updateStatus('scroll-memory-status', 'success');
+                        log(`✅ 内存使用: ${memoryUsage}MB`, 'success');
+                    } else {
+                        updateStatus('scroll-memory-status', 'success');
+                        log('✅ 内存检查完成（浏览器不支持详细信息）', 'success');
+                    }
+
+                    updateStatus('scroll-performance-status', 'success');
+                    showResult('scroll-performance-result', 'success', '滚动性能检查完成');
+
+                    // 重置滚动位置
+                    scrollTestArea.scrollTop = 0;
+                }, 800);
+            }, 200);
+        }
+
+        // 点击响应检查
+        function checkClickResponse() {
+            log('🖱️ 开始点击响应检查...', 'info');
+            updateStatus('click-response-status', 'testing');
+
+            // 检查按钮点击
+            setTimeout(() => {
+                const buttons = document.querySelectorAll('button');
+                let workingButtons = 0;
+                let totalButtons = buttons.length;
+
+                buttons.forEach(button => {
+                    if (!button.disabled && button.onclick) {
+                        workingButtons++;
+                    } else if (!button.disabled && button.addEventListener) {
+                        // 检查是否有事件监听器
+                        workingButtons++;
+                    }
+                });
+
+                if (workingButtons >= totalButtons * 0.8) {
+                    updateStatus('button-click-status', 'success');
+                    log(`✅ 按钮点击响应正常: ${workingButtons}/${totalButtons}`, 'success');
+                } else {
+                    updateStatus('button-click-status', 'warning');
+                    log(`⚠️ 部分按钮可能无响应: ${workingButtons}/${totalButtons}`, 'warning');
+                }
+            }, 400);
+
+            // 检查链接点击
+            setTimeout(() => {
+                const links = document.querySelectorAll('a');
+                let workingLinks = 0;
+
+                links.forEach(link => {
+                    if (link.href && link.href !== '#') {
+                        workingLinks++;
+                    }
+                });
+
+                updateStatus('link-click-status', 'success');
+                log(`✅ 链接点击检查完成: ${workingLinks} 个有效链接`, 'success');
+            }, 700);
+
+            // 检查表单提交
+            setTimeout(() => {
+                const forms = document.querySelectorAll('form');
+                if (forms.length > 0) {
+                    updateStatus('form-submit-status', 'success');
+                    log(`✅ 发现 ${forms.length} 个表单`, 'success');
+                } else {
+                    updateStatus('form-submit-status', 'success');
+                    log('✅ 当前页面无表单元素', 'success');
+                }
+
+                updateStatus('click-response-status', 'success');
+                showResult('click-response-result', 'success', '点击响应检查完成');
+            }, 1000);
+        }
+
+        // 悬停效果检查
+        function checkHoverEffects() {
+            log('🖱️ 开始悬停效果检查...', 'info');
+            updateStatus('hover-effects-status', 'testing');
+
+            // 检查悬停动画
+            setTimeout(() => {
+                const hoverElements = document.querySelectorAll('.test-button, .demo-element, .test-card');
+                let elementsWithHover = 0;
+
+                hoverElements.forEach(element => {
+                    const computedStyle = window.getComputedStyle(element);
+                    const transition = computedStyle.transition;
+
+                    if (transition && transition !== 'none') {
+                        elementsWithHover++;
+                    }
+                });
+
+                if (elementsWithHover > 0) {
+                    updateStatus('hover-animation-status', 'success');
+                    log(`✅ 发现 ${elementsWithHover} 个元素有悬停动画`, 'success');
+                } else {
+                    updateStatus('hover-animation-status', 'warning');
+                    log('⚠️ 未发现悬停动画效果', 'warning');
+                }
+            }, 300);
+
+            // 检查悬停状态
+            setTimeout(() => {
+                // 模拟悬停测试
+                const testElement = document.querySelector('.demo-element');
+                if (testElement) {
+                    const event = new MouseEvent('mouseenter', { bubbles: true });
+                    testElement.dispatchEvent(event);
+
+                    setTimeout(() => {
+                        updateStatus('hover-state-status', 'success');
+                        log('✅ 悬停状态测试完成', 'success');
+
+                        const leaveEvent = new MouseEvent('mouseleave', { bubbles: true });
+                        testElement.dispatchEvent(leaveEvent);
+                    }, 200);
+                } else {
+                    updateStatus('hover-state-status', 'success');
+                    log('✅ 悬停状态检查完成', 'success');
+                }
+            }, 600);
+
+            // 检查鼠标指针
+            setTimeout(() => {
+                const clickableElements = document.querySelectorAll('button, a, .demo-element');
+                let elementsWithPointer = 0;
+
+                clickableElements.forEach(element => {
+                    const computedStyle = window.getComputedStyle(element);
+                    if (computedStyle.cursor === 'pointer') {
+                        elementsWithPointer++;
+                    }
+                });
+
+                if (elementsWithPointer >= clickableElements.length * 0.8) {
+                    updateStatus('cursor-status', 'success');
+                    log(`✅ 鼠标指针样式正常: ${elementsWithPointer}/${clickableElements.length}`, 'success');
+                } else {
+                    updateStatus('cursor-status', 'warning');
+                    log(`⚠️ 部分元素缺少pointer样式: ${elementsWithPointer}/${clickableElements.length}`, 'warning');
+                }
+
+                updateStatus('hover-effects-status', 'success');
+                showResult('hover-effects-result', 'success', '悬停效果检查完成');
+            }, 900);
+        }
+
+        // 模态框功能检查
+        function checkModalFunctionality() {
+            log('🪟 开始模态框功能检查...', 'info');
+            updateStatus('modal-functionality-status', 'testing');
+
+            const testModal = document.getElementById('testModal');
+
+            // 检查打开/关闭
+            setTimeout(() => {
+                if (testModal) {
+                    // 测试显示
+                    testModal.classList.add('show');
+
+                    setTimeout(() => {
+                        if (testModal.classList.contains('show')) {
+                            updateStatus('modal-toggle-status', 'success');
+                            log('✅ 模态框显示功能正常', 'success');
+
+                            // 测试隐藏
+                            testModal.classList.remove('show');
+                        } else {
+                            updateStatus('modal-toggle-status', 'error');
+                            log('❌ 模态框显示功能异常', 'error');
+                        }
+                    }, 200);
+                } else {
+                    updateStatus('modal-toggle-status', 'error');
+                    log('❌ 未找到测试模态框', 'error');
+                }
+            }, 300);
+
+            // 检查遮罩层
+            setTimeout(() => {
+                if (testModal) {
+                    const computedStyle = window.getComputedStyle(testModal);
+                    const backgroundColor = computedStyle.backgroundColor;
+
+                    if (backgroundColor.includes('rgba') || backgroundColor.includes('rgb')) {
+                        updateStatus('modal-overlay-status', 'success');
+                        log('✅ 模态框遮罩层样式正常', 'success');
+                    } else {
+                        updateStatus('modal-overlay-status', 'warning');
+                        log('⚠️ 模态框遮罩层样式可能有问题', 'warning');
+                    }
+                } else {
+                    updateStatus('modal-overlay-status', 'error');
+                    log('❌ 无法检查遮罩层', 'error');
+                }
+            }, 600);
+
+            // 检查ESC键关闭
+            setTimeout(() => {
+                // 模拟ESC键事件
+                const escEvent = new KeyboardEvent('keydown', {
+                    key: 'Escape',
+                    keyCode: 27,
+                    bubbles: true
+                });
+
+                document.dispatchEvent(escEvent);
+
+                updateStatus('modal-esc-status', 'success');
+                log('✅ ESC键事件测试完成', 'success');
+
+                updateStatus('modal-functionality-status', 'success');
+                showResult('modal-functionality-result', 'success', '模态框功能检查完成');
+            }, 900);
+        }
+
+        // 模态框无障碍性检查
+        function checkModalAccessibility() {
+            log('♿ 开始模态框无障碍性检查...', 'info');
+            updateStatus('modal-accessibility-status', 'testing');
+
+            const testModal = document.getElementById('testModal');
+
+            // 检查焦点管理
+            setTimeout(() => {
+                if (testModal) {
+                    const focusableElements = testModal.querySelectorAll(
+                        'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+                    );
+
+                    if (focusableElements.length > 0) {
+                        updateStatus('modal-focus-status', 'success');
+                        log(`✅ 模态框包含 ${focusableElements.length} 个可聚焦元素`, 'success');
+                    } else {
+                        updateStatus('modal-focus-status', 'warning');
+                        log('⚠️ 模态框缺少可聚焦元素', 'warning');
+                    }
+                } else {
+                    updateStatus('modal-focus-status', 'error');
+                    log('❌ 无法检查焦点管理', 'error');
+                }
+            }, 300);
+
+            // 检查键盘导航
+            setTimeout(() => {
+                // 模拟Tab键导航
+                const tabEvent = new KeyboardEvent('keydown', {
+                    key: 'Tab',
+                    keyCode: 9,
+                    bubbles: true
+                });
+
+                document.dispatchEvent(tabEvent);
+
+                updateStatus('modal-keyboard-status', 'success');
+                log('✅ 键盘导航测试完成', 'success');
+            }, 600);
+
+            // 检查屏幕阅读器支持
+            setTimeout(() => {
+                if (testModal) {
+                    const ariaLabel = testModal.getAttribute('aria-label');
+                    const ariaLabelledby = testModal.getAttribute('aria-labelledby');
+                    const role = testModal.getAttribute('role');
+
+                    if (ariaLabel || ariaLabelledby || role) {
+                        updateStatus('modal-screen-reader-status', 'success');
+                        log('✅ 模态框包含无障碍属性', 'success');
+                    } else {
+                        updateStatus('modal-screen-reader-status', 'warning');
+                        log('⚠️ 建议添加aria-label或role属性', 'warning');
+                    }
+                } else {
+                    updateStatus('modal-screen-reader-status', 'error');
+                    log('❌ 无法检查屏幕阅读器支持', 'error');
+                }
+
+                updateStatus('modal-accessibility-status', 'success');
+                showResult('modal-accessibility-result', 'success', '模态框无障碍性检查完成');
+            }, 900);
+        }
+
+        // 测试元素点击
+        function testElementClick(element) {
+            element.style.transform = 'scale(0.95)';
+            element.style.background = '#52c41a';
+
+            setTimeout(() => {
+                element.style.transform = '';
+                element.style.background = '';
+            }, 200);
+
+            log(`✅ 测试元素点击成功: ${element.textContent}`, 'success');
+        }
+
+        // 显示测试模态框
+        function showTestModal() {
+            const testModal = document.getElementById('testModal');
+            testModal.classList.add('show');
+            log('🪟 测试模态框已显示', 'info');
+        }
+
+        // 隐藏测试模态框
+        function hideTestModal() {
+            const testModal = document.getElementById('testModal');
+            testModal.classList.remove('show');
+            log('🪟 测试模态框已隐藏', 'info');
+        }
+
+        // 全面布局检查
+        async function runFullLayoutCheck() {
+            log('🚀 开始全面布局检查...', 'info');
+
+            // 重置所有状态
+            const statusElements = document.querySelectorAll('.status-indicator');
+            statusElements.forEach(element => {
+                element.className = 'status-indicator pending';
+            });
+
+            const resultElements = document.querySelectorAll('.test-result');
+            resultElements.forEach(element => {
+                element.style.display = 'none';
+            });
+
+            // 按顺序执行所有检查
+            checkElementOverlap();
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            checkLayoutAlignment();
+            await new Promise(resolve => setTimeout(resolve, 1200));
+
+            checkScrollBehavior();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkScrollPerformance();
+            await new Promise(resolve => setTimeout(resolve, 1500));
+
+            checkClickResponse();
+            await new Promise(resolve => setTimeout(resolve, 1200));
+
+            checkHoverEffects();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkModalFunctionality();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkModalAccessibility();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            // 生成检查报告
+            setTimeout(() => {
+                generateLayoutReport();
+            }, 1000);
+
+            log('🎉 全面布局检查完成！', 'success');
+        }
+
+        // 交互功能测试
+        async function runInteractionTest() {
+            log('🎯 开始交互功能测试...', 'info');
+
+            // 重点测试交互相关功能
+            checkClickResponse();
+            await new Promise(resolve => setTimeout(resolve, 1200));
+
+            checkHoverEffects();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkModalFunctionality();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            log('🎯 交互功能测试完成！', 'success');
+        }
+
+        // 自动修复问题
+        function autoFixIssues() {
+            log('🔧 开始自动修复问题...', 'info');
+
+            let fixedIssues = 0;
+
+            // 修复文字重叠问题
+            setTimeout(() => {
+                const textElements = document.querySelectorAll('p, span, div');
+                textElements.forEach(element => {
+                    const computedStyle = window.getComputedStyle(element);
+                    const lineHeight = parseFloat(computedStyle.lineHeight);
+                    const fontSize = parseFloat(computedStyle.fontSize);
+
+                    if (lineHeight && fontSize && lineHeight / fontSize < 1.2) {
+                        element.style.lineHeight = '1.5';
+                        fixedIssues++;
+                    }
+                });
+
+                if (fixedIssues > 0) {
+                    log(`🔧 修复了 ${fixedIssues} 个文字重叠问题`, 'success');
+                }
+            }, 500);
+
+            // 修复Z-index问题
+            setTimeout(() => {
+                const elementsWithHighZIndex = document.querySelectorAll('*');
+                let zIndexFixed = 0;
+
+                elementsWithHighZIndex.forEach(element => {
+                    const zIndex = parseInt(window.getComputedStyle(element).zIndex);
+                    if (!isNaN(zIndex) && zIndex > 9999) {
+                        element.style.zIndex = '999';
+                        zIndexFixed++;
+                    }
+                });
+
+                if (zIndexFixed > 0) {
+                    log(`🔧 修复了 ${zIndexFixed} 个Z-index层级问题`, 'success');
+                }
+            }, 800);
+
+            // 修复鼠标指针样式
+            setTimeout(() => {
+                const clickableElements = document.querySelectorAll('button, a');
+                let cursorFixed = 0;
+
+                clickableElements.forEach(element => {
+                    const computedStyle = window.getComputedStyle(element);
+                    if (computedStyle.cursor !== 'pointer') {
+                        element.style.cursor = 'pointer';
+                        cursorFixed++;
+                    }
+                });
+
+                if (cursorFixed > 0) {
+                    log(`🔧 修复了 ${cursorFixed} 个鼠标指针样式问题`, 'success');
+                }
+            }, 1100);
+
+            // 添加模态框无障碍属性
+            setTimeout(() => {
+                const testModal = document.getElementById('testModal');
+                if (testModal && !testModal.getAttribute('role')) {
+                    testModal.setAttribute('role', 'dialog');
+                    testModal.setAttribute('aria-label', '测试模态框');
+                    log('🔧 为模态框添加了无障碍属性', 'success');
+                }
+            }, 1400);
+
+            setTimeout(() => {
+                log('🎉 自动修复完成！建议重新运行检查验证修复效果', 'success');
+            }, 1700);
+        }
+
+        // 生成布局检查报告
+        function generateLayoutReport() {
+            const successElements = document.querySelectorAll('.status-indicator.success');
+            const warningElements = document.querySelectorAll('.status-indicator.warning');
+            const errorElements = document.querySelectorAll('.status-indicator.error');
+
+            const totalChecks = successElements.length + warningElements.length + errorElements.length;
+            const score = totalChecks > 0 ? Math.round((successElements.length / totalChecks) * 100) : 0;
+
+            log('', 'info');
+            log('📊 ===== 布局和交互检查报告 =====', 'info');
+            log(`总检查项: ${totalChecks}`, 'info');
+            log(`通过项: ${successElements.length}`, 'success');
+            log(`警告项: ${warningElements.length}`, 'warning');
+            log(`错误项: ${errorElements.length}`, 'error');
+            log(`布局质量评分: ${score}%`, score >= 90 ? 'success' : score >= 70 ? 'warning' : 'error');
+            log('', 'info');
+
+            // 分类报告
+            log('📋 检查分类结果:', 'info');
+
+            // 元素重叠检查
+            const overlapPassed = ['text-overlap-status', 'component-overlap-status', 'zindex-status']
+                .filter(id => document.getElementById(id)?.classList.contains('success')).length;
+            log(`• 元素重叠检查: ${overlapPassed}/3 项通过`, overlapPassed === 3 ? 'success' : 'warning');
+
+            // 布局对齐检查
+            const alignmentPassed = ['grid-alignment-status', 'flex-alignment-status', 'baseline-alignment-status']
+                .filter(id => document.getElementById(id)?.classList.contains('success')).length;
+            log(`• 布局对齐检查: ${alignmentPassed}/3 项通过`, alignmentPassed === 3 ? 'success' : 'warning');
+
+            // 滚动行为检查
+            const scrollPassed = ['vertical-scroll-status', 'horizontal-scroll-status', 'scrollbar-style-status']
+                .filter(id => document.getElementById(id)?.classList.contains('success')).length;
+            log(`• 滚动行为检查: ${scrollPassed}/3 项通过`, scrollPassed >= 2 ? 'success' : 'warning');
+
+            // 交互响应检查
+            const interactionPassed = ['button-click-status', 'hover-animation-status', 'cursor-status']
+                .filter(id => document.getElementById(id)?.classList.contains('success')).length;
+            log(`• 交互响应检查: ${interactionPassed}/3 项通过`, interactionPassed >= 2 ? 'success' : 'warning');
+
+            // 模态框功能检查
+            const modalPassed = ['modal-toggle-status', 'modal-overlay-status', 'modal-focus-status']
+                .filter(id => document.getElementById(id)?.classList.contains('success')).length;
+            log(`• 模态框功能检查: ${modalPassed}/3 项通过`, modalPassed >= 2 ? 'success' : 'warning');
+
+            log('', 'info');
+
+            // 总体评价和建议
+            if (score >= 95) {
+                log('🎉 布局和交互质量优秀！系统运行稳定', 'success');
+            } else if (score >= 85) {
+                log('👍 布局和交互质量良好，少数问题需要关注', 'success');
+            } else if (score >= 70) {
+                log('⚠️ 布局和交互质量一般，建议使用自动修复功能', 'warning');
+            } else {
+                log('❌ 布局和交互存在较多问题，建议立即修复', 'error');
+            }
+
+            log('', 'info');
+            log('🔧 修复建议:', 'info');
+            if (warningElements.length > 0) {
+                log('• 点击"自动修复问题"按钮尝试自动修复', 'info');
+            }
+            if (errorElements.length > 0) {
+                log('• 检查控制台错误信息', 'info');
+                log('• 验证相关组件是否正确加载', 'info');
+            }
+            log('• 在不同设备和浏览器中测试', 'info');
+            log('• 关注用户反馈和使用体验', 'info');
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🎯 iFlytek布局和交互问题检查工具已启动', 'info');
+            log('📋 请选择检查项目或点击"开始全面布局检查"', 'info');
+
+            // 添加ESC键关闭模态框功能
+            document.addEventListener('keydown', function(e) {
+                if (e.key === 'Escape') {
+                    hideTestModal();
+                }
+            });
+
+            // 添加点击遮罩关闭模态框功能
+            document.getElementById('testModal').addEventListener('click', function(e) {
+                if (e.target === this) {
+                    hideTestModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

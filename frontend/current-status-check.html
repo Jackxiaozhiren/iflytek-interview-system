@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek 当前状态检查</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .status-item {
+            margin: 15px 0;
+            padding: 15px;
+            border-radius: 6px;
+            border: 1px solid #e0e0e0;
+        }
+        .success { background: #f6ffed; border-color: #b7eb8f; color: #52c41a; }
+        .error { background: #fff2f0; border-color: #ffccc7; color: #ff4d4f; }
+        .warning { background: #fffbe6; border-color: #ffe58f; color: #faad14; }
+        .info { background: #f0f9ff; border-color: #91d5ff; color: #1890ff; }
+        .test-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 10px 5px;
+        }
+        .test-button:hover {
+            background: #0066cc;
+        }
+        pre {
+            background: #f8f8f8;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 iFlytek 当前状态检查</h1>
+        
+        <div class="status-item info">
+            <h3>📍 当前页面信息</h3>
+            <div id="page-info">正在检查...</div>
+        </div>
+        
+        <div class="status-item">
+            <h3>📱 Vue应用状态</h3>
+            <div id="vue-status">正在检查...</div>
+        </div>
+        
+        <div class="status-item">
+            <h3>🧩 DOM结构检查</h3>
+            <div id="dom-structure">正在检查...</div>
+        </div>
+        
+        <div class="status-item">
+            <h3>🎨 组件计数</h3>
+            <div id="component-count">正在检查...</div>
+        </div>
+        
+        <div class="status-item">
+            <h3>🛠️ 手动测试</h3>
+            <button class="test-button" onclick="runFullCheck()">运行完整检查</button>
+            <button class="test-button" onclick="testNavigation()">测试导航</button>
+            <button class="test-button" onclick="showDOMStructure()">显示DOM结构</button>
+            <div id="manual-test-result"></div>
+        </div>
+        
+        <div class="status-item">
+            <h3>📊 详细信息</h3>
+            <div id="detailed-info"></div>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载时自动检查
+        window.addEventListener('load', () => {
+            setTimeout(checkCurrentStatus, 1000);
+        });
+
+        function checkCurrentStatus() {
+            // 检查页面信息
+            const pageInfo = document.getElementById('page-info');
+            pageInfo.innerHTML = `
+                <strong>URL:</strong> ${window.location.href}<br>
+                <strong>路径:</strong> ${window.location.pathname}<br>
+                <strong>时间:</strong> ${new Date().toLocaleString()}
+            `;
+
+            // 检查Vue应用状态
+            const vueStatus = document.getElementById('vue-status');
+            const app = document.getElementById('app');
+            
+            if (!app) {
+                vueStatus.innerHTML = '<span class="error">❌ #app 容器不存在</span>';
+                vueStatus.className = 'status-item error';
+            } else if (!app.__vue_app__) {
+                vueStatus.innerHTML = '<span class="error">❌ Vue应用实例未挂载</span>';
+                vueStatus.className = 'status-item error';
+            } else {
+                vueStatus.innerHTML = '<span class="success">✅ Vue应用正常运行</span>';
+                vueStatus.className = 'status-item success';
+            }
+
+            // 检查DOM结构
+            const domStructure = document.getElementById('dom-structure');
+            const structures = {
+                'enterprise-homepage': document.querySelector('.enterprise-homepage'),
+                'ai-app': document.querySelector('.ai-app'),
+                'enterprise-header': document.querySelector('.enterprise-header'),
+                'ai-header': document.querySelector('.ai-header')
+            };
+
+            let domHtml = '';
+            Object.entries(structures).forEach(([key, element]) => {
+                const status = element ? '✅' : '❌';
+                domHtml += `${status} ${key}: ${element ? '存在' : '不存在'}<br>`;
+            });
+            domStructure.innerHTML = domHtml;
+
+            // 检查组件计数
+            const componentCount = document.getElementById('component-count');
+            const counts = {
+                'el-menu-item': document.querySelectorAll('.el-menu-item').length,
+                'el-button': document.querySelectorAll('.el-button').length,
+                'primary-cta': document.querySelectorAll('.primary-cta').length,
+                'secondary-cta': document.querySelectorAll('.secondary-cta').length,
+                'product-card': document.querySelectorAll('.product-card').length
+            };
+
+            let countHtml = '';
+            Object.entries(counts).forEach(([key, count]) => {
+                const color = count > 0 ? 'success' : 'error';
+                countHtml += `<span class="${color}">${key}: ${count} 个</span><br>`;
+            });
+            componentCount.innerHTML = countHtml;
+        }
+
+        function runFullCheck() {
+            const result = document.getElementById('manual-test-result');
+            result.innerHTML = '<div class="info">🔄 正在运行完整检查...</div>';
+
+            setTimeout(() => {
+                checkCurrentStatus();
+                
+                // 检查控制台错误
+                const errors = [];
+                const originalError = console.error;
+                console.error = function(...args) {
+                    errors.push(args.join(' '));
+                    originalError.apply(console, args);
+                };
+
+                // 运行一些基本测试
+                let testResults = '<h4>测试结果:</h4>';
+                
+                // 测试History API
+                try {
+                    const originalPath = window.location.pathname;
+                    window.history.pushState({}, '', '/test');
+                    window.history.pushState({}, '', originalPath);
+                    testResults += '<div class="success">✅ History API 正常</div>';
+                } catch (error) {
+                    testResults += '<div class="error">❌ History API 错误: ' + error.message + '</div>';
+                }
+
+                // 测试Vue Router
+                try {
+                    const app = document.getElementById('app');
+                    if (app && app.__vue_app__ && app.__vue_app__._instance) {
+                        testResults += '<div class="success">✅ Vue Router 可访问</div>';
+                    } else {
+                        testResults += '<div class="warning">⚠️ Vue Router 状态未知</div>';
+                    }
+                } catch (error) {
+                    testResults += '<div class="error">❌ Vue Router 错误: ' + error.message + '</div>';
+                }
+
+                if (errors.length > 0) {
+                    testResults += '<div class="error">❌ 发现 ' + errors.length + ' 个控制台错误</div>';
+                } else {
+                    testResults += '<div class="success">✅ 无控制台错误</div>';
+                }
+
+                result.innerHTML = testResults;
+            }, 1000);
+        }
+
+        function testNavigation() {
+            const result = document.getElementById('manual-test-result');
+            result.innerHTML = '<div class="info">🔄 正在测试导航...</div>';
+
+            setTimeout(() => {
+                const menuItems = document.querySelectorAll('.el-menu-item');
+                const buttons = document.querySelectorAll('.primary-cta, .secondary-cta');
+                
+                let navResults = '<h4>导航测试结果:</h4>';
+                navResults += `<div>菜单项数量: ${menuItems.length}</div>`;
+                navResults += `<div>主要按钮数量: ${buttons.length}</div>`;
+
+                if (menuItems.length >= 5) {
+                    navResults += '<div class="success">✅ 导航菜单项数量正常</div>';
+                } else {
+                    navResults += '<div class="error">❌ 导航菜单项数量异常</div>';
+                }
+
+                if (buttons.length >= 2) {
+                    navResults += '<div class="success">✅ 主要按钮数量正常</div>';
+                } else {
+                    navResults += '<div class="error">❌ 主要按钮数量异常</div>';
+                }
+
+                result.innerHTML = navResults;
+            }, 500);
+        }
+
+        function showDOMStructure() {
+            const result = document.getElementById('detailed-info');
+            
+            const app = document.getElementById('app');
+            let structure = '';
+            
+            if (app) {
+                structure += '<h4>DOM结构分析:</h4>';
+                structure += '<pre>';
+                structure += 'App容器类名: ' + app.className + '\n';
+                structure += 'App子元素数量: ' + app.children.length + '\n';
+                
+                if (app.children.length > 0) {
+                    structure += '\n子元素:\n';
+                    Array.from(app.children).forEach((child, index) => {
+                        structure += `${index + 1}. ${child.tagName}`;
+                        if (child.className) {
+                            structure += ` (class: ${child.className})`;
+                        }
+                        structure += '\n';
+                    });
+                }
+                
+                structure += '</pre>';
+            } else {
+                structure = '<div class="error">❌ 无法找到#app容器</div>';
+            }
+            
+            result.innerHTML = structure;
+        }
+    </script>
+</body>
+</html>

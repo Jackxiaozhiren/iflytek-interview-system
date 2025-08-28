@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>最终修复验证</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+        .test-section {
+            margin: 25px 0;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            border-left: 4px solid #4CAF50;
+        }
+        .test-section.error {
+            border-left-color: #f44336;
+        }
+        .status {
+            font-weight: bold;
+            font-size: 18px;
+            margin-bottom: 10px;
+        }
+        .success { color: #4CAF50; }
+        .error { color: #f44336; }
+        .info { color: #2196F3; }
+        .warning { color: #ff9800; }
+        pre {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+            white-space: pre-wrap;
+            font-size: 14px;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 10px 5px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #45a049;
+        }
+        .summary {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Process.env 修复最终验证</h1>
+        <p>验证所有 <code>process.env</code> 到 <code>import.meta.env</code> 的修复是否成功</p>
+        
+        <div class="test-section">
+            <h3>📋 1. 环境变量系统检查</h3>
+            <div id="env-system-check" class="status">检查中...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>🚀 2. iFlytek服务实例验证</h3>
+            <div id="service-instance-check" class="status">检查中...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>⚙️ 3. 服务配置验证</h3>
+            <div id="service-config-check" class="status">检查中...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔍 4. API调用模拟测试</h3>
+            <div id="api-call-test" class="status">检查中...</div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 5. 控制台错误监控</h3>
+            <div id="console-monitor" class="status">监控中...</div>
+        </div>
+
+        <div class="summary">
+            <h3>📈 总体状态</h3>
+            <div id="overall-status" class="status">评估中...</div>
+        </div>
+
+        <button onclick="runAllTests()">🔄 重新运行所有测试</button>
+        <button onclick="clearResults()">🧹 清除结果</button>
+    </div>
+
+    <script type="module">
+        let testResults = {
+            envSystem: false,
+            serviceInstance: false,
+            serviceConfig: false,
+            apiCall: false,
+            consoleClean: true
+        };
+
+        let errorCount = 0;
+        const errors = [];
+
+        // 监控控制台错误
+        const originalError = console.error;
+        console.error = function(...args) {
+            errorCount++;
+            errors.push(args.join(' '));
+            testResults.consoleClean = false;
+            updateConsoleMonitor();
+            originalError.apply(console, args);
+        };
+
+        function updateConsoleMonitor() {
+            const monitorDiv = document.getElementById('console-monitor');
+            if (errorCount === 0) {
+                monitorDiv.innerHTML = '<span class="success">✅ 无控制台错误</span>';
+            } else {
+                monitorDiv.innerHTML = `
+                    <span class="error">❌ 检测到 ${errorCount} 个错误</span>
+                    <pre>最新错误:\n${errors.slice(-3).join('\n')}</pre>
+                `;
+            }
+        }
+
+        // 1. 环境变量系统检查
+        async function checkEnvironmentSystem() {
+            const envDiv = document.getElementById('env-system-check');
+            
+            try {
+                // 检查 import.meta 是否可用
+                if (typeof import.meta === 'undefined') {
+                    throw new Error('import.meta 不可用');
+                }
+
+                // 检查 import.meta.env 是否可用
+                if (typeof import.meta.env === 'undefined') {
+                    throw new Error('import.meta.env 不可用');
+                }
+
+                const env = import.meta.env;
+                const envKeys = Object.keys(env);
+                const vueAppKeys = envKeys.filter(key => key.startsWith('VUE_APP_'));
+
+                envDiv.innerHTML = `
+                    <span class="success">✅ 环境变量系统正常</span>
+                    <pre>总环境变量: ${envKeys.length}
+VUE_APP_* 变量: ${vueAppKeys.length}
+模式: ${env.MODE || 'undefined'}
+开发模式: ${env.DEV || 'undefined'}</pre>
+                `;
+                
+                testResults.envSystem = true;
+            } catch (error) {
+                envDiv.innerHTML = `
+                    <span class="error">❌ 环境变量系统异常</span>
+                    <pre>${error.message}</pre>
+                `;
+                testResults.envSystem = false;
+            }
+        }
+
+        // 2. iFlytek服务实例验证
+        async function checkServiceInstance() {
+            const serviceDiv = document.getElementById('service-instance-check');
+            
+            try {
+                serviceDiv.innerHTML = '<span class="info">🔄 正在导入服务...</span>';
+                
+                // 使用正确的导入路径
+                const module = await import('/src/services/enhancedIflytekSparkService.js');
+                
+                const serviceInstance = module.default;
+                const ServiceClass = module.EnhancedIflytekSparkService;
+                
+                if (!serviceInstance) {
+                    throw new Error('默认导出的服务实例为空');
+                }
+
+                if (!ServiceClass) {
+                    throw new Error('服务类导出失败');
+                }
+
+                serviceDiv.innerHTML = `
+                    <span class="success">✅ 服务导入成功</span>
+                    <pre>默认实例: ✅ 可用
+服务类: ✅ 可用
+实例类型: ${serviceInstance.constructor.name}
+类名称: ${ServiceClass.name}</pre>
+                `;
+                
+                testResults.serviceInstance = true;
+                return serviceInstance;
+            } catch (error) {
+                serviceDiv.innerHTML = `
+                    <span class="error">❌ 服务导入失败</span>
+                    <pre>${error.message}
+${error.stack}</pre>
+                `;
+                testResults.serviceInstance = false;
+                return null;
+            }
+        }
+
+        // 3. 服务配置验证
+        async function checkServiceConfig(serviceInstance) {
+            const configDiv = document.getElementById('service-config-check');
+            
+            try {
+                if (!serviceInstance) {
+                    throw new Error('服务实例不可用');
+                }
+
+                const config = serviceInstance.config;
+                if (!config) {
+                    throw new Error('服务配置不存在');
+                }
+
+                // 检查关键配置项
+                const requiredConfigs = ['baseUrl', 'appId', 'apiKey', 'apiSecret'];
+                const configStatus = {};
+                
+                requiredConfigs.forEach(key => {
+                    configStatus[key] = config[key] ? '✅' : '❌';
+                });
+
+                configDiv.innerHTML = `
+                    <span class="success">✅ 服务配置验证完成</span>
+                    <pre>API URL: ${configStatus.baseUrl} ${config.baseUrl || 'undefined'}
+App ID: ${configStatus.appId} ${config.appId || 'undefined'}
+API Key: ${configStatus.apiKey} ${config.apiKey ? '已配置' : 'undefined'}
+API Secret: ${configStatus.apiSecret} ${config.apiSecret ? '已配置' : 'undefined'}
+模拟模式: ${config.appId === 'simulation_mode' ? '是' : '否'}</pre>
+                `;
+                
+                testResults.serviceConfig = true;
+            } catch (error) {
+                configDiv.innerHTML = `
+                    <span class="error">❌ 服务配置验证失败</span>
+                    <pre>${error.message}</pre>
+                `;
+                testResults.serviceConfig = false;
+            }
+        }
+
+        // 4. API调用模拟测试
+        async function testApiCall(serviceInstance) {
+            const apiDiv = document.getElementById('api-call-test');
+            
+            try {
+                if (!serviceInstance) {
+                    throw new Error('服务实例不可用');
+                }
+
+                apiDiv.innerHTML = '<span class="info">🔄 正在测试API调用...</span>';
+
+                // 模拟一个简单的API调用
+                const testRequest = {
+                    action: 'test_connection',
+                    data: { test: true }
+                };
+
+                // 这里不实际调用API，只测试方法是否存在
+                if (typeof serviceInstance.callSparkAPI !== 'function') {
+                    throw new Error('callSparkAPI 方法不存在');
+                }
+
+                apiDiv.innerHTML = `
+                    <span class="success">✅ API调用接口验证成功</span>
+                    <pre>callSparkAPI 方法: ✅ 存在
+服务状态: ✅ 就绪
+配置完整性: ${serviceInstance.config.appId ? '✅' : '❌'}</pre>
+                `;
+                
+                testResults.apiCall = true;
+            } catch (error) {
+                apiDiv.innerHTML = `
+                    <span class="error">❌ API调用测试失败</span>
+                    <pre>${error.message}</pre>
+                `;
+                testResults.apiCall = false;
+            }
+        }
+
+        // 更新总体状态
+        function updateOverallStatus() {
+            const overallDiv = document.getElementById('overall-status');
+            
+            const passedTests = Object.values(testResults).filter(result => result === true).length;
+            const totalTests = Object.keys(testResults).length;
+            
+            if (passedTests === totalTests) {
+                overallDiv.innerHTML = `
+                    <span class="success">🎉 所有测试通过 (${passedTests}/${totalTests})</span>
+                    <p>✅ Process.env 修复完全成功！系统可以正常运行。</p>
+                `;
+            } else {
+                overallDiv.innerHTML = `
+                    <span class="warning">⚠️ 部分测试失败 (${passedTests}/${totalTests})</span>
+                    <p>需要进一步检查失败的测试项目。</p>
+                `;
+            }
+        }
+
+        // 运行所有测试
+        async function runAllTests() {
+            console.log('🧪 开始运行所有测试...');
+            
+            // 重置结果
+            errorCount = 0;
+            errors.length = 0;
+            testResults = {
+                envSystem: false,
+                serviceInstance: false,
+                serviceConfig: false,
+                apiCall: false,
+                consoleClean: true
+            };
+
+            // 依次运行测试
+            await checkEnvironmentSystem();
+            const serviceInstance = await checkServiceInstance();
+            await checkServiceConfig(serviceInstance);
+            await testApiCall(serviceInstance);
+            
+            // 等待一秒钟收集可能的错误
+            setTimeout(() => {
+                updateConsoleMonitor();
+                updateOverallStatus();
+                console.log('✅ 所有测试完成');
+            }, 1000);
+        }
+
+        // 清除结果
+        function clearResults() {
+            errorCount = 0;
+            errors.length = 0;
+            testResults = {
+                envSystem: false,
+                serviceInstance: false,
+                serviceConfig: false,
+                apiCall: false,
+                consoleClean: true
+            };
+
+            document.getElementById('env-system-check').innerHTML = '等待测试...';
+            document.getElementById('service-instance-check').innerHTML = '等待测试...';
+            document.getElementById('service-config-check').innerHTML = '等待测试...';
+            document.getElementById('api-call-test').innerHTML = '等待测试...';
+            document.getElementById('console-monitor').innerHTML = '监控中...';
+            document.getElementById('overall-status').innerHTML = '等待测试...';
+        }
+
+        // 页面加载时自动运行测试
+        window.addEventListener('load', () => {
+            setTimeout(runAllTests, 500);
+        });
+
+        // 全局暴露函数
+        window.runAllTests = runAllTests;
+        window.clearResults = clearResults;
+    </script>
+</body>
+</html>

@@ -1,0 +1,5183 @@
+<template>
+  <div class="text-primary-interview-page">
+    <!-- 顶部导航栏 -->
+    <header class="interview-header">
+      <div class="header-content">
+        <div class="header-left">
+          <el-icon class="logo-icon"><Star /></el-icon>
+          <h1>iFlytek星火智能面试</h1>
+          <span class="interview-mode">文本优先模式</span>
+        </div>
+        <div class="header-right">
+          <div class="interview-progress">
+            <span>问题进度: {{ currentQuestion }}/{{ totalQuestions }}</span>
+            <el-progress :percentage="(currentQuestion / totalQuestions) * 100" :show-text="false" />
+          </div>
+          <div class="interview-timer">
+            <el-icon><Timer /></el-icon>
+            <span>{{ formatTime(elapsedTime) }}</span>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="interview-main">
+      <div class="interview-layout">
+        <!-- 左侧: 文本对话区域 -->
+        <section class="conversation-section">
+          <div class="conversation-container">
+            <!-- 对话历史 -->
+            <div class="conversation-history">
+              <div class="conversation-header">
+                <div class="header-info">
+                  <el-icon><Document /></el-icon>
+                  <h3>面试对话</h3>
+                  <span class="mode-indicator">文本优先</span>
+                </div>
+
+              </div>
+
+              <!-- 消息列表 -->
+              <div class="messages-container"
+                   ref="messagesContainer"
+                   @scroll="handleUserScroll"
+                   @keydown="handleKeyboardScroll"
+                   tabindex="0"
+                   role="log"
+                   aria-label="面试对话记录"
+                   aria-live="polite">
+                <div v-for="(message, index) in conversationHistory" :key="index"
+                     class="message-item"
+                     :class="[
+                       message.type,
+                       { 'message-animating': message.isAnimating },
+                       { 'message-thinking': message.isThinking },
+                       { 'message-enhanced': message.hasThinkingProcess },
+                       { 'message-transition': message.isTransition }
+                     ]"
+                     :data-transition="message.isTransition">
+                  <div class="message-avatar">
+                    <el-icon v-if="message.type === 'ai'">
+                      <User v-if="!message.isThinking" />
+                      <Loading v-else class="thinking-icon" />
+                    </el-icon>
+                    <el-icon v-else><Star /></el-icon>
+                  </div>
+                  <div class="message-content">
+                    <div class="message-header">
+                      <span class="message-sender">{{ message.sender }}</span>
+                      <span class="message-time">{{ message.timestamp }}</span>
+                    </div>
+
+                    <!-- 思考过程状态指示器 -->
+                    <div v-if="message.isThinking" class="thinking-indicator">
+                      <el-icon class="thinking-icon"><Loading /></el-icon>
+                      <span>{{ message.content }}</span>
+                    </div>
+
+                    <!-- 增强的可折叠思考过程 -->
+                    <div v-if="message.hasThinkingProcess && message.thinkingProcess"
+                         class="thinking-process-container enhanced-thinking"
+                         role="region"
+                         aria-label="AI思考过程分析">
+                      <el-collapse v-model="message.thinkingExpanded" class="thinking-collapse">
+                        <el-collapse-item name="thinking">
+                          <template #title>
+                            <div class="thinking-summary"
+                                 role="button"
+                                 :aria-expanded="message.thinkingExpanded?.includes('thinking')"
+                                 aria-controls="thinking-content"
+                                 tabindex="0">
+                              <div class="thinking-icon-wrapper" aria-hidden="true">
+                                <el-icon class="thinking-main-icon"><Cpu /></el-icon>
+                              </div>
+                              <div class="thinking-title-content">
+                                <span class="thinking-title">🧠 AI思考过程分析</span>
+                                <span v-if="message.thinkingExpanded?.includes('thinking')"
+                                      class="thinking-subtitle">点击查看详细的分析步骤和评估要点</span>
+                              </div>
+                              <div class="thinking-status">
+                                <el-tag size="small" :type="message.thinkingExpanded?.includes('thinking') ? 'success' : 'info'">
+                                  {{ message.thinkingExpanded?.includes('thinking') ? '已展开' : '点击展开' }}
+                                </el-tag>
+                              </div>
+                            </div>
+                          </template>
+                          <div class="thinking-content enhanced-content"
+                               id="thinking-content"
+                               role="tabpanel"
+                               :aria-hidden="!message.thinkingExpanded?.includes('thinking')">
+                            <div class="thinking-steps" role="list" aria-label="思考步骤列表">
+                              <div v-for="(step, index) in parseThinkingSteps(message.thinkingProcess)"
+                                   :key="index"
+                                   class="thinking-step"
+                                   role="listitem"
+                                   :aria-label="`第${index + 1}步: ${step.title}`">
+                                <div class="step-header">
+                                  <span class="step-number" aria-hidden="true">{{ index + 1 }}</span>
+                                  <span class="step-title">{{ step.title }}</span>
+                                </div>
+                                <div class="step-content">{{ step.content }}</div>
+                              </div>
+                            </div>
+                          </div>
+                        </el-collapse-item>
+                      </el-collapse>
+                    </div>
+
+                    <!-- 主要回复内容 -->
+                    <div v-if="!message.isThinking" class="message-text">
+                      <div v-if="message.isTyping" class="typing-text">
+                        {{ message.displayedContent }}
+                        <span class="typing-cursor">|</span>
+                      </div>
+                      <div v-else-if="message.hasThinkingProcess && message.finalResponse" class="final-response">
+                        {{ message.finalResponse }}
+                      </div>
+                      <div v-else-if="message.displayedContent" class="displayed-content">
+                        {{ message.displayedContent }}
+                      </div>
+                      <div v-else class="default-content">
+                        {{ message.content }}
+                      </div>
+                    </div>
+
+                    <!-- 分析标签 -->
+                    <div v-if="message.analysis && !message.isThinking"
+                         class="message-analysis">
+                      <div class="analysis-tags">
+                        <span class="score-tag">评分: {{ message.analysis.score }}</span>
+                        <span class="keywords-tag">关键词: {{ (message.analysis.keywords || []).join(', ') || '无' }}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- 回到最新消息按钮 -->
+              <div v-if="scrollState.showScrollToBottomHint"
+                   class="scroll-to-bottom-hint"
+                   @click="forceScrollToBottom">
+                <el-button type="primary" size="small" round>
+                  <el-icon><ArrowRight /></el-icon>
+                  回到最新消息
+                </el-button>
+              </div>
+            </div>
+
+
+
+            <!-- 回答输入区域 -->
+            <div class="answer-input-panel">
+              <div class="input-header">
+                <div class="input-header-left">
+                  <span class="input-label">您的回答</span>
+                  <el-tag v-if="currentTextInput.length > 0" type="info" size="small">
+                    {{ currentTextInput.length }}/1000 字符
+                  </el-tag>
+                </div>
+                <div class="input-tools">
+                  <el-button-group>
+                    <el-button size="small" @click="insertTemplate('项目经验')" title="插入项目经验模板">
+                      <el-icon><Document /></el-icon>
+                      项目经验
+                    </el-button>
+                    <el-button size="small" @click="insertTemplate('技术栈')" title="插入技术栈模板">
+                      <el-icon><Setting /></el-icon>
+                      技术栈
+                    </el-button>
+                    <el-button size="small" @click="insertTemplate('解决方案')" title="插入解决方案模板">
+                      <el-icon><Tools /></el-icon>
+                      解决方案
+                    </el-button>
+                  </el-button-group>
+                </div>
+              </div>
+
+              <div class="input-container">
+                <div class="textarea-wrapper">
+                  <el-input
+                    v-model="currentTextInput"
+                    type="textarea"
+                    :rows="6"
+                    placeholder="请在此输入您的回答...&#10;&#10;💡 提示：&#10;• 使用 Ctrl + Enter 快速提交&#10;• 点击上方模板按钮快速插入常用内容&#10;• 详细描述您的经验和思路"
+                    class="answer-textarea"
+                    @keydown.ctrl.enter="submitAnswer"
+                    @input="handleInputChange"
+                    maxlength="1000"
+                    show-word-limit
+                    resize="vertical"
+                  />
+                  <!-- 右下角提交按钮 -->
+                  <el-button
+                    type="primary"
+                    size="small"
+                    :loading="isProcessingMultimodal"
+                    @click="submitAnswer"
+                    :disabled="!currentTextInput.trim()"
+                    class="corner-submit-btn"
+                    title="提交回答 (Ctrl + Enter)"
+                  >
+                    <el-icon><Promotion /></el-icon>
+                  </el-button>
+                </div>
+
+                <!-- 智能建议浮层 -->
+                <div v-if="showSmartSuggestions && smartSuggestions.length > 0" class="smart-suggestions">
+                  <div class="suggestions-header">
+                    <el-icon><Star /></el-icon>
+                    <span>智能建议</span>
+                  </div>
+                  <div class="suggestions-list">
+                    <div
+                      v-for="(suggestion, index) in smartSuggestions"
+                      :key="index"
+                      class="suggestion-item"
+                      @click="applySuggestion(suggestion)"
+                    >
+                      <el-icon><Plus /></el-icon>
+                      <span>{{ suggestion }}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="input-footer">
+                <div class="input-footer-left">
+                  <span class="input-hint">
+                    <el-icon><InfoFilled /></el-icon>
+                    Ctrl + Enter 快速提交
+                  </span>
+                  <el-button
+                    v-if="currentTextInput.length > 0"
+                    size="small"
+                    type="info"
+                    text
+                    @click="toggleSmartSuggestions"
+                  >
+                    <el-icon><Star /></el-icon>
+                    {{ showSmartSuggestions ? '隐藏建议' : '智能建议' }}
+                  </el-button>
+                </div>
+                <div class="input-actions">
+                  <el-button size="small" @click="saveAsDraft" v-if="currentTextInput.length > 0">
+                    <el-icon><Document /></el-icon>
+                    保存草稿
+                  </el-button>
+                  <el-button size="small" @click="clearInput" v-if="currentTextInput.length > 0">
+                    <el-icon><Delete /></el-icon>
+                    清空
+                  </el-button>
+                  <el-button size="small" @click="nextQuestion" v-if="currentQuestion < totalQuestions">
+                    <el-icon><Right /></el-icon>
+                    跳过问题
+                  </el-button>
+                  <el-button
+                    type="primary"
+                    size="small"
+                    :loading="isProcessingMultimodal"
+                    @click="submitAnswer"
+                    :disabled="!currentTextInput.trim()"
+                  >
+                    <el-icon><Promotion /></el-icon>
+                    提交回答
+                  </el-button>
+                </div>
+              </div>
+            </div>
+
+
+          </div>
+        </section>
+
+        <!-- 右侧: 当前问题和快捷操作面板 -->
+        <section class="question-control-section">
+          <!-- 面试问题面板 -->
+          <div class="current-question-panel">
+            <div class="question-header">
+              <div class="header-left">
+                <el-icon class="question-icon"><InfoFilled /></el-icon>
+                <span class="question-title">面试问题</span>
+                <el-tag type="info" size="small">{{ currentQuestion }}/{{ totalQuestions }}</el-tag>
+              </div>
+              <div class="question-actions">
+                <el-button size="small" @click="getAiHint" :disabled="aiAssistanceCount <= 0">
+                  <el-icon><Star /></el-icon>
+                  AI提示 ({{ aiAssistanceCount }})
+                </el-button>
+              </div>
+            </div>
+            <div class="question-content">
+              <div class="question-text-container">
+                <p class="question-text">{{ currentQuestionData.text }}</p>
+              </div>
+              <div class="question-meta">
+                <el-tag type="primary" size="small">
+                  <el-icon><Document /></el-icon>
+                  {{ currentQuestionData.type }}
+                </el-tag>
+                <el-tag type="warning" size="small">
+                  难度: {{ currentQuestionData.difficulty }}
+                </el-tag>
+                <el-tag type="success" size="small">
+                  {{ currentQuestionData.domainName }}
+                </el-tag>
+              </div>
+            </div>
+          </div>
+
+          <!-- 快捷操作面板 -->
+          <div class="quick-actions-panel">
+            <div class="actions-header">
+              <el-icon><Operation /></el-icon>
+              <h4>快捷操作</h4>
+            </div>
+            <div class="actions-content">
+              <!-- 问题导航 -->
+              <div class="question-navigation">
+                <div class="nav-title">
+                  <el-icon><QuestionFilled /></el-icon>
+                  问题导航
+                </div>
+                <div class="question-buttons">
+                  <el-button
+                    v-for="n in totalQuestions"
+                    :key="n"
+                    :type="n === currentQuestion ? 'primary' : (n < currentQuestion ? 'success' : 'default')"
+                    :disabled="n > currentQuestion + 1"
+                    size="small"
+                    @click="jumpToQuestion(n)"
+                    class="question-nav-btn"
+                  >
+                    {{ n }}
+                  </el-button>
+                </div>
+              </div>
+
+              <!-- 面试控制 -->
+              <div class="interview-controls">
+                <div class="controls-title">
+                  <el-icon><Setting /></el-icon>
+                  面试控制
+                </div>
+                <div class="control-buttons">
+                  <el-button
+                    size="small"
+                    @click="pauseInterview"
+                    :disabled="interviewState.isPaused"
+                  >
+                    <el-icon><VideoPause /></el-icon>
+                    暂停面试
+                  </el-button>
+                  <el-button
+                    size="small"
+                    @click="resumeInterview"
+                    :disabled="!interviewState.isPaused"
+                  >
+                    <el-icon><VideoPlay /></el-icon>
+                    继续面试
+                  </el-button>
+                  <el-button
+                    size="small"
+                    type="danger"
+                    @click="endInterview"
+                  >
+                    <el-icon><SwitchButton /></el-icon>
+                    结束面试
+                  </el-button>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- 候选人信息面板 -->
+          <div class="candidate-info-panel">
+            <div class="panel-header">
+              <el-icon><User /></el-icon>
+              <h4>候选人信息</h4>
+              <el-tag type="info" size="small">{{ candidateInfo.position }}</el-tag>
+            </div>
+            <div class="panel-content">
+              <div class="candidate-info">
+                <div class="candidate-basic">
+                  <div class="candidate-name">{{ candidateInfo.name }}</div>
+                  <div class="candidate-stats">
+                    <span>回答问题: {{ conversationHistory.filter(msg => msg.type === 'user').length }}</span>
+                    <span>对话分数: {{ conversationScoring.currentQuestionScore }}</span>
+                  </div>
+                </div>
+                <div class="candidate-skills">
+                  <div class="skills-tags">
+                    <el-tag v-for="skill in candidateInfo.skills.slice(0, 4)" :key="skill" size="small">
+                      {{ skill }}
+                    </el-tag>
+                    <el-tag v-if="candidateInfo.skills.length > 4" size="small" type="info">
+                      +{{ candidateInfo.skills.length - 4 }}
+                    </el-tag>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+
+
+      </div>
+    </main>
+
+    <!-- 对话框下方的分析面板容器 - 并排显示 -->
+    <div class="analysis-panels-container">
+      <!-- 实时分析状态面板 -->
+      <div class="analysis-panel status-panel">
+        <div class="panel-header">
+          <el-icon class="spark-icon"><Star /></el-icon>
+          <h4>实时分析状态</h4>
+          <div class="status-indicator" :class="{ active: isSparkInitialized }">
+            <div class="status-dot"></div>
+            <span>{{ sparkStatus }}</span>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="processing-stats">
+            <div class="stat-item">
+              <span class="stat-label">已处理消息</span>
+              <span class="stat-value">{{ conversationHistory.length }}</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">分析耗时</span>
+              <span class="stat-value">{{ lastAnalysisTime }}ms</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">模型版本</span>
+              <span class="stat-value">Spark 3.5</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-label">响应时间</span>
+              <span class="stat-value">{{ sparkMetrics.responseTime }}ms</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 文本分析结果面板 -->
+      <div class="analysis-panel results-panel">
+        <div class="panel-header">
+          <div class="header-left">
+            <el-icon><Document /></el-icon>
+            <h4>文本分析结果</h4>
+            <el-tag :type="getScoreType(conversationScoring.currentQuestionScore)" size="small">
+              对话{{ conversationScoring.currentQuestionScore || 0 }}分
+            </el-tag>
+          </div>
+          <div class="header-right">
+            <el-tag type="info" size="small">
+              对话轮次: {{ interviewState.conversationRounds }}
+            </el-tag>
+            <el-tag type="success" size="small">
+              流畅度: {{ Math.round(conversationScoring.fluencyMetrics?.interactionQuality || 0) }}分
+            </el-tag>
+          </div>
+        </div>
+        <div class="panel-content">
+          <div class="score-breakdown enhanced-layout">
+            <div class="score-column">
+              <div class="score-item">
+                <span class="score-name">技术能力</span>
+                <div class="score-bar">
+                  <div class="score-fill" :style="{ width: (realTimeAnalysis.technicalCompetency || 0) + '%' }"></div>
+                </div>
+                <span class="score-value">{{ realTimeAnalysis.technicalCompetency || 0 }}</span>
+              </div>
+              <div class="score-item">
+                <span class="score-name">沟通技巧</span>
+                <div class="score-bar">
+                  <div class="score-fill" :style="{ width: (realTimeAnalysis.communicationSkills || 0) + '%' }"></div>
+                </div>
+                <span class="score-value">{{ realTimeAnalysis.communicationSkills || 0 }}</span>
+              </div>
+              <div class="score-item">
+                <span class="score-name">内容质量</span>
+                <div class="score-bar">
+                  <div class="score-fill" :style="{ width: (realTimeAnalysis.contentQuality || 0) + '%' }"></div>
+                </div>
+                <span class="score-value">{{ realTimeAnalysis.contentQuality || 0 }}</span>
+              </div>
+            </div>
+            <div class="score-column">
+              <div class="score-item">
+                <span class="score-name">逻辑思维</span>
+                <div class="score-bar">
+                  <div class="score-fill" :style="{ width: (realTimeAnalysis.logicalThinking || 0) + '%' }"></div>
+                </div>
+                <span class="score-value">{{ realTimeAnalysis.logicalThinking || 0 }}</span>
+              </div>
+              <div class="score-item">
+                <span class="score-name">表达能力</span>
+                <div class="score-bar">
+                  <div class="score-fill" :style="{ width: (realTimeAnalysis.expressionAbility || 0) + '%' }"></div>
+                </div>
+                <span class="score-value">{{ realTimeAnalysis.expressionAbility || 0 }}</span>
+              </div>
+              <div class="score-item">
+                <span class="score-name">学习能力</span>
+                <div class="score-bar">
+                  <div class="score-fill" :style="{ width: (realTimeAnalysis.learningAbility || 0) + '%' }"></div>
+                </div>
+                <span class="score-value">{{ realTimeAnalysis.learningAbility || 0 }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- AI智能提示浮层面板 -->
+    <div class="ai-hints-overlay" v-if="showAiHints" @click.self="showAiHints = false">
+      <div class="ai-hints-floating-panel">
+        <div class="hints-header">
+          <div class="hints-title">
+            <el-icon><Star /></el-icon>
+            <span>AI智能提示</span>
+          </div>
+          <el-button size="small" text @click="showAiHints = false" class="close-btn">
+            <el-icon><Close /></el-icon>
+          </el-button>
+        </div>
+        <div class="hints-content">
+          <div class="hint-text-container">
+            <p class="hint-text">{{ currentAiHint }}</p>
+          </div>
+          <div class="hint-actions">
+            <el-button
+              size="small"
+              @click="getAiHint"
+              :disabled="aiAssistanceCount <= 0"
+              type="primary"
+            >
+              <el-icon><Star /></el-icon>
+              获取新提示 ({{ aiAssistanceCount }})
+            </el-button>
+            <el-button size="small" @click="showAiHints = false">
+              关闭
+            </el-button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed, watch, onMounted, onUnmounted, nextTick } from 'vue'
+import { useRouter } from 'vue-router'
+import { ElMessage, ElNotification, ElMessageBox } from 'element-plus'
+import {
+  User, Timer, Star, Loading,
+  Document, ArrowRight, Setting, Close,
+  InfoFilled, Tools, Promotion,
+  Plus, Delete, Right, QuestionFilled,
+  Operation, VideoPause,
+  VideoPlay, SwitchButton
+} from '@element-plus/icons-vue'
+import enhancedIflytekSparkService from '@/services/enhancedIflytekSparkService'
+
+const router = useRouter()
+
+// DOM引用
+const messagesContainer = ref(null)
+
+// 讯飞星火服务相关
+const sparkSession = ref(null)
+const isSparkInitialized = ref(false)
+const sparkStatus = ref('初始化中...')
+
+// 基础面试数据
+const currentQuestion = ref(1)
+const totalQuestions = ref(10)
+
+// 监听题目变化（调试用）
+watch(currentQuestion, (newVal, oldVal) => {
+  console.log('🔢 题目变化:', oldVal, '->', newVal)
+  console.trace('题目变化调用栈')
+}, { immediate: true })
+const elapsedTime = ref(0)
+const aiAssistanceCount = ref(3)
+
+// 文本优先交互
+const currentTextInput = ref('')
+const isProcessingMultimodal = ref(false)
+
+// 智能建议功能
+const showSmartSuggestions = ref(false)
+const smartSuggestions = ref([])
+const draftAnswers = ref(new Map())
+
+// iFlytek Spark技术指标
+const sparkMetrics = ref({
+  responseTime: 156,
+  accuracy: 96.8,
+  processedTokens: '2.3K'
+})
+
+const lastAnalysisTime = ref(156)
+
+// AI能力展示
+const aiCapabilities = ref([
+  {
+    id: 1,
+    name: '语义理解',
+    level: 95,
+    color: '#1890ff',
+    icon: 'ChatDotRound',
+    description: '深度理解回答内容的语义和逻辑结构'
+  },
+  {
+    id: 2,
+    name: '技能评估',
+    level: 92,
+    color: '#52c41a',
+    icon: 'TrendCharts',
+    description: '精准评估候选人的技术能力和经验水平'
+  },
+  {
+    id: 3,
+    name: '实时分析',
+    level: 98,
+    color: '#fa8c16',
+    icon: 'Monitor',
+    description: '毫秒级实时分析，提供即时反馈'
+  },
+  {
+    id: 4,
+    name: '智能推荐',
+    level: 89,
+    color: '#722ed1',
+    icon: 'Star',
+    description: '基于分析结果提供个性化改进建议'
+  }
+])
+
+// 对话历史
+const conversationHistory = ref([
+  {
+    type: 'ai',
+    sender: 'AI面试官',
+    content: '您好！欢迎参加iFlytek星火智能面试。我将通过文本对话的方式与您进行面试。面试问题将显示在上方的问题面板中，请仔细阅读后进行回答。祝您面试顺利！',
+    timestamp: new Date().toLocaleTimeString(),
+    analysis: null
+  }
+])
+
+// AI提示相关
+const showAiHints = ref(false)
+const currentAiHint = ref('建议从项目背景开始介绍，然后详述技术难点和解决方案')
+
+// 预设问题库
+const questionBank = ref([
+  {
+    text: '请简单介绍一下您在人工智能领域的项目经验，特别是在机器学习模型开发方面的实践。',
+    type: '技术深度',
+    difficulty: 'medium',
+    domain: 'ai',
+    domainName: 'AI算法'
+  },
+  {
+    text: '请详细描述您在深度学习模型优化方面的实践经验，包括使用的技术手段、遇到的挑战以及最终的效果。',
+    type: '实践经验',
+    difficulty: 'medium',
+    domain: 'ai',
+    domainName: 'AI算法'
+  },
+  {
+    text: '在大数据处理项目中，您是如何设计和实现数据处理流水线的？请分享具体的技术架构和优化策略。',
+    type: '系统设计',
+    difficulty: 'hard',
+    domain: 'bigdata',
+    domainName: '大数据'
+  },
+  {
+    text: '请描述一个您参与的自然语言处理项目，包括技术选型、模型训练和效果评估的完整过程。',
+    type: '项目经验',
+    difficulty: 'medium',
+    domain: 'ai',
+    domainName: 'AI算法'
+  },
+  {
+    text: '在物联网系统开发中，您是如何处理设备连接、数据采集和实时监控的技术挑战的？',
+    type: '技术实现',
+    difficulty: 'hard',
+    domain: 'iot',
+    domainName: '物联网'
+  },
+  {
+    text: '请分享您在计算机视觉项目中的经验，包括图像处理、特征提取和模型部署的技术细节。',
+    type: '专业技能',
+    difficulty: 'medium',
+    domain: 'ai',
+    domainName: 'AI算法'
+  },
+  {
+    text: '在分布式系统设计中，您是如何保证系统的高可用性和数据一致性的？请结合具体案例说明。',
+    type: '架构设计',
+    difficulty: 'hard',
+    domain: 'system',
+    domainName: '系统架构'
+  },
+  {
+    text: '请描述您在推荐系统开发中的经验，包括算法选择、特征工程和效果优化的完整流程。',
+    type: '算法应用',
+    difficulty: 'medium',
+    domain: 'ai',
+    domainName: 'AI算法'
+  },
+  {
+    text: '在云计算平台上部署机器学习模型时，您是如何处理性能优化和成本控制的？',
+    type: '工程实践',
+    difficulty: 'hard',
+    domain: 'cloud',
+    domainName: '云计算'
+  },
+  {
+    text: '请总结您在技术团队中的协作经验，以及在技术决策和项目管理方面的心得体会。',
+    type: '综合能力',
+    difficulty: 'medium',
+    domain: 'management',
+    domainName: '团队协作'
+  }
+])
+
+// 当前问题数据
+const currentQuestionData = ref({
+  text: '请简单介绍一下您在人工智能领域的项目经验，特别是在机器学习模型开发方面的实践。',
+  type: '技术深度',
+  difficulty: 'medium',
+  domain: 'ai',
+  domainName: 'AI算法'
+})
+
+// 实时分析结果
+const realTimeAnalysis = ref({
+  overallScore: 0,
+  technicalCompetency: 0,
+  communicationSkills: 0,
+  contentQuality: 0,
+  lastUpdated: null
+})
+
+
+
+// 候选人信息
+const candidateInfo = ref({
+  name: '张三',
+  position: 'AI算法工程师',
+  skills: ['Python', 'TensorFlow', '机器学习', '深度学习', 'NLP']
+})
+
+// 方法
+const formatTime = (seconds) => {
+  const mins = Math.floor(seconds / 60)
+  const secs = seconds % 60
+  return `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`
+}
+
+// 初始化讯飞星火服务
+const initializeSparkService = async () => {
+  try {
+    sparkStatus.value = '正在连接讯飞星火大模型...'
+
+    const candidateProfile = {
+      name: candidateInfo.value.name,
+      position: candidateInfo.value.position,
+      skills: candidateInfo.value.skills,
+      domain: 'ai'
+    }
+
+    sparkSession.value = await enhancedIflytekSparkService.initializeInterviewSession(
+      candidateProfile,
+      'comprehensive'
+    )
+
+    isSparkInitialized.value = true
+    sparkStatus.value = '讯飞星火大模型已就绪'
+
+    ElNotification.success({
+      title: '系统就绪',
+      message: 'iFlytek星火大模型已成功初始化，面试可以开始了！',
+      duration: 3000
+    })
+
+    // 生成第一个问题
+    await generateNextQuestion()
+
+  } catch (error) {
+    console.error('讯飞星火服务初始化失败:', error)
+    sparkStatus.value = '连接失败，使用模拟模式'
+    ElMessage.warning('讯飞星火服务暂时不可用，将使用模拟模式继续面试')
+  }
+}
+
+// 生成下一个问题
+const generateNextQuestion = async () => {
+  try {
+    console.log('🎯 开始生成问题，当前题目编号:', currentQuestion.value)
+
+    // 首先尝试从问题库中获取
+    const questionIndex = currentQuestion.value - 1
+    if (questionIndex < questionBank.value.length) {
+      currentQuestionData.value = { ...questionBank.value[questionIndex] }
+      console.log('📝 从问题库获取问题:', currentQuestionData.value.text)
+      return
+    }
+
+    // 如果问题库中没有，则使用AI生成
+    console.log('📝 问题库中没有更多问题，使用AI生成')
+    const context = {
+      previousAnswers: conversationHistory.value.filter(msg => msg.type === 'user'),
+      difficulty: 'medium',
+      domain: 'ai',
+      candidateProfile: candidateInfo.value,
+      questionNumber: currentQuestion.value
+    }
+
+    const questionData = await enhancedIflytekSparkService.generateInterviewQuestion(
+      sparkSession.value?.sessionId || 'fallback',
+      context
+    )
+
+    currentQuestionData.value = {
+      text: questionData.question,
+      type: questionData.type,
+      difficulty: questionData.difficulty,
+      domain: 'ai',
+      domainName: 'AI算法'
+    }
+
+    // 不再将问题添加到对话历史中，避免重复显示
+    // 问题将只在独立的"当前问题面板"中显示
+    console.log('✅ 新问题已生成，显示在问题面板中')
+
+    // 启动回答时间计时器
+    interviewState.value.responseTimeStart = Date.now()
+    interviewState.value.timeoutWarningShown = false
+
+    scrollToBottom()
+
+  } catch (error) {
+    console.error('问题生成失败:', error)
+    ElMessage.error('问题生成失败，请稍后重试')
+  }
+}
+
+// 提交回答
+const submitAnswer = async () => {
+  console.log('🚀 开始提交回答流程...')
+
+  if (!currentTextInput.value.trim()) {
+    ElMessage.warning('请输入您的回答')
+    return
+  }
+
+  console.log('📝 用户输入:', currentTextInput.value)
+  isProcessingMultimodal.value = true
+
+  // 重置滚动状态，确保能够跟随新消息
+  resetScrollStateForNewMessage()
+
+  try {
+    // 记录回答时间（用于时间检测）
+    const responseTime = interviewState.value.responseTimeStart ?
+      Date.now() - interviewState.value.responseTimeStart : 0
+
+    // 添加用户回答到对话历史
+    const userMessage = {
+      type: 'user',
+      sender: '候选人',
+      content: currentTextInput.value,
+      timestamp: new Date().toLocaleTimeString(),
+      responseTime: responseTime,
+      analysis: null
+    }
+
+    conversationHistory.value.push(userMessage)
+    console.log('✅ 用户消息已添加到对话历史')
+
+    // 立即滚动到用户消息底部
+    await nextTick()
+    scrollToBottom(true, true) // 强制滚动，使用平滑动画
+    console.log('📜 已滚动到用户消息底部')
+
+    // 重置回答时间计时器
+    interviewState.value.responseTimeStart = null
+
+    // 分析回答（文本优先）
+    console.log('🔍 开始分析用户回答...')
+    const analysisData = {
+      text: currentTextInput.value,
+      audio: null, // 语音功能已禁用
+      video: null, // 视频分析已禁用
+      domain: 'ai',
+      questionContext: currentQuestionData.value?.text || '当前问题'
+    }
+
+    console.log('📊 分析数据:', analysisData)
+    const analysis = await enhancedIflytekSparkService.analyzeTextPrimaryInput(
+      sparkSession.value?.sessionId || 'fallback',
+      analysisData
+    )
+    console.log('✅ 分析完成:', analysis)
+
+    // 更新实时分析结果
+    updateRealTimeAnalysis(analysis)
+
+    // 更新用户消息的分析结果
+    userMessage.analysis = {
+      score: analysis.overallScore,
+      keywords: analysis.textAnalysis?.keywords || []
+    }
+
+    // 不再添加分离的分析反馈消息，改为在合并的AI回复中处理
+    // 生成AI面试官的合并回复（包含分析和对话式回复）
+    console.log('🤖 开始生成AI面试官合并回复...')
+    await generateAIInterviewerResponse(analysis, userMessage.content)
+    console.log('✅ AI面试官合并回复生成完成')
+
+    // 清空输入（使用增强的清空函数）
+    await clearInput()
+
+    // 滚动到底部
+    scrollToBottom()
+
+    ElMessage.success('回答已提交并分析完成')
+
+    // 不再在这里自动递增题目，让智能过渡逻辑来处理
+    // 这样可以避免题目跳跃的问题
+
+  } catch (error) {
+    console.error('❌ 回答分析失败:', error)
+    console.error('❌ 错误详情:', error.message)
+    console.error('❌ 错误堆栈:', error.stack)
+
+    // 添加错误提示到对话历史
+    conversationHistory.value.push({
+      type: 'ai',
+      sender: 'AI面试官',
+      content: '抱歉，分析过程中出现了问题，但我仍然可以为您提供一些反馈。让我们继续下一个问题。',
+      timestamp: new Date().toLocaleTimeString(),
+      analysis: { type: 'error' }
+    })
+
+    // 清空输入框（即使出错也要清空）
+    await clearInput()
+
+    // 尝试滚动到底部
+    try {
+      scrollToBottom()
+    } catch (scrollError) {
+      console.warn('⚠️ 滚动失败:', scrollError.message)
+    }
+
+    // 显示用户友好的错误信息
+    ElMessage.warning('系统正在使用备用模式，功能正常')
+
+  } finally {
+    isProcessingMultimodal.value = false
+    // 确保输入框被清空（双重保障）
+    if (currentTextInput.value.trim()) {
+      try {
+        await clearInput()
+      } catch (clearError) {
+        // 如果清空函数失败，直接设置为空
+        currentTextInput.value = ''
+        console.log('🧹 Finally块中强制清空输入框')
+      }
+    }
+    console.log('🔄 提交回答流程结束')
+  }
+}
+
+
+
+// 解析思考过程为结构化步骤
+const parseThinkingSteps = (thinkingText) => {
+  if (!thinkingText) return []
+
+  const steps = []
+  const lines = thinkingText.split('\n').filter(line => line.trim())
+
+  let currentStep = null
+
+  lines.forEach(line => {
+    line = line.trim()
+
+    // 检测步骤标题（包含关键词的行）
+    if (line.includes('分析') || line.includes('评估') || line.includes('检测') ||
+        line.includes('思考') || line.includes('判断') || line.includes('生成')) {
+
+      if (currentStep) {
+        steps.push(currentStep)
+      }
+
+      // 提取步骤标题
+      let title = '分析步骤'
+      if (line.includes('分析')) title = '📊 内容分析'
+      else if (line.includes('评估')) title = '⚖️ 质量评估'
+      else if (line.includes('检测')) title = '🔍 关键词检测'
+      else if (line.includes('思考')) title = '🤔 逻辑思考'
+      else if (line.includes('判断')) title = '🎯 结果判断'
+      else if (line.includes('生成')) title = '💡 回复生成'
+
+      currentStep = {
+        title: title,
+        content: line
+      }
+    } else if (currentStep) {
+      // 添加到当前步骤的内容
+      currentStep.content += '\n' + line
+    } else {
+      // 如果没有当前步骤，创建一个默认步骤
+      currentStep = {
+        title: '🧠 AI思考',
+        content: line
+      }
+    }
+  })
+
+  // 添加最后一个步骤
+  if (currentStep) {
+    steps.push(currentStep)
+  }
+
+  // 如果没有解析出步骤，返回原始内容作为单个步骤
+  if (steps.length === 0) {
+    steps.push({
+      title: '🧠 AI思考过程',
+      content: thinkingText
+    })
+  }
+
+  return steps
+}
+
+// 生成AI分析反馈内容
+const generateAiAnalysisFeedback = (analysis) => {
+  const score = analysis.overallScore || 0
+  const recommendations = analysis.recommendations || []
+  const strengthAreas = analysis.strengthAreas || []
+  const improvementAreas = analysis.improvementAreas || []
+
+  let feedback = `📊 分析完成 (综合评分: ${score}分)\n\n`
+
+  // 添加思考过程
+  feedback += `🤔 AI分析思考过程:\n`
+  feedback += `正在分析您的回答内容... 检测到关键词: ${analysis.textAnalysis?.keywords?.slice(0, 3).join(', ') || '无'}\n`
+  feedback += `评估技术深度和表达逻辑... 分析专业术语使用情况...\n\n`
+
+  // 评估结果
+  if (score >= 85) {
+    feedback += `✅ 评估结果: 回答质量优秀！`
+  } else if (score >= 70) {
+    feedback += `👍 评估结果: 回答质量良好，有提升空间。`
+  } else {
+    feedback += `💪 评估结果: 回答需要改进，建议加强练习。`
+  }
+
+  // 优势领域
+  if (strengthAreas.length > 0) {
+    feedback += `\n\n🌟 优势领域: ${strengthAreas.join(', ')}`
+  }
+
+  // 改进建议
+  if (recommendations.length > 0) {
+    feedback += `\n\n💡 改进建议:\n`
+    recommendations.slice(0, 3).forEach((rec, index) => {
+      feedback += `${index + 1}. ${rec}\n`
+    })
+  }
+
+  // 需要改进的领域
+  if (improvementAreas.length > 0) {
+    feedback += `\n📈 需要加强: ${improvementAreas.join(', ')}`
+  }
+
+  return feedback
+}
+
+// 生成智能适应性思考过程
+const generateHumanizedThinkingProcess = (analysis, userAnswer) => {
+  const score = analysis.overallScore || 0
+  const keywords = analysis.textAnalysis?.keywords || []
+  const answerLength = userAnswer.length
+  const rounds = interviewState.value.conversationRounds
+  const isUnknownAnswer = userAnswer.includes('不知道') || userAnswer.includes('不清楚') || userAnswer.trim().length < 10
+  const isTimeoutResponse = checkResponseTime()
+
+  // 分析用户回答的具体内容特征
+  const hasProjectExperience = userAnswer.includes('项目') || userAnswer.includes('实际') || userAnswer.includes('经验')
+  const hasTechnicalDetails = userAnswer.includes('算法') || userAnswer.includes('模型') || userAnswer.includes('技术')
+  const hasSpecificExamples = userAnswer.includes('比如') || userAnswer.includes('例如') || userAnswer.includes('举例')
+  const isDetailedAnswer = userAnswer.length > 200
+
+  let thinking = ''
+
+  // 根据对话轮次和回答模式生成适应性思考
+  if (interviewState.value.consecutiveUnknownAnswers >= 2) {
+    thinking = `候选人已经连续几次表示不了解了...这种情况下我需要调整策略。\n\n`
+    thinking += `与其继续问技术细节，不如了解一下候选人的学习背景和动机。每个人的起点不同，关键是要看学习能力和态度。\n\n`
+    thinking += `我应该提供一些具体的指导，帮助候选人建立信心，然后从更基础的角度重新开始。`
+  } else if (isTimeoutResponse && !interviewState.value.timeoutWarningShown) {
+    thinking = `候选人思考了很长时间...这可能说明问题对他们来说有一定难度。\n\n`
+    thinking += `长时间的沉默在面试中其实不太好，我应该提醒候选人可以先说出部分想法，然后再逐步完善。\n\n`
+    thinking += `让我给出一些时间管理的建议，帮助候选人更好地应对面试。`
+  } else if (interviewState.value.consecutiveSimilarResponses >= 2 && rounds >= 4) {
+    thinking = `我注意到最近几轮对话的模式比较相似...可能需要换个角度了。\n\n`
+    thinking += `继续用同样的方式可能不会有新的突破，我应该尝试不同的提问策略，或者了解候选人的其他方面。\n\n`
+    thinking += `让我想想如何从新的角度来评估候选人的能力...`
+  } else {
+    // 正常的思考过程 - 基于具体回答内容
+    // 第一印象思考
+    if (isDetailedAnswer) {
+      thinking += `哇，这是一个很详细的回答！候选人提供了${answerLength}字符的内容，让我仔细分析一下。\n\n`
+    } else if (answerLength < 20) {
+      thinking += `回答比较简短，只有${answerLength}字符...让我看看是否能从中获得有价值的信息。\n\n`
+    } else {
+      thinking += `回答长度适中（${answerLength}字符），让我分析一下内容的质量。\n\n`
+    }
+
+    // 内容特征分析
+    if (isUnknownAnswer) {
+      thinking += `候选人诚实地表达了不了解，这种态度很好。诚实比胡编乱造要强得多。`
+    } else {
+      // 分析具体技术内容
+      if (userAnswer.includes('知识蒸馏') || userAnswer.includes('Knowledge Distillation')) {
+        thinking += `候选人提到了知识蒸馏技术，这是模型压缩的重要方法。让我看看理解深度如何。`
+      } else if (userAnswer.includes('YOLOv4') || userAnswer.includes('目标检测')) {
+        thinking += `候选人谈到了目标检测和YOLOv4，这是计算机视觉的热门领域。`
+      } else if (hasProjectExperience) {
+        thinking += `很好！候选人提到了项目经验，这比纯理论回答更有价值。`
+      } else if (hasTechnicalDetails) {
+        thinking += `候选人展现了一定的技术理解，提到了相关的技术概念。`
+      } else if (keywords.length > 0) {
+        thinking += `从回答中识别到关键词：${keywords.slice(0, 2).join('、')}。`
+      } else {
+        thinking += `回答比较通用，缺乏具体的技术细节。`
+      }
+    }
+
+    thinking += `\n\n`
+
+    // 深度分析
+    if (hasSpecificExamples) {
+      thinking += `候选人给出了具体例子，这说明有实际的理解和经验。`
+    }
+    if (hasTechnicalDetails && hasProjectExperience) {
+      thinking += `既有技术理论又有项目实践，这是很好的组合。`
+    }
+
+    thinking += `\n\n`
+
+    // 基于对话流程的智能思考过程
+    const flow = conversationScoring.value.conversationFlow
+    const currentScore = conversationScoring.value.currentQuestionScore
+    const conversationRounds = interviewState.value.conversationRounds
+
+    thinking += `对话流程分析：单次回答${score}分，对话流程累积${currentScore}分，总轮次${flow.totalTurns}，有意义轮次${flow.meaningfulTurns}，概念覆盖${flow.conceptsCovered.size}个，深度层级${flow.topicDepth}。`
+
+    if (currentScore >= 85) {
+      thinking += `对话流程评分${currentScore}分，这是一个卓越的对话表现！候选人不仅在技术内容上表现出色，整个对话过程展现了深度思考、概念整合和实践经验。基于对话流程的完整性和质量，这个问题已经得到了充分的探讨。`
+      interviewState.value.shouldTransitionToNext = true
+    } else if (currentScore >= 75) {
+      thinking += `对话流程评分${currentScore}分，整体对话质量很好！候选人在技术理解、概念运用和表达逻辑方面都表现不错，对话呈现良好的递进性。这个问题基本已经得到了充分的回答。`
+      interviewState.value.shouldTransitionToNext = true
+    } else if (currentScore >= 60) {
+      thinking += `对话流程评分${currentScore}分，对话质量良好，显示了一定的技术基础。我可以通过追问来进一步了解候选人的深度理解，或者根据对话完整性考虑下一步。`
+      interviewState.value.shouldTransitionToNext = false
+    } else if (currentScore >= 40) {
+      thinking += `对话流程评分${currentScore}分，对话显示出基础理解，但在深度、实例和概念整合方面还有提升空间。我需要通过引导来帮助候选人更好地展示能力。`
+      interviewState.value.shouldTransitionToNext = false
+    } else {
+      thinking += `对话流程评分${currentScore}分，对话质量需要改善。我应该提供更多具体的指导和鼓励，帮助候选人建立信心并改善表达方式。`
+      interviewState.value.shouldTransitionToNext = false
+    }
+
+    thinking += `\n\n`
+
+    // 个性化的下一步策略
+    if (score >= 85) {
+      thinking += `既然技术基础扎实，我想了解更多实际应用经验和遇到的挑战。`
+    } else if (score >= 70) {
+      thinking += `我可以通过具体例子来帮助候选人更好地展示自己的理解。`
+    } else {
+      thinking += `我需要提供更多支持和引导，帮助候选人建立信心。`
+    }
+  }
+
+  return thinking
+}
+
+// 智能面试官状态管理
+const interviewState = ref({
+  responseTimeStart: null,
+  conversationRounds: 0,
+  lastResponseType: null,
+  consecutiveUnknownAnswers: 0,
+  consecutiveSimilarResponses: 0,
+  hasProvidedAnswer: false,
+  timeoutWarningShown: false,
+  shouldTransitionToNext: false,
+  currentQuestionSatisfied: false,
+  isPaused: false
+})
+
+// 对话流程综合评分系统 - 真正基于整个对话过程的评分
+const conversationScoring = ref({
+  // 当前问题的对话流程分数（从0开始，逐步累积）
+  currentQuestionScore: 0,
+
+  // 流畅度指标
+  fluencyMetrics: {
+    responseTime: [],        // 响应时间记录
+    topicContinuity: 0,     // 话题连续性分数
+    interactionQuality: 0,   // 互动质量分数
+    averageResponseTime: 0   // 平均响应时间
+  },
+
+  // 累积评分历史
+  answerHistory: [],
+
+  // 对话流程状态跟踪
+  conversationFlow: {
+    totalTurns: 0,           // 总对话轮次
+    meaningfulTurns: 0,      // 有意义的对话轮次
+    topicDepth: 0,          // 话题深入程度
+    conceptsCovered: new Set(), // 已覆盖的概念
+    examplesProvided: 0,     // 提供的实例数量
+    clarificationsAsked: 0,  // 主动澄清次数
+    buildOnPrevious: 0       // 基于前一轮对话的回答次数
+  },
+
+  // 分数累积规则
+  scoringRules: {
+    // 基础分数增量（每轮对话的基础分）
+    baseIncrement: 8,
+
+    // 质量加成系数
+    qualityMultipliers: {
+      excellent: 1.5,        // 优秀回答：基础分 × 1.5
+      good: 1.2,            // 良好回答：基础分 × 1.2
+      average: 1.0,         // 一般回答：基础分 × 1.0
+      poor: 0.5,            // 较差回答：基础分 × 0.5
+      veryPoor: 0.2         // 很差回答：基础分 × 0.2
+    },
+
+    // 对话流程加成
+    flowBonuses: {
+      topicContinuity: 5,    // 话题连续性加成
+      depthProgression: 8,   // 深度递进加成
+      exampleProvision: 6,   // 提供实例加成
+      activeEngagement: 4,   // 主动参与加成
+      conceptIntegration: 7  // 概念整合加成
+    },
+
+    // 累积阈值设置
+    thresholds: {
+      basic: 40,            // 基础理解阈值
+      competent: 65,        // 胜任能力阈值
+      proficient: 80,       // 熟练掌握阈值
+      expert: 95            // 专家水平阈值
+    }
+  },
+
+  // 自动跳题条件
+  transitionConditions: {
+    scoreThreshold: 75,      // 分数阈值
+    minTurns: 2,            // 最少对话轮次
+    maxTurns: 6,            // 最多对话轮次
+    conceptCoverage: 3,      // 最少概念覆盖数
+    depthRequirement: 2      // 最低深度要求
+  }
+})
+
+// 检测回答时间过长
+const checkResponseTime = () => {
+  if (!interviewState.value.responseTimeStart) return false
+
+  const elapsed = Date.now() - interviewState.value.responseTimeStart
+  const timeoutThreshold = 45000 // 45秒超时阈值
+
+  return elapsed > timeoutThreshold
+}
+
+// 检测重复性回复模式
+const detectRepetitivePattern = (currentResponseType) => {
+  if (currentResponseType === interviewState.value.lastResponseType) {
+    interviewState.value.consecutiveSimilarResponses++
+  } else {
+    interviewState.value.consecutiveSimilarResponses = 0
+  }
+
+  if (currentResponseType === 'unknown') {
+    interviewState.value.consecutiveUnknownAnswers++
+  } else {
+    interviewState.value.consecutiveUnknownAnswers = 0
+  }
+
+  interviewState.value.lastResponseType = currentResponseType
+  return {
+    isRepetitive: interviewState.value.consecutiveSimilarResponses >= 2,
+    tooManyUnknown: interviewState.value.consecutiveUnknownAnswers >= 2
+  }
+}
+
+// 智能语义分析 - 区分用户的真实意图
+const analyzeUserIntent = (userAnswer) => {
+  const answer = userAnswer.toLowerCase().trim()
+
+  // 直接要答案的表达模式
+  const directAnswerPatterns = [
+    /我不知道.*请告诉我.*答案/,
+    /不知道.*正确答案是什么/,
+    /请直接告诉我.*答案/,
+    /能否给出.*标准答案/,
+    /请提供.*正确答案/,
+    /告诉我.*答案.*吧/,
+    /我完全不知道.*请给出答案/,
+    /不会.*请告诉我怎么做/,
+    /请给出.*具体答案/
+  ]
+
+  // 要思路引导的表达模式
+  const guidancePatterns = [
+    /请给我.*思路/,
+    /能否提供.*思路/,
+    /给我一些.*方向/,
+    /请指导.*方向/,
+    /能否引导.*思考/,
+    /给我一些.*提示/,
+    /请提供.*思考方向/,
+    /能否给一些.*建议/,
+    /希望得到.*指导/,
+    /请帮我.*分析/
+  ]
+
+  // 表达不知道的模式
+  const unknownPatterns = [
+    /不知道/,
+    /不清楚/,
+    /没有经验/,
+    /不了解/,
+    /不会/,
+    /没做过/,
+    /不太懂/,
+    /不确定/,
+    /完全不懂/,
+    /一点都不知道/,
+    /从来没接触过/
+  ]
+
+  // 检测意图
+  const isRequestingAnswer = directAnswerPatterns.some(pattern => pattern.test(answer))
+  const isRequestingGuidance = guidancePatterns.some(pattern => pattern.test(answer))
+  const isUnknown = unknownPatterns.some(pattern => pattern.test(answer)) &&
+                   !isRequestingAnswer && !isRequestingGuidance
+
+  // 特殊情况：如果回答很短且包含"不知道"，但没有明确要求，默认为需要引导
+  if (answer.length < 20 && unknownPatterns.some(pattern => pattern.test(answer))) {
+    return {
+      isUnknown: true,
+      isRequestingAnswer: false,
+      isRequestingGuidance: false,
+      intent: 'unknown'
+    }
+  }
+
+  // 确定主要意图
+  let intent = 'normal'
+  if (isRequestingAnswer) intent = 'request_answer'
+  else if (isRequestingGuidance) intent = 'request_guidance'
+  else if (isUnknown) intent = 'unknown'
+
+  return {
+    isUnknown,
+    isRequestingAnswer,
+    isRequestingGuidance,
+    intent,
+    confidence: isRequestingAnswer || isRequestingGuidance ? 0.9 : 0.7
+  }
+}
+
+// 生成技术标准答案
+const generateTechnicalAnswer = (questionNumber) => {
+  const technicalAnswers = {
+    1: `关于机器学习模型优化，主要有以下几个关键方面：
+
+**1. 算法层面优化**
+- 选择合适的算法：根据数据特点选择线性模型、树模型或神经网络
+- 超参数调优：使用网格搜索、随机搜索或贝叶斯优化
+- 集成学习：通过Bagging、Boosting等方法提升性能
+
+**2. 数据层面优化**
+- 特征工程：特征选择、特征构造、特征变换
+- 数据预处理：标准化、归一化、缺失值处理
+- 数据增强：通过合成数据扩充训练集
+
+**3. 系统层面优化**
+- 模型压缩：量化、剪枝、蒸馏
+- 硬件加速：GPU并行、分布式训练
+- 推理优化：模型转换、批处理、缓存策略`,
+
+    2: `关于大数据处理架构设计，标准的解决方案包括：
+
+**1. 数据采集层**
+- 实时采集：Kafka、Flume、Logstash
+- 批量采集：Sqoop、DataX
+- API接口：RESTful API、GraphQL
+
+**2. 数据存储层**
+- 分布式存储：HDFS、对象存储
+- NoSQL数据库：HBase、Cassandra、MongoDB
+- 数据仓库：Hive、ClickHouse、Snowflake
+
+**3. 数据处理层**
+- 批处理：Spark、MapReduce、Flink
+- 流处理：Storm、Kafka Streams
+- 混合处理：Lambda架构、Kappa架构
+
+**4. 数据服务层**
+- 查询引擎：Presto、Impala
+- 可视化：Tableau、Grafana
+- API服务：微服务架构`,
+
+    3: `关于IoT系统架构，完整的解决方案包括：
+
+**1. 设备层**
+- 传感器网络：温度、湿度、压力等传感器
+- 通信协议：MQTT、CoAP、LoRaWAN
+- 边缘计算：边缘网关、本地处理
+
+**2. 连接层**
+- 网络协议：WiFi、蓝牙、5G、NB-IoT
+- 数据传输：加密、压缩、缓存
+- 设备管理：注册、认证、监控
+
+**3. 平台层**
+- 数据接入：消息队列、协议转换
+- 数据存储：时序数据库、关系数据库
+- 业务逻辑：规则引擎、工作流
+
+**4. 应用层**
+- 数据分析：实时分析、历史分析
+- 可视化：仪表板、报表
+- 控制指令：远程控制、自动化`
+  }
+
+  return technicalAnswers[questionNumber] || `这是一个很好的技术问题。标准的解决方案通常包括：
+- 理论基础的掌握
+- 实践经验的积累
+- 工具和技术的熟练运用
+- 问题分析和解决能力的培养`
+}
+
+// 生成思路引导
+const generateGuidanceThoughts = (questionNumber) => {
+  const guidanceThoughts = {
+    1: `关于机器学习模型优化，您可以从以下几个角度来思考：
+
+**💡 思考角度1：性能优化**
+- 您觉得什么指标最能反映模型的好坏？
+- 在您的理解中，过拟合和欠拟合是什么概念？
+
+**💡 思考角度2：实际应用**
+- 您有没有接触过任何机器学习的应用场景？
+- 比如推荐系统、图像识别等，您觉得它们是如何工作的？
+
+**💡 思考角度3：学习经验**
+- 您是通过什么途径了解机器学习的？
+- 在学习过程中，您觉得最有挑战性的部分是什么？`,
+
+    2: `关于大数据处理，您可以从这些方面来考虑：
+
+**💡 思考角度1：数据规模**
+- 您理解的"大数据"是什么概念？
+- 您觉得传统数据库和大数据处理有什么区别？
+
+**💡 思考角度2：处理流程**
+- 您觉得处理大量数据时，主要的挑战是什么？
+- 数据从产生到最终使用，您觉得需要经过哪些步骤？
+
+**💡 思考角度3：技术工具**
+- 您听说过哪些大数据相关的技术或工具？
+- 即使不深入了解，您觉得它们可能解决什么问题？`,
+
+    3: `关于IoT物联网系统，您可以这样思考：
+
+**💡 思考角度1：生活应用**
+- 您在日常生活中接触过哪些智能设备？
+- 您觉得这些设备是如何"联网"和"智能"的？
+
+**💡 思考角度2：系统架构**
+- 从设备到手机APP，您觉得数据是怎么传输的？
+- 您觉得需要哪些技术环节来支撑这个过程？
+
+**💡 思考角度3：技术挑战**
+- 您觉得物联网系统可能面临哪些技术难题？
+- 比如安全性、稳定性等方面，您有什么想法？`
+  }
+
+  return guidanceThoughts[questionNumber] || `您可以从以下几个方面来思考这个问题：
+- 基础概念的理解
+- 实际应用的场景
+- 可能遇到的挑战
+- 解决问题的思路`
+}
+
+// 生成智能适应性面试官回复
+const generateHumanizedInterviewerResponse = (analysis, userAnswer, score, keywords, recommendations) => {
+  // 更新对话轮次
+  interviewState.value.conversationRounds++
+
+  // 智能语义理解 - 区分不同的求助方式
+  const semanticAnalysis = analyzeUserIntent(userAnswer)
+
+  const isUnknownAnswer = semanticAnalysis.isUnknown
+  const isRequestingAnswer = semanticAnalysis.isRequestingAnswer
+  const isRequestingGuidance = semanticAnalysis.isRequestingGuidance
+
+  const isShortAnswer = userAnswer.length < 20
+  const hasKeywords = keywords.length > 0
+  const isTimeoutResponse = checkResponseTime()
+
+  // 确定当前回答类型 - 基于智能评分分析
+  let currentResponseType = 'normal'
+  if (isRequestingAnswer) currentResponseType = 'request_answer'
+  else if (isRequestingGuidance) currentResponseType = 'request_guidance'
+  else if (isUnknownAnswer) currentResponseType = 'unknown'
+  else if (score >= 85) currentResponseType = 'exceptional'  // 卓越回答
+  else if (score >= 75) currentResponseType = 'excellent'   // 优秀回答
+  else if (score >= 65) currentResponseType = 'good'        // 良好回答
+  else if (score >= 50) currentResponseType = 'basic'       // 基础回答
+  else currentResponseType = 'needs_improvement'            // 需要改进
+
+  // 检测重复模式
+  const patterns = detectRepetitivePattern(currentResponseType)
+
+  let response = ''
+
+  // 记录当前回答的详细信息用于个性化回复
+  console.log('🎯 生成智能个性化回复 - 用户回答:', userAnswer.substring(0, 100))
+  console.log('📊 评分:', score, '类型:', currentResponseType)
+  console.log('🔍 关键词:', keywords)
+  console.log('🧠 智能判断:', interviewState.value.shouldTransitionToNext ? '准备跳题' : '继续深入')
+
+  // 根据对话轮次和模式调整策略
+  if (patterns.tooManyUnknown && interviewState.value.conversationRounds >= 3) {
+    // 连续多次不知道 - 提供具体答案和指导
+    response = `我注意到您对这几个问题都不太熟悉，这很正常。让我来分享一些基础知识，帮助您建立理解：\n\n`
+
+    if (currentQuestion.value <= 2) {
+      response += `关于这个问题，简单来说：机器学习是让计算机通过数据学习规律的技术。比如推荐系统会根据您的浏览历史推荐商品，这就是机器学习的应用。\n\n`
+      response += `现在您可以尝试用自己的话说说，您觉得机器学习在日常生活中还有哪些应用？`
+    } else {
+      response += `让我们换个更贴近实际的角度。您平时使用手机APP时，有没有注意到它们会"学习"您的使用习惯？比如输入法会记住您常用的词汇，这其实就涉及到了我们讨论的技术概念。\n\n`
+      response += `基于这个例子，您能谈谈对这类"智能化"功能的理解吗？`
+    }
+
+    interviewState.value.hasProvidedAnswer = true
+
+  } else if (isTimeoutResponse && !interviewState.value.timeoutWarningShown) {
+    // 回答时间过长 - 时间管理提醒
+    response = `我注意到您思考了比较长的时间，这说明您在认真考虑问题，这很好！\n\n`
+    response += `在面试中，如果遇到不太确定的问题，可以先说出您知道的部分，然后诚实地表达哪些方面需要进一步学习。这样的回答往往比长时间沉默更有效。\n\n`
+    response += `现在请您简单分享一下刚才的思考过程，或者说说您对这个问题的初步理解。`
+
+    interviewState.value.timeoutWarningShown = true
+
+  } else if (patterns.isRepetitive && interviewState.value.conversationRounds >= 4) {
+    // 重复性回复 - 改变策略
+    response = `我们已经聊了几轮了，我想换个方式来了解您。\n\n`
+
+    if (currentResponseType === 'unknown') {
+      response += `既然技术细节暂时不太熟悉，那我们聊聊您的学习经历吧。您是通过什么途径开始接触这个领域的？是课程学习、项目实践，还是个人兴趣？\n\n`
+      response += `您的学习动机和方法往往比具体的技术知识更能体现您的潜力。`
+    } else {
+      response += `您的技术基础不错，现在我想了解您的实际应用能力。能否描述一个您认为最有挑战性的技术问题？不一定要很复杂，关键是您如何分析和解决的。\n\n`
+      response += `这能帮我更好地评估您的问题解决能力。`
+    }
+
+  } else {
+    // 智能适应性回复 - 增强版
+    const openingPhrases = {
+      unknown: [
+        '我很欣赏您的诚实态度！',
+        '诚实地表达不了解，这其实是一个很好的品质。',
+        '没关系，每个人都有不熟悉的领域。'
+      ],
+      exceptional: [
+        '太棒了！这是一个非常出色的回答！',
+        '您的回答展现了深厚的技术功底和丰富的实践经验。',
+        '这个回答让我看到了您的专业水准，非常impressive！'
+      ],
+      excellent: [
+        '很棒的回答！您对这个领域确实很有见解。',
+        '听起来您有丰富的实践经验，回答质量很高。',
+        '您的回答让我印象深刻，技术理解很到位。'
+      ],
+      good: [
+        '不错的回答！我能感受到您对这个话题的理解。',
+        '您的思路很清晰，基础很扎实。',
+        '回答得很好，显示了良好的技术基础。'
+      ],
+      basic: [
+        '谢谢您的分享，我听出了您的一些想法。',
+        '这是一个不错的开始，我们可以进一步探讨。',
+        '您提到了一些关键点，让我们深入了解一下。'
+      ],
+      needs_improvement: [
+        '感谢您的回答，我们一起来梳理一下这个问题。',
+        '让我帮您理清一下思路，这个话题确实有一定难度。',
+        '没关系，我们可以从基础开始，一步步建立理解。'
+      ]
+    }
+
+    if (isRequestingAnswer) {
+      // 候选人明确要求标准答案 - 直接提供技术解答
+      response = `我理解您希望了解这个问题的标准答案，这种主动学习的态度很好！让我为您详细解析：\n\n`
+
+      // 根据当前问题提供具体的技术答案
+      response += generateTechnicalAnswer(currentQuestion.value)
+
+      response += `\n\n现在您了解了标准答案，能否结合您的理解，谈谈您觉得在实际应用中可能会遇到哪些挑战？`
+
+    } else if (isRequestingGuidance) {
+      // 候选人要求思路引导 - 提供思考方向
+      response = `很好的问题！我来为您提供一些思考的方向和思路：\n\n`
+
+      response += generateGuidanceThoughts(currentQuestion.value)
+
+      response += `\n\n基于这些思路，您现在可以尝试从其中一个角度来回答，不需要面面俱到，选择您最有感触的方面即可。`
+
+    } else if (isUnknownAnswer) {
+      const opening = openingPhrases.unknown[Math.floor(Math.random() * openingPhrases.unknown.length)]
+      response = `${opening}在面试中，诚实比胡编乱造要好得多。\n\n`
+
+      response += `让我换个角度来引导一下：这个问题其实是想了解您在技术学习和实践方面的经验。`
+      response += `即使您对具体的技术细节不太熟悉，也可以从以下方面来思考：\n\n`
+      response += `比如说，您在学习新技术时通常是怎么入手的？或者您觉得学好一门技术最重要的是什么？`
+      response += `这些都能体现您的学习能力和思维方式。`
+
+    } else if (score >= 85) {
+      // 85分以上：卓越回答，立即过渡到下一题
+      const opening = openingPhrases.exceptional[Math.floor(Math.random() * openingPhrases.exceptional.length)]
+      response = `${opening}您的回答不仅技术深度到位，还体现了丰富的实践经验和独到的见解。`
+
+      // 分析用户回答中的具体技术点
+      if (userAnswer.includes('知识蒸馏') || userAnswer.includes('Knowledge Distillation')) {
+        response += `特别是您对知识蒸馏技术的深度理解，从理论基础到实际应用，再到性能优化，展现了专家级的技术水准。`
+      } else if (userAnswer.includes('YOLOv4') || userAnswer.includes('目标检测')) {
+        response += `您对目标检测算法的全面掌握，包括模型架构、训练策略和部署优化，显示了深厚的计算机视觉功底。`
+      } else if (hasKeywords) {
+        response += `您对${keywords.slice(0, 3).join('、')}等核心技术的深入理解令人印象深刻。`
+      }
+
+      response += `\n\n这个问题您已经回答得非常完美了！让我们进入下一个更具挑战性的技术话题。`
+
+      // 立即标记过渡到下一题
+      console.log('🏆 卓越回答，立即过渡到下一题，分数:', score)
+      interviewState.value.shouldTransitionToNext = true
+
+    } else if (score >= 75) {
+      // 75-84分：优秀回答，准备过渡到下一题
+      const opening = openingPhrases.excellent[Math.floor(Math.random() * openingPhrases.excellent.length)]
+      response = `${opening}您的回答质量很高，技术理解很到位！`
+
+      // 根据用户回答内容给出具体反馈
+      if (userAnswer.includes('知识蒸馏') || userAnswer.includes('Knowledge Distillation')) {
+        response += `您对知识蒸馏技术的实际应用经验很丰富，从模型压缩到性能优化的完整流程都描述得很清楚。`
+      } else if (userAnswer.includes('项目') && userAnswer.includes('经验')) {
+        response += `您分享的项目经验很有价值，从技术选型到实施落地，展现了良好的工程实践能力。`
+      } else if (hasKeywords) {
+        response += `您对${keywords.slice(0, 2).join('、')}等技术的理解很深入。`
+      }
+
+      response += `\n\n这个问题您回答得很好，我对您的技术能力有了清晰的认识。让我们继续下一个问题。`
+
+      // 标记准备过渡到下一题
+      console.log('🏆 优秀回答，准备过渡到下一题，分数:', score)
+      interviewState.value.shouldTransitionToNext = true
+
+    } else if (score >= 65) {
+      // 65-74分：良好回答，简单确认后考虑下一题
+      const opening = openingPhrases.good[Math.floor(Math.random() * openingPhrases.good.length)]
+      response = `${opening}您的回答显示了扎实的基础和一定的实践经验。`
+
+      // 根据用户回答内容给出具体反馈
+      if (userAnswer.includes('项目') || userAnswer.includes('经验')) {
+        response += `您提到的项目经验很有参考价值，能看出您有实际的动手能力。`
+      } else if (hasKeywords) {
+        response += `您对${keywords[0]}等概念的理解是正确的，基础很扎实。`
+      }
+
+      response += `\n\n让我简单确认一下：在您的理解中，这个技术最大的优势是什么？然后我们可以进入下一个话题。`
+
+      // 不立即跳题，但准备跳题
+      interviewState.value.shouldTransitionToNext = false
+
+      response += `\n\n不过我觉得您还可以展开得更深入一些。比如说，您能举个具体的例子来说明吗？或者分享一下您是怎么学习这个技术的？`
+
+    } else if (score >= 50) {
+      // 50-64分：基础回答，需要引导深入
+      const opening = openingPhrases.basic[Math.floor(Math.random() * openingPhrases.basic.length)]
+      response = `${opening}您显示了基础的理解，但我们可以进一步探讨。`
+
+      if (hasKeywords) {
+        response += `您提到的${keywords[0]}确实是个相关的概念。`
+      }
+
+      response += `\n\n让我们深入一些：您能结合具体的应用场景来说明吗？或者分享一下您在学习这个技术时的思考过程？这样能帮我更好地了解您的技术思维。`
+
+      // 继续当前话题，不跳题
+      interviewState.value.shouldTransitionToNext = false
+
+    } else {
+      // 低于50分：需要改进，提供指导
+      const opening = openingPhrases.needs_improvement[Math.floor(Math.random() * openingPhrases.needs_improvement.length)]
+      response = `${opening}这个话题确实有一定的复杂性。`
+
+      if (hasKeywords) {
+        response += `您提到的${keywords[0]}是个起点，我们可以从这里开始。`
+      }
+
+      response += `\n\n让我换个角度来帮助您：这个技术其实在我们日常生活中有很多应用。比如说，您平时使用的手机APP、网站推荐等都可能用到相关技术。从这个角度，您觉得这类技术的核心价值是什么？`
+
+      // 继续当前话题，提供更多指导
+      interviewState.value.shouldTransitionToNext = false
+    }
+  }
+
+  return response
+}
+
+// 打字机效果函数
+const typewriterEffect = async (messageIndex, text, type = 'response') => {
+  const message = conversationHistory.value[messageIndex]
+  if (!message) {
+    console.warn('消息不存在:', messageIndex)
+    return
+  }
+
+  console.log(`开始打字机效果 - 类型: ${type}, 文本长度: ${text.length}`)
+
+  // 按字符分割，但保持换行符
+  const chars = text.split('')
+  let displayedText = ''
+
+  for (let i = 0; i < chars.length; i++) {
+    displayedText += chars[i]
+
+    if (type === 'thinking') {
+      // 思考过程显示在content中
+      message.content = displayedText
+    } else {
+      // 回复内容显示在displayedContent中
+      message.displayedContent = displayedText
+      message.isTyping = true
+    }
+
+    // 触发响应式更新
+    await nextTick()
+    // 在打字机效果期间强制滚动跟随，确保用户能看到最新内容
+    scrollToBottom(true, false) // 强制滚动，但不使用平滑动画（避免影响打字效果）
+
+    // 控制打字速度：标点符号稍慢，普通字符较快
+    const char = chars[i]
+    const delay = /[，。！？；：]/.test(char) ? 200 :
+                  /[,.\!?;:]/.test(char) ? 200 :
+                  /[\s\n]/.test(char) ? 30 :
+                  50
+
+    await new Promise(resolve => setTimeout(resolve, delay))
+  }
+
+  // 完成显示后的处理
+  if (type === 'thinking') {
+    message.content = text
+    message.isThinking = false
+  } else {
+    message.displayedContent = text
+    message.isTyping = false
+  }
+
+  console.log(`打字机效果完成 - 类型: ${type}`)
+}
+
+// 生成AI面试官的对话式回复（合并显示，可折叠思考过程）
+const generateAIInterviewerResponse = async (analysis, userAnswer) => {
+  try {
+    console.log('🤖 开始生成AI面试官回复...')
+    console.log('📊 分析数据:', analysis)
+    console.log('💬 用户回答:', userAnswer)
+
+    // 第一阶段：显示AI正在思考状态
+    const aiMessage = {
+      type: 'ai',
+      sender: 'AI面试官',
+      content: '🤔 AI面试官正在思考...',
+      timestamp: new Date().toLocaleTimeString(),
+      isThinking: true,
+      isAnimating: true,
+      hasThinkingProcess: true,
+      thinkingProcess: '',
+      thinkingExpanded: [], // 折叠状态控制
+      displayedContent: '',
+      finalResponse: '', // 最终回复内容
+      isTyping: false,
+      analysis: {
+        type: 'enhanced_response',
+        score: analysis.overallScore || 0,
+        responseType: (analysis.overallScore || 0) >= 85 ? 'excellent' :
+                     (analysis.overallScore || 0) >= 70 ? 'good' : 'needs_improvement'
+      }
+    }
+
+    conversationHistory.value.push(aiMessage)
+    console.log('✅ AI消息已添加')
+    await nextTick()
+    scrollToBottom(true, true) // 强制滚动到AI消息，使用平滑动画
+
+    // 第二阶段：生成并逐步显示思考过程
+    console.log('⏳ 开始生成思考过程...')
+    await new Promise(resolve => setTimeout(resolve, 1000))
+
+    // 生成人性化的思考过程（基于用户具体回答内容）
+    const thinkingContent = generateHumanizedThinkingProcess(analysis, userAnswer)
+
+    const messageIndex = conversationHistory.value.length - 1
+
+    // 开始打字机效果显示人性化思考过程
+    await typewriterEffect(messageIndex, thinkingContent, 'thinking')
+    console.log('✅ 人性化思考过程显示完成')
+
+    // 第三阶段：设置思考过程并准备折叠
+    await new Promise(resolve => setTimeout(resolve, 800))
+    conversationHistory.value[messageIndex].thinkingProcess = thinkingContent
+    conversationHistory.value[messageIndex].isThinking = false
+    conversationHistory.value[messageIndex].thinkingExpanded = [] // 默认折叠状态
+    console.log('✅ 思考过程已设置，准备显示回复')
+
+    // 第四阶段：生成并逐步显示最终回复内容
+    console.log('🎯 开始生成AI回复内容...')
+    const score = analysis.overallScore || 0
+    const keywords = analysis.textAnalysis?.keywords || []
+    const recommendations = analysis.recommendations || []
+
+    console.log('📈 评分:', score)
+    console.log('🔑 关键词:', keywords)
+    console.log('💡 建议:', recommendations)
+
+    // 使用对话流程综合评分系统
+    const aiResponse = generateHumanizedInterviewerResponse(analysis, userAnswer, score, keywords, recommendations)
+    const conversationScore = calculateConversationScore(userAnswer, aiResponse, score)
+    console.log('📈 对话流程评分结果:', { 单次分数: score, 对话流程分数: conversationScore })
+
+    // 在同一消息中开始显示最终回复（打字机效果）
+    conversationHistory.value[messageIndex].isTyping = true
+    await typewriterEffect(messageIndex, aiResponse, 'response')
+
+    // 完成回复显示，但不覆盖content字段（保留思考过程）
+    conversationHistory.value[messageIndex].isTyping = false
+    conversationHistory.value[messageIndex].isAnimating = false
+
+    // 确保最终回复内容正确设置
+    conversationHistory.value[messageIndex].finalResponse = aiResponse
+
+    // AI回复完成后，强制滚动到底部并使用平滑动画
+    await nextTick()
+    scrollToBottom(true, true)
+    console.log('✅ AI面试官回复生成完成，已滚动到底部')
+
+    // 智能题目过渡逻辑 - 统一处理题目递增
+    console.log('🔄 准备处理题目过渡，当前题目:', currentQuestion.value)
+
+    // 延迟后处理题目过渡（统一入口，避免重复递增）
+    setTimeout(async () => {
+      if (currentQuestion.value < totalQuestions.value) {
+        // 检查AI面试官是否明确表示要跳转下一题
+        if (interviewState.value.shouldTransitionToNext) {
+          console.log('🎯 AI面试官明确表示跳转下一题，直接执行跳转')
+
+          // 延迟2秒后生成下一题（给用户时间阅读AI回复）
+          setTimeout(() => {
+            console.log('📈 AI指导跳转：从第', currentQuestion.value, '题到第', currentQuestion.value + 1, '题')
+            currentQuestion.value++
+            interviewState.value.shouldTransitionToNext = false
+            interviewState.value.currentQuestionSatisfied = true
+            resetConversationScoring() // 重置对话流程评分状态
+            generateNextQuestion()
+          }, 2000)
+        } else {
+          // 使用对话流程评分检查是否需要自动过渡到下一题
+          const shouldTransition = shouldTransitionToNextQuestion()
+          if (shouldTransition) {
+            console.log('🎯 基于对话流程评分检测到满足跳题条件，自动过渡到下一题')
+
+            // 添加过渡提示消息
+            const transitionMessage = {
+              type: 'ai',
+              sender: 'AI面试官',
+              content: '很好！基于您优秀的回答，我们继续下一个问题。',
+              timestamp: new Date().toLocaleTimeString(),
+              isTransition: true
+            }
+
+            conversationHistory.value.push(transitionMessage)
+            await nextTick()
+            scrollToBottom(true, true) // 强制滚动到过渡消息
+
+            // 延迟1秒后生成下一题
+            setTimeout(() => {
+              console.log('📈 自动过渡：从第', currentQuestion.value, '题到第', currentQuestion.value + 1, '题')
+              currentQuestion.value++
+              interviewState.value.shouldTransitionToNext = false
+              interviewState.value.currentQuestionSatisfied = true
+              resetConversationScoring() // 重置对话流程评分状态
+              generateNextQuestion()
+            }, 1500)
+          } else {
+            // 不满足自动过渡条件，继续当前问题的对话
+            console.log('📝 不满足跳题条件，继续当前问题的对话')
+          }
+        }
+      } else {
+        // 面试结束
+        console.log('🎉 面试已完成所有题目')
+        ElNotification.success({
+          title: '面试完成',
+          message: '恭喜您完成了所有面试问题！',
+          duration: 5000
+        })
+      }
+    }, 3000)
+
+  } catch (error) {
+    console.error('❌ AI面试官回复生成失败:', error)
+
+    // 清理思考状态的消息
+    const lastMessage = conversationHistory.value[conversationHistory.value.length - 1]
+    if (lastMessage && lastMessage.isThinking) {
+      lastMessage.isThinking = false
+      lastMessage.isAnimating = false
+    }
+
+    // 根据用户回答类型生成合适的备用回复
+    const isUnknownAnswer = userAnswer.includes('不知道') ||
+                           userAnswer.includes('不清楚') ||
+                           userAnswer.includes('没有经验') ||
+                           userAnswer.includes('不会') ||
+                           userAnswer.trim().length < 10
+
+    const fallbackContent = isUnknownAnswer ?
+      '没关系，诚实地表达不了解是很好的态度。我们可以从基础概念开始学习。让我们继续下一个问题。' :
+      '感谢您的回答。我看到您对这个问题有一定的理解。让我们继续下一个问题。'
+
+    // 如果有未完成的消息，更新其内容
+    if (lastMessage && lastMessage.hasThinkingProcess) {
+      lastMessage.content = fallbackContent
+      lastMessage.analysis = { type: 'fallback' }
+    } else {
+      // 否则添加新的备用回复
+      conversationHistory.value.push({
+        type: 'ai',
+        sender: 'AI面试官',
+        content: fallbackContent,
+        timestamp: new Date().toLocaleTimeString(),
+        analysis: { type: 'fallback' },
+        isAnimating: true
+      })
+    }
+
+    // 安全地滚动到底部
+    try {
+      scrollToBottom()
+    } catch (scrollError) {
+      console.warn('⚠️ 滚动失败:', scrollError.message)
+    }
+  }
+}
+
+// 获取AI提示
+const getAiHint = async () => {
+  if (aiAssistanceCount.value <= 0) {
+    ElMessage.warning('AI提示次数已用完')
+    return
+  }
+
+  try {
+    const context = {
+      question: currentQuestionData.value.text,
+      candidateResponse: currentTextInput.value,
+      analysisResults: realTimeAnalysis.value,
+      questionNumber: currentQuestion.value
+    }
+
+    const hint = await enhancedIflytekSparkService.generateRealTimeHint(
+      sparkSession.value?.sessionId || 'fallback',
+      context
+    )
+
+    currentAiHint.value = hint.hint
+    showAiHints.value = true
+    aiAssistanceCount.value--
+
+    ElMessage.success('AI提示已生成')
+
+  } catch (error) {
+    console.error('AI提示生成失败:', error)
+    ElMessage.error('AI提示生成失败，请稍后重试')
+  }
+}
+
+// 清空输入（强制清空）
+const clearInput = async () => {
+  currentTextInput.value = ''
+  showSmartSuggestions.value = false
+  smartSuggestions.value = []
+
+  // 确保DOM更新
+  await nextTick()
+
+  // 双重保障
+  if (currentTextInput.value) {
+    currentTextInput.value = ''
+  }
+
+  console.log('🧹 输入框已强制清空')
+}
+
+// 插入模板内容
+const insertTemplate = (templateType) => {
+  const templates = {
+    '项目经验': `在我参与的[项目名称]项目中，我主要负责[具体职责]。
+
+项目背景：[项目背景描述]
+技术栈：[使用的技术栈]
+我的贡献：[具体贡献和成果]
+遇到的挑战：[技术难点]
+解决方案：[解决方案]
+项目成果：[项目成果和影响]`,
+
+    '技术栈': `我熟练掌握以下技术栈：
+
+前端技术：[如：Vue.js, React, JavaScript, TypeScript等]
+后端技术：[如：Node.js, Python, Java, Go等]
+数据库：[如：MySQL, MongoDB, Redis等]
+开发工具：[如：Git, Docker, Kubernetes等]
+云服务：[如：AWS, 阿里云等]
+
+其中我最擅长的是[具体技术]，有[时间]的实践经验。`,
+
+    '解决方案': `针对这个问题，我的解决思路如下：
+
+1. 问题分析：[问题的核心是什么]
+2. 技术选型：[选择什么技术方案，为什么]
+3. 实施步骤：[具体的实施步骤]
+4. 风险控制：[可能的风险和应对措施]
+5. 效果评估：[如何评估解决效果]
+
+这种方案的优势是[优势说明]，可能的不足是[不足说明]。`
+  }
+
+  const template = templates[templateType]
+  if (template) {
+    if (currentTextInput.value.trim()) {
+      currentTextInput.value += '\n\n' + template
+    } else {
+      currentTextInput.value = template
+    }
+    ElMessage.success(`已插入${templateType}模板`)
+  }
+}
+
+// 处理输入变化
+const handleInputChange = () => {
+  if (currentTextInput.value.length > 50) {
+    generateSmartSuggestions()
+  } else {
+    smartSuggestions.value = []
+  }
+}
+
+// 生成智能建议
+const generateSmartSuggestions = () => {
+  const input = currentTextInput.value.toLowerCase()
+  const suggestions = []
+
+  // 基于输入内容生成建议
+  if (input.includes('项目') && !input.includes('背景')) {
+    suggestions.push('可以详细描述项目背景和规模')
+  }
+  if (input.includes('技术') && !input.includes('选型')) {
+    suggestions.push('说明技术选型的原因和考虑因素')
+  }
+  if (input.includes('问题') && !input.includes('解决')) {
+    suggestions.push('详细描述问题的解决过程和方法')
+  }
+  if (input.includes('经验') && !input.includes('学到')) {
+    suggestions.push('分享从这个经验中学到的知识')
+  }
+  if (input.length > 100 && !input.includes('总结')) {
+    suggestions.push('可以添加一个简短的总结')
+  }
+
+  smartSuggestions.value = suggestions.slice(0, 3)
+}
+
+// 切换智能建议显示
+const toggleSmartSuggestions = () => {
+  showSmartSuggestions.value = !showSmartSuggestions.value
+  if (showSmartSuggestions.value) {
+    generateSmartSuggestions()
+  }
+}
+
+// 应用建议
+const applySuggestion = (suggestion) => {
+  currentTextInput.value += '\n\n' + suggestion
+  ElMessage.success('已应用建议')
+}
+
+// 保存草稿
+const saveAsDraft = () => {
+  const questionKey = `question_${currentQuestion.value}`
+  draftAnswers.value.set(questionKey, currentTextInput.value)
+  ElMessage.success('草稿已保存')
+}
+
+// 跳过问题
+const nextQuestion = () => {
+  if (currentQuestion.value < totalQuestions.value) {
+    currentQuestion.value++
+    generateNextQuestion()
+    ElMessage.info('已跳过当前问题')
+  }
+}
+
+// 跳转到指定问题
+const jumpToQuestion = (questionNumber) => {
+  console.log('🎯 尝试跳转到问题:', questionNumber, '当前问题:', currentQuestion.value)
+
+  if (questionNumber < 1 || questionNumber > totalQuestions.value) {
+    ElMessage.warning('无效的问题编号')
+    return
+  }
+
+  if (questionNumber > currentQuestion.value + 1) {
+    ElMessage.warning('不能跳过未解锁的问题')
+    return
+  }
+
+  // 如果点击的是当前问题，不需要跳转
+  if (questionNumber === currentQuestion.value) {
+    ElMessage.info('当前已经是第' + questionNumber + '题')
+    return
+  }
+
+  console.log('✅ 执行跳转：从第', currentQuestion.value, '题到第', questionNumber, '题')
+
+  // 直接从问题库中获取问题数据
+  const questionIndex = questionNumber - 1
+  if (questionIndex < questionBank.value.length) {
+    currentQuestionData.value = { ...questionBank.value[questionIndex] }
+    console.log('📝 已更新问题内容:', currentQuestionData.value.text)
+  } else {
+    // 如果超出问题库范围，生成新问题
+    console.log('📝 问题超出预设范围，生成新问题')
+    generateNextQuestion()
+  }
+
+  currentQuestion.value = questionNumber
+  ElMessage.success(`已跳转到第${questionNumber}题`)
+}
+
+// 插入快捷回答
+const insertQuickResponse = (response) => {
+  if (currentTextInput.value.trim()) {
+    currentTextInput.value += '\n\n' + response
+  } else {
+    currentTextInput.value = response
+  }
+  ElMessage.success('已插入快捷回答')
+}
+
+// 暂停面试
+const pauseInterview = () => {
+  interviewState.value.isPaused = true
+  ElMessage.info('面试已暂停')
+}
+
+// 继续面试
+const resumeInterview = () => {
+  interviewState.value.isPaused = false
+  ElMessage.success('面试已继续')
+}
+
+// 结束面试
+const endInterview = () => {
+  ElMessageBox.confirm(
+    '确定要结束面试吗？结束后将无法继续回答问题。',
+    '确认结束面试',
+    {
+      confirmButtonText: '确定结束',
+      cancelButtonText: '取消',
+      type: 'warning',
+    }
+  ).then(() => {
+    // 跳转到结果页面或执行结束逻辑
+    ElNotification.success({
+      title: '面试已结束',
+      message: '感谢您的参与，正在生成面试报告...',
+      duration: 3000
+    })
+    // 这里可以添加跳转到结果页面的逻辑
+  }).catch(() => {
+    ElMessage.info('已取消结束面试')
+  })
+}
+
+// 获取问题难度类型
+const getQuestionDifficultyType = (difficulty) => {
+  switch (difficulty) {
+    case '简单': return 'success'
+    case '中等': return 'warning'
+    case '困难': return 'danger'
+    default: return 'info'
+  }
+}
+
+// 获取分数类型
+const getScoreType = (score) => {
+  if (score >= 80) return 'success'
+  if (score >= 60) return 'warning'
+  return 'danger'
+}
+
+// 计算平均分数（保留原有逻辑作为备用）
+const calculateAverageScore = () => {
+  const userMessages = conversationHistory.value.filter(msg => msg.type === 'user' && msg.analysis?.score)
+  if (userMessages.length === 0) return 0
+
+  const totalScore = userMessages.reduce((sum, msg) => sum + (msg.analysis.score || 0), 0)
+  return Math.round(totalScore / userMessages.length)
+}
+
+// 对话流程综合评分计算 - 真正基于整个对话过程的评分系统
+const calculateConversationScore = (userAnswer, aiResponse, singleScore) => {
+  console.log('🧮 开始计算对话流程综合评分...')
+
+  const flow = conversationScoring.value.conversationFlow
+  const rules = conversationScoring.value.scoringRules
+
+  // 更新对话流程状态
+  flow.totalTurns++
+
+  // 1. 分析当前回答的质量等级
+  const qualityLevel = determineAnswerQuality(userAnswer, singleScore)
+
+  // 2. 检测对话流程特征
+  const flowFeatures = analyzeConversationFlow(userAnswer, aiResponse)
+
+  // 3. 计算本轮对话的分数增量
+  let scoreIncrement = rules.baseIncrement
+
+  // 应用质量系数
+  scoreIncrement *= rules.qualityMultipliers[qualityLevel]
+
+  // 应用对话流程加成
+  if (flowFeatures.topicContinuity) {
+    scoreIncrement += rules.flowBonuses.topicContinuity
+    flow.buildOnPrevious++
+  }
+
+  if (flowFeatures.depthProgression) {
+    scoreIncrement += rules.flowBonuses.depthProgression
+    flow.topicDepth++
+  }
+
+  if (flowFeatures.exampleProvided) {
+    scoreIncrement += rules.flowBonuses.exampleProvision
+    flow.examplesProvided++
+  }
+
+  if (flowFeatures.activeEngagement) {
+    scoreIncrement += rules.flowBonuses.activeEngagement
+  }
+
+  if (flowFeatures.conceptIntegration) {
+    scoreIncrement += rules.flowBonuses.conceptIntegration
+    flowFeatures.newConcepts.forEach(concept => flow.conceptsCovered.add(concept))
+  }
+
+  // 4. 累积到总分
+  conversationScoring.value.currentQuestionScore += Math.round(scoreIncrement)
+
+  // 5. 确保分数在合理范围内
+  conversationScoring.value.currentQuestionScore = Math.min(100, Math.max(0, conversationScoring.value.currentQuestionScore))
+
+  // 6. 判断是否为有意义的对话轮次
+  if (scoreIncrement > rules.baseIncrement * 0.8) {
+    flow.meaningfulTurns++
+  }
+
+  console.log('📊 对话流程评分详情:', {
+    质量等级: qualityLevel,
+    基础增量: rules.baseIncrement,
+    质量系数: rules.qualityMultipliers[qualityLevel],
+    流程加成: scoreIncrement - (rules.baseIncrement * rules.qualityMultipliers[qualityLevel]),
+    本轮增量: Math.round(scoreIncrement),
+    累积总分: conversationScoring.value.currentQuestionScore,
+    对话轮次: flow.totalTurns,
+    有意义轮次: flow.meaningfulTurns,
+    概念覆盖: flow.conceptsCovered.size
+  })
+
+  return conversationScoring.value.currentQuestionScore
+}
+
+// 确定回答质量等级
+const determineAnswerQuality = (userAnswer, singleScore) => {
+  // 综合考虑单次评分和回答特征
+  const length = userAnswer.length
+  const hasExamples = /例如|比如|举例|案例|实际|项目中/.test(userAnswer)
+  const hasTechnicalTerms = /算法|模型|架构|框架|技术|系统|数据|优化/.test(userAnswer)
+  const hasPersonalExperience = /我在|我的|我们|我曾经|我认为|我觉得/.test(userAnswer)
+
+  // 基于单次评分的基础等级
+  let qualityLevel = 'average'
+  if (singleScore >= 85) qualityLevel = 'excellent'
+  else if (singleScore >= 70) qualityLevel = 'good'
+  else if (singleScore >= 50) qualityLevel = 'average'
+  else if (singleScore >= 30) qualityLevel = 'poor'
+  else qualityLevel = 'veryPoor'
+
+  // 根据回答特征进行调整
+  let adjustmentFactor = 0
+
+  if (length > 100) adjustmentFactor += 0.2 // 详细回答加成
+  if (hasExamples) adjustmentFactor += 0.3 // 有实例加成
+  if (hasTechnicalTerms) adjustmentFactor += 0.2 // 技术术语加成
+  if (hasPersonalExperience) adjustmentFactor += 0.2 // 个人经验加成
+
+  // 应用调整
+  if (adjustmentFactor >= 0.6 && qualityLevel !== 'excellent') {
+    // 升级质量等级
+    const levels = ['veryPoor', 'poor', 'average', 'good', 'excellent']
+    const currentIndex = levels.indexOf(qualityLevel)
+    qualityLevel = levels[Math.min(currentIndex + 1, levels.length - 1)]
+  }
+
+  return qualityLevel
+}
+
+// 分析对话流程特征
+const analyzeConversationFlow = (userAnswer, aiResponse) => {
+  const previousMessages = conversationHistory.value.slice(-4) // 最近4条消息
+  const lastAiMessage = previousMessages.filter(msg => msg.type === 'ai').slice(-1)[0]
+
+  const features = {
+    topicContinuity: false,
+    depthProgression: false,
+    exampleProvided: false,
+    activeEngagement: false,
+    conceptIntegration: false,
+    newConcepts: []
+  }
+
+  // 1. 话题连续性检测
+  if (lastAiMessage && lastAiMessage.content) {
+    const aiKeywords = extractKeywords(lastAiMessage.content)
+    const userKeywords = extractKeywords(userAnswer)
+    const overlap = aiKeywords.filter(keyword => userKeywords.includes(keyword))
+
+    if (overlap.length > 0 ||
+        userAnswer.includes('您提到') ||
+        userAnswer.includes('刚才') ||
+        userAnswer.includes('基于您的问题')) {
+      features.topicContinuity = true
+    }
+  }
+
+  // 2. 深度递进检测
+  const depthIndicators = [
+    '具体来说', '详细地说', '进一步', '深入', '更具体',
+    '从技术角度', '从实现角度', '从架构角度', '底层原理'
+  ]
+  if (depthIndicators.some(indicator => userAnswer.includes(indicator))) {
+    features.depthProgression = true
+  }
+
+  // 3. 实例提供检测
+  const exampleIndicators = [
+    '例如', '比如', '举例', '案例', '实际项目', '我在项目中',
+    '具体的例子', '实际应用', '实践中'
+  ]
+  if (exampleIndicators.some(indicator => userAnswer.includes(indicator))) {
+    features.exampleProvided = true
+  }
+
+  // 4. 主动参与检测
+  const engagementIndicators = [
+    '我想补充', '我还想说', '另外', '还有一点', '我认为',
+    '我的理解是', '我觉得', '从我的经验'
+  ]
+  if (engagementIndicators.some(indicator => userAnswer.includes(indicator))) {
+    features.activeEngagement = true
+  }
+
+  // 5. 概念整合检测
+  const technicalConcepts = extractTechnicalConcepts(userAnswer)
+  if (technicalConcepts.length > 1) {
+    features.conceptIntegration = true
+    features.newConcepts = technicalConcepts
+  }
+
+  return features
+}
+
+// 提取关键词
+const extractKeywords = (text) => {
+  const keywords = text.match(/[\u4e00-\u9fa5]{2,}|[a-zA-Z]{3,}/g) || []
+  return keywords.filter(word => word.length >= 2).slice(0, 10)
+}
+
+// 提取技术概念
+const extractTechnicalConcepts = (text) => {
+  const technicalTerms = [
+    '算法', '模型', '架构', '框架', '系统', '数据库', '缓存', '负载均衡',
+    '微服务', '容器', '云计算', '大数据', '机器学习', '深度学习', '神经网络',
+    'API', 'REST', 'GraphQL', 'Docker', 'Kubernetes', 'Redis', 'MySQL',
+    'MongoDB', 'Elasticsearch', 'Kafka', 'RabbitMQ', 'Nginx', 'Apache'
+  ]
+
+  return technicalTerms.filter(term => text.includes(term))
+}
+
+// 计算对话流畅度分数
+const calculateConversationFluency = (answerRecord) => {
+  const fluencyMetrics = conversationScoring.value.fluencyMetrics
+
+  // 1. 响应时间评估（理想响应时间：30秒-2分钟）
+  const responseTime = answerRecord.responseTime / 1000 // 转换为秒
+  fluencyMetrics.responseTime.push(responseTime)
+
+  let timeScore = 100
+  if (responseTime < 10) timeScore = 60 // 太快可能思考不充分
+  else if (responseTime <= 30) timeScore = 80
+  else if (responseTime <= 120) timeScore = 100 // 理想时间
+  else if (responseTime <= 300) timeScore = 85
+  else timeScore = 70 // 超过5分钟扣分
+
+  // 2. 话题连续性评估
+  const conversationRounds = interviewState.value.conversationRounds
+  if (conversationRounds > 1) {
+    // 检查是否与前一轮对话有良好的连接
+    const lastAiMessage = conversationHistory.value
+      .filter(msg => msg.type === 'ai')
+      .slice(-1)[0]
+
+    if (lastAiMessage && lastAiMessage.content) {
+      // 简单的话题连续性检测
+      const hasGoodTransition =
+        answerRecord.content.includes('您提到') ||
+        answerRecord.content.includes('刚才') ||
+        answerRecord.content.includes('基于') ||
+        answerRecord.content.includes('补充') ||
+        answerRecord.content.length > 50 // 详细回答通常连续性更好
+
+      fluencyMetrics.topicContinuity += hasGoodTransition ? 10 : 0
+    }
+  }
+
+  // 3. 互动质量评估
+  const interactionQuality = Math.min(100,
+    timeScore * 0.4 +
+    Math.min(100, fluencyMetrics.topicContinuity) * 0.3 +
+    (answerRecord.content.length > 30 ? 80 : 50) * 0.3
+  )
+
+  fluencyMetrics.interactionQuality = interactionQuality
+
+  return Math.round(interactionQuality)
+}
+
+// 计算渐进改善分数
+const calculateProgressiveImprovement = () => {
+  const history = conversationScoring.value.answerHistory
+  if (history.length < 2) return 70 // 首次回答给基础分
+
+  // 分析最近3次回答的趋势
+  const recentAnswers = history.slice(-3)
+  const scores = recentAnswers.map(a => a.singleScore)
+
+  // 计算改善趋势
+  let improvementTrend = 0
+  for (let i = 1; i < scores.length; i++) {
+    const improvement = scores[i] - scores[i-1]
+    improvementTrend += improvement
+  }
+
+  // 基础改善分数
+  let improvementScore = 70
+
+  if (improvementTrend > 10) improvementScore = 90 // 显著改善
+  else if (improvementTrend > 0) improvementScore = 80 // 有改善
+  else if (improvementTrend === 0) improvementScore = 75 // 保持稳定
+  else if (improvementTrend > -10) improvementScore = 65 // 轻微下降
+  else improvementScore = 50 // 明显下降
+
+  // 考虑回答长度的改善
+  const lengths = recentAnswers.map(a => a.content.length)
+  const avgLength = lengths.reduce((sum, len) => sum + len, 0) / lengths.length
+  if (avgLength > 100) improvementScore += 5 // 详细回答加分
+
+  return Math.min(100, improvementScore)
+}
+
+// 计算一致性分数
+const calculateConsistency = () => {
+  const history = conversationScoring.value.answerHistory
+  if (history.length < 2) return 80 // 首次回答给较高基础分
+
+  // 分析回答质量的一致性
+  const scores = history.map(a => a.singleScore)
+  const avgScore = scores.reduce((sum, score) => sum + score, 0) / scores.length
+
+  // 计算标准差
+  const variance = scores.reduce((sum, score) => sum + Math.pow(score - avgScore, 2), 0) / scores.length
+  const standardDeviation = Math.sqrt(variance)
+
+  // 一致性分数：标准差越小，一致性越高
+  let consistencyScore = 100 - (standardDeviation * 2)
+  consistencyScore = Math.max(50, Math.min(100, consistencyScore))
+
+  return Math.round(consistencyScore)
+}
+
+// 基于对话流程的智能跳题判断
+const shouldTransitionToNextQuestion = () => {
+  const flow = conversationScoring.value.conversationFlow
+  const conditions = conversationScoring.value.transitionConditions
+  const currentScore = conversationScoring.value.currentQuestionScore
+
+  console.log('🤔 评估对话流程跳题条件:', {
+    当前分数: currentScore,
+    总对话轮次: flow.totalTurns,
+    有意义轮次: flow.meaningfulTurns,
+    概念覆盖数: flow.conceptsCovered.size,
+    话题深度: flow.topicDepth,
+    实例数量: flow.examplesProvided
+  })
+
+  // 1. 分数达标检查
+  const scoreReached = currentScore >= conditions.scoreThreshold
+
+  // 2. 最少轮次检查
+  const minTurnsReached = flow.totalTurns >= conditions.minTurns
+
+  // 3. 概念覆盖检查
+  const conceptsCovered = flow.conceptsCovered.size >= conditions.conceptCoverage
+
+  // 4. 深度要求检查
+  const depthReached = flow.topicDepth >= conditions.depthRequirement
+
+  // 5. 强制跳题检查（避免过长对话）
+  const forceTransition = flow.totalTurns >= conditions.maxTurns
+
+  // 6. 高质量快速通过检查
+  const excellentPerformance = currentScore >= 85 &&
+                              flow.meaningfulTurns >= 2 &&
+                              flow.examplesProvided >= 1
+
+  // 7. 综合判断
+  if (forceTransition) {
+    console.log('✅ 达到最大对话轮次，强制跳题')
+    return true
+  }
+
+  if (excellentPerformance) {
+    console.log('✅ 表现优秀，快速通过')
+    return true
+  }
+
+  if (scoreReached && minTurnsReached && (conceptsCovered || depthReached)) {
+    console.log('✅ 满足综合跳题条件')
+    return true
+  }
+
+  // 8. 特殊情况：分数很高但其他条件不足
+  if (currentScore >= 90 && flow.totalTurns >= 2) {
+    console.log('✅ 分数极高，允许跳题')
+    return true
+  }
+
+  console.log('❌ 未满足跳题条件，继续当前问题')
+  return false
+}
+
+// 重置对话流程评分状态（切换到新问题时调用）
+const resetConversationScoring = () => {
+  console.log('🔄 重置对话流程评分状态')
+
+  // 重置当前问题的对话流程状态
+  conversationScoring.value.currentQuestionScore = 0
+  conversationScoring.value.conversationFlow = {
+    totalTurns: 0,
+    meaningfulTurns: 0,
+    topicDepth: 0,
+    conceptsCovered: new Set(),
+    examplesProvided: 0,
+    clarificationsAsked: 0,
+    buildOnPrevious: 0
+  }
+
+  // 根据历史表现动态调整跳题阈值
+  const previousQuestions = Math.max(1, currentQuestion.value - 1)
+  const avgPerformance = conversationScoring.value.currentQuestionScore / Math.max(1, conversationScoring.value.conversationFlow.totalTurns)
+
+  if (avgPerformance >= 15) {
+    // 高水平候选人：降低阈值，加快进度
+    conversationScoring.value.transitionConditions.scoreThreshold = 70
+    conversationScoring.value.transitionConditions.minTurns = 2
+  } else if (avgPerformance >= 10) {
+    // 中等水平候选人：标准阈值
+    conversationScoring.value.transitionConditions.scoreThreshold = 75
+    conversationScoring.value.transitionConditions.minTurns = 2
+  } else {
+    // 较低水平候选人：提高阈值，给更多机会
+    conversationScoring.value.transitionConditions.scoreThreshold = 80
+    conversationScoring.value.transitionConditions.minTurns = 3
+  }
+
+  console.log('📊 新问题跳题条件:', {
+    分数阈值: conversationScoring.value.transitionConditions.scoreThreshold,
+    最少轮次: conversationScoring.value.transitionConditions.minTurns,
+    最多轮次: conversationScoring.value.transitionConditions.maxTurns
+  })
+}
+
+// 实时更新分析数据
+const updateRealTimeAnalysis = (analysis) => {
+  if (!analysis) return
+
+  // 更新实时分析数据
+  realTimeAnalysis.value = {
+    overallScore: analysis.overallScore || realTimeAnalysis.value.overallScore,
+    technicalCompetency: analysis.technicalCompetency || realTimeAnalysis.value.technicalCompetency,
+    communicationSkills: analysis.communicationSkills || realTimeAnalysis.value.communicationSkills,
+    contentQuality: analysis.contentQuality || realTimeAnalysis.value.contentQuality,
+    lastUpdated: new Date().toLocaleTimeString()
+  }
+
+  // 更新Spark指标
+  sparkMetrics.value.responseTime = Math.floor(Math.random() * 200) + 100 // 模拟响应时间
+  sparkMetrics.value.accuracy = Math.min(95, sparkMetrics.value.accuracy + Math.random() * 2)
+  sparkMetrics.value.processedTokens += Math.floor(Math.random() * 50) + 20
+
+  // 更新最后分析时间
+  lastAnalysisTime.value = Math.floor(Math.random() * 500) + 200
+
+  console.log('📊 实时分析数据已更新:', realTimeAnalysis.value)
+}
+
+// 智能滚动控制系统
+const scrollState = ref({
+  userScrolledUp: false,        // 用户是否主动向上滚动
+  lastScrollTop: 0,             // 上次滚动位置
+  autoScrollEnabled: true,      // 是否启用自动滚动
+  scrollThreshold: 100,         // 滚动阈值（距离底部多少像素认为用户在查看历史）
+  userInteractionTime: 0,       // 用户最后交互时间
+  showScrollToBottomHint: false // 是否显示"回到最新"提示
+})
+
+// 增强的用户滚动行为检测
+const handleUserScroll = () => {
+  const container = messagesContainer.value
+  if (!container) return
+
+  const currentScrollTop = container.scrollTop
+  const scrollHeight = container.scrollHeight
+  const clientHeight = container.clientHeight
+  const distanceFromBottom = scrollHeight - clientHeight - currentScrollTop
+  const scrollDelta = Math.abs(currentScrollTop - scrollState.value.lastScrollTop)
+
+  // 检测用户是否主动向上滚动（增加最小滚动距离阈值）
+  if (currentScrollTop < scrollState.value.lastScrollTop && scrollDelta > 10) {
+    // 用户向上滚动
+    scrollState.value.userScrolledUp = true
+    scrollState.value.userInteractionTime = Date.now()
+
+    // 如果距离底部超过阈值，显示"回到最新"提示
+    if (distanceFromBottom > scrollState.value.scrollThreshold) {
+      scrollState.value.showScrollToBottomHint = true
+    }
+  } else if (distanceFromBottom <= 30) {
+    // 用户滚动到底部附近，重新启用自动滚动
+    scrollState.value.userScrolledUp = false
+    scrollState.value.showScrollToBottomHint = false
+    scrollState.value.autoScrollEnabled = true
+  }
+
+  scrollState.value.lastScrollTop = currentScrollTop
+}
+
+// 添加键盘滚动支持
+const handleKeyboardScroll = (event) => {
+  const container = messagesContainer.value
+  if (!container) return
+
+  const scrollStep = 120 // 增加滚动步长
+
+  switch (event.key) {
+    case 'ArrowUp':
+      event.preventDefault()
+      container.scrollBy({ top: -scrollStep, behavior: 'smooth' })
+      break
+    case 'ArrowDown':
+      event.preventDefault()
+      container.scrollBy({ top: scrollStep, behavior: 'smooth' })
+      break
+    case 'PageUp':
+      event.preventDefault()
+      container.scrollBy({ top: -container.clientHeight * 0.8, behavior: 'smooth' })
+      break
+    case 'PageDown':
+      event.preventDefault()
+      container.scrollBy({ top: container.clientHeight * 0.8, behavior: 'smooth' })
+      break
+    case 'Home':
+      if (event.ctrlKey) {
+        event.preventDefault()
+        container.scrollTo({ top: 0, behavior: 'smooth' })
+      }
+      break
+    case 'End':
+      if (event.ctrlKey) {
+        event.preventDefault()
+        scrollToBottom(true, true)
+      }
+      break
+  }
+}
+
+// 增强的智能滚动到底部（支持平滑滚动和更好的用户体验）
+const scrollToBottom = (force = false, smooth = true) => {
+  nextTick(() => {
+    try {
+      const container = messagesContainer.value
+      if (!container) {
+        console.warn('⚠️ messagesContainer引用未找到')
+        return
+      }
+
+      // 如果用户主动向上滚动且不是强制滚动，则不自动滚动
+      if (scrollState.value.userScrolledUp && !force) {
+        console.log('📜 用户正在查看历史消息，跳过自动滚动')
+        return
+      }
+
+      // 检查是否需要自动滚动（用户在底部附近）
+      const scrollHeight = container.scrollHeight
+      const clientHeight = container.clientHeight
+      const currentScrollTop = container.scrollTop
+      const distanceFromBottom = scrollHeight - clientHeight - currentScrollTop
+
+      if (force || distanceFromBottom <= scrollState.value.scrollThreshold) {
+        // 使用平滑滚动或立即滚动
+        if (smooth && container.scrollTo) {
+          container.scrollTo({
+            top: scrollHeight,
+            behavior: 'smooth'
+          })
+        } else {
+          container.scrollTop = scrollHeight
+        }
+
+        scrollState.value.lastScrollTop = scrollHeight
+        scrollState.value.userScrolledUp = false
+        scrollState.value.showScrollToBottomHint = false
+        console.log('📜 智能滚动到底部完成 (平滑:', smooth, ')')
+      } else {
+        console.log('📜 用户不在底部附近，跳过自动滚动')
+      }
+    } catch (error) {
+      console.error('❌ 滚动到底部失败:', error)
+    }
+  })
+}
+
+// 强制滚动到底部（用户点击"回到最新"按钮时）
+const forceScrollToBottom = () => {
+  scrollToBottom(true)
+  ElMessage.success('已回到最新消息')
+}
+
+// 重置滚动状态（提交回答时调用）
+const resetScrollStateForNewMessage = () => {
+  scrollState.value.userScrolledUp = false
+  scrollState.value.autoScrollEnabled = true
+  scrollState.value.showScrollToBottomHint = false
+  console.log('📜 滚动状态已重置，准备跟随新消息')
+}
+
+// 定时器
+let timer = null
+let responseTimeChecker = null
+
+// 检查回答时间的定时器
+const startResponseTimeChecker = () => {
+  if (responseTimeChecker) {
+    clearInterval(responseTimeChecker)
+  }
+
+  responseTimeChecker = setInterval(() => {
+    if (interviewState.value.responseTimeStart) {
+      const elapsed = Date.now() - interviewState.value.responseTimeStart
+
+      // 30秒提醒
+      if (elapsed > 30000 && elapsed < 35000 && !interviewState.value.timeoutWarningShown) {
+        ElMessage.warning('建议在面试中及时回答，可以先说出您知道的部分')
+      }
+
+      // 45秒强提醒
+      if (elapsed > 45000 && !interviewState.value.timeoutWarningShown) {
+        ElMessage.error('回答时间较长，建议先表达您的想法，然后逐步完善')
+        interviewState.value.timeoutWarningShown = true
+      }
+    }
+  }, 5000) // 每5秒检查一次
+}
+
+// 生命周期
+onMounted(async () => {
+  // 启动计时器
+  timer = setInterval(() => {
+    elapsedTime.value++
+  }, 1000)
+
+  // 启动回答时间检查器
+  startResponseTimeChecker()
+
+  // 初始化滚动状态
+  nextTick(() => {
+    const container = messagesContainer.value
+    if (container) {
+      scrollState.value.lastScrollTop = container.scrollTop
+      console.log('📜 滚动状态已初始化')
+    }
+  })
+
+  // 初始化讯飞星火服务
+  await initializeSparkService()
+})
+
+onUnmounted(() => {
+  if (timer) {
+    clearInterval(timer)
+  }
+  if (responseTimeChecker) {
+    clearInterval(responseTimeChecker)
+  }
+})
+</script>
+
+<style scoped>
+.text-primary-interview-page {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 119, 198, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 40% 40%, rgba(120, 119, 198, 0.1) 0%, transparent 50%),
+    linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background-attachment: fixed;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.text-primary-interview-page::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background:
+    url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.05)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.03)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.04)"/><circle cx="10" cy="60" r="0.8" fill="rgba(255,255,255,0.02)"/><circle cx="90" cy="40" r="0.6" fill="rgba(255,255,255,0.03)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  pointer-events: none;
+  z-index: 0;
+}
+
+.interview-header {
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(24, 144, 255, 0.1);
+  padding: 20px 32px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  position: relative;
+  z-index: 10;
+}
+
+.interview-header::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: linear-gradient(90deg, #1890ff 0%, #40a9ff 50%, #1890ff 100%);
+  background-size: 200% 100%;
+  animation: headerGlow 3s ease-in-out infinite;
+}
+
+@keyframes headerGlow {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+.header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.logo-icon {
+  color: #1890ff;
+  font-size: 24px;
+}
+
+.header-left h1 {
+  margin: 0;
+  color: #262626;
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.interview-mode {
+  padding: 4px 12px;
+  background: #e6f7ff;
+  color: #1890ff;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+.interview-progress {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 150px;
+}
+
+.interview-timer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #262626;
+}
+
+.interview-main {
+  flex: 1;
+  padding: 24px;
+}
+
+.interview-layout {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 24px;
+  max-width: 1400px;
+  margin: 0 auto;
+  min-height: calc(100vh - 120px);
+  align-items: start;
+}
+
+.conversation-section {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 36px;
+  display: flex;
+  flex-direction: column;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  height: calc(60vh - 60px); /* 减少高度，为下方分析面板留出空间 */
+  min-height: 500px;
+  max-width: 1400px;
+  width: 100%;
+  margin: 0 auto;
+  overflow: hidden;
+  position: relative;
+  z-index: 5;
+}
+
+.conversation-container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 12px; /* 减少间距 */
+}
+
+.conversation-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border-radius: 20px;
+  background: linear-gradient(135deg, rgba(24, 144, 255, 0.02) 0%, rgba(118, 75, 162, 0.02) 100%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.conversation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: 16px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.header-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.header-info h3 {
+  margin: 0;
+  color: #262626;
+  font-size: 18px;
+}
+
+.mode-indicator {
+  padding: 2px 8px;
+  background: #f6ffed;
+  color: #52c41a;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.conversation-history {
+  flex: 1; /* 占据剩余空间 */
+  display: flex;
+  flex-direction: column;
+  min-height: 0; /* 允许flex子项收缩 */
+  overflow: hidden; /* 恢复overflow控制，防止内容溢出到其他区域 */
+  margin: 8px 0; /* 增加上下边距 */
+}
+
+.messages-container {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: 20px 0; /* 增加上下内边距 */
+  display: flex;
+  flex-direction: column;
+  gap: 20px; /* 增加消息间距 */
+  min-height: 200px; /* 减少最小高度，避免占用过多空间 */
+  max-height: calc(100vh - 400px); /* 重新设置合理的最大高度，为问题栏和输入栏留出空间 */
+  /* 自定义滚动条样式 */
+  scrollbar-width: thin;
+  scrollbar-color: #d9d9d9 transparent;
+}
+
+.message-item {
+  display: flex;
+  gap: 12px;
+}
+
+.message-item.ai {
+  flex-direction: row;
+}
+
+.message-item.user {
+  flex-direction: row-reverse;
+}
+
+.message-avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.message-item.ai .message-avatar {
+  background: var(--info-bg-wcag);
+  color: var(--info-wcag-aa);
+}
+
+.message-item.user .message-avatar {
+  background: var(--success-bg-wcag);
+  color: var(--success-wcag-aa);
+}
+
+.message-content {
+  flex: 1;
+  max-width: 80%; /* 增加消息内容最大宽度 */
+  min-width: 0; /* 允许内容收缩 */
+  word-wrap: break-word; /* 长单词换行 */
+  overflow-wrap: break-word; /* 现代浏览器支持 */
+  overflow: visible; /* 确保内容完整显示 */
+}
+
+.message-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 4px;
+}
+
+.message-sender {
+  font-weight: 500;
+  color: var(--text-primary-aaa);
+  font-size: 14px;
+}
+
+.message-time {
+  font-size: 12px;
+  color: var(--text-tertiary-aa);
+}
+
+.message-text {
+  background: var(--bg-tertiary-wcag);
+  padding: 16px 20px; /* 增加内边距 */
+  border-radius: 12px;
+  line-height: 1.6; /* 增加行高 */
+  color: var(--text-primary-aaa);
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+  white-space: pre-wrap; /* 保留换行符和空格 */
+  max-width: 100%;
+  font-size: 15px; /* 增加字体大小 */
+  min-height: 24px; /* 设置最小高度 */
+}
+
+.message-item.ai .message-text {
+  background: #e6f7ff;
+}
+
+.message-item.user .message-text {
+  background: #f6ffed;
+}
+
+.message-analysis {
+  margin-top: 8px;
+}
+
+.analysis-tags {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.score-tag, .keywords-tag {
+  padding: 2px 8px;
+  background: #fff7e6;
+  color: #fa8c16;
+  border-radius: 4px;
+  font-size: 12px;
+}
+
+.current-question-panel {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+  border-radius: 12px;
+  padding: 16px; /* 减少内边距 */
+  border: 2px solid #1890ff;
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+  margin-bottom: 12px; /* 减少下边距 */
+  flex-shrink: 0; /* 防止被压缩 */
+  max-height: 180px; /* 限制问题面板最大高度 */
+  overflow-y: auto; /* 内容过多时可滚动 */
+  z-index: 10; /* 确保问题栏在上层显示 */
+}
+
+.question-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.question-icon {
+  color: #1890ff;
+  font-size: 18px;
+}
+
+.question-title {
+  font-weight: 600;
+  color: #1890ff;
+  font-size: 16px;
+}
+
+.question-text-container {
+  background: white;
+  border-radius: 8px;
+  padding: 12px; /* 减少内边距 */
+  margin-bottom: 8px; /* 减少下边距 */
+  border: 1px solid #d9d9d9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.question-text {
+  font-size: 15px; /* 稍微减小字体 */
+  line-height: 1.5; /* 减少行高 */
+  color: #262626;
+  margin: 0;
+  font-weight: 500;
+  letter-spacing: 0.3px;
+}
+
+.question-meta {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.question-meta .el-tag {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-weight: 500;
+  padding: 4px 8px;
+}
+
+.answer-input-panel {
+  border: 1px solid #d9d9d9;
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0; /* 防止被压缩 */
+  max-height: 200px; /* 限制输入面板最大高度 */
+  z-index: 10; /* 确保输入栏在上层显示 */
+  margin-top: 12px; /* 与消息区域保持间距 */
+}
+
+.input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 16px; /* 减少内边距 */
+  background: #fafafa;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.input-label {
+  font-weight: 500;
+  color: #262626;
+}
+
+.input-tools {
+  display: flex;
+  gap: 8px;
+}
+
+.answer-textarea {
+  border: none;
+}
+
+.answer-textarea :deep(.el-textarea__inner) {
+  border: none;
+  box-shadow: none;
+  resize: none;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+/* 增强的输入区域样式 */
+.input-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid #dee2e6;
+  border-radius: 12px 12px 0 0;
+}
+
+.input-header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.input-label {
+  font-weight: 600;
+  color: #495057;
+  font-size: 16px;
+}
+
+.input-container {
+  position: relative;
+}
+
+.textarea-wrapper {
+  position: relative;
+}
+
+.corner-submit-btn {
+  position: absolute;
+  bottom: 8px;
+  right: 8px;
+  z-index: 10;
+  border-radius: 6px;
+  padding: 6px 8px;
+  min-width: 36px;
+  height: 28px;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.3);
+  transition: all 0.3s ease;
+}
+
+.corner-submit-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.4);
+}
+
+.corner-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.answer-textarea {
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+/* 智能建议面板 */
+.smart-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  background: rgba(255, 255, 255, 0.98);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(24, 144, 255, 0.2);
+  border-radius: 0 0 12px 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.suggestions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+  border-bottom: 1px solid rgba(24, 144, 255, 0.1);
+  font-weight: 500;
+  color: #1890ff;
+  font-size: 14px;
+}
+
+.suggestions-list {
+  padding: 8px 0;
+}
+
+.suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-size: 14px;
+  color: #495057;
+}
+
+.suggestion-item:hover {
+  background: rgba(24, 144, 255, 0.05);
+  color: #1890ff;
+}
+
+.input-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-top: 1px solid #dee2e6;
+  border-radius: 0 0 12px 12px;
+}
+
+.input-footer-left {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.input-hint {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.input-actions {
+  display: flex;
+  gap: 8px;
+}
+
+/* AI智能提示浮层面板样式 */
+.ai-hints-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(4px);
+}
+
+.ai-hints-floating-panel {
+  background: white;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow: hidden;
+  animation: slideInUp 0.3s ease-out;
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.hints-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 24px 16px 24px;
+  border-bottom: 1px solid #f0f0f0;
+  background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+}
+
+.hints-title {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-weight: 600;
+  font-size: 18px;
+  color: #1890ff;
+}
+
+.close-btn {
+  color: #8c8c8c;
+  transition: color 0.2s;
+}
+
+.close-btn:hover {
+  color: #1890ff;
+}
+
+.hints-content {
+  padding: 24px;
+}
+
+.hint-text-container {
+  background: #f8f9fa;
+  border-radius: 12px;
+  padding: 20px;
+  margin-bottom: 20px;
+  border-left: 4px solid #1890ff;
+}
+
+.hint-text {
+  color: #262626;
+  line-height: 1.6;
+  margin: 0;
+  font-size: 15px;
+}
+
+.hint-actions {
+  display: flex;
+  gap: 12px;
+  justify-content: flex-end;
+}
+
+/* 响应式设计 - AI提示浮层 */
+@media (max-width: 768px) {
+  .ai-hints-floating-panel {
+    width: 95%;
+    max-height: 85vh;
+  }
+
+  .hints-header {
+    padding: 16px 20px 12px 20px;
+  }
+
+  .hints-title {
+    font-size: 16px;
+  }
+
+  .hints-content {
+    padding: 20px;
+  }
+
+  .hint-text-container {
+    padding: 16px;
+  }
+
+  .hint-text {
+    font-size: 14px;
+  }
+
+  .hint-actions {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .hint-actions .el-button {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .ai-hints-floating-panel {
+    width: 98%;
+    max-height: 90vh;
+  }
+
+  .hints-header {
+    padding: 12px 16px 8px 16px;
+  }
+
+  .hints-title {
+    font-size: 15px;
+    gap: 8px;
+  }
+
+  .hints-content {
+    padding: 16px;
+  }
+
+  .hint-text-container {
+    padding: 12px;
+  }
+
+  .hint-text {
+    font-size: 13px;
+  }
+}
+
+.analysis-section {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  height: calc(100vh - 120px); /* 与对话框高度一致 */
+  overflow-y: auto; /* 允许滚动 */
+}
+
+.spark-advantages-panel,
+.spark-status-panel,
+.text-analysis-panel,
+.candidate-info-panel {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.08),
+    0 2px 8px rgba(0, 0, 0, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  position: relative;
+  transition: all 0.3s ease;
+  margin-bottom: 16px;
+}
+
+.spark-advantages-panel:hover,
+.spark-status-panel:hover,
+.text-analysis-panel:hover,
+.candidate-info-panel:hover {
+  transform: translateY(-2px);
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.12),
+    0 4px 12px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.9);
+}
+
+/* iFlytek Spark技术优势面板 */
+.spark-advantages-panel {
+  background: linear-gradient(135deg, rgba(24, 144, 255, 0.02) 0%, rgba(64, 169, 255, 0.02) 100%);
+  border: 1px solid rgba(24, 144, 255, 0.15);
+}
+
+.advantages-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 1px solid rgba(24, 144, 255, 0.1);
+}
+
+.advantages-header h3 {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 0;
+  color: #1890ff;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.tech-metrics {
+  display: grid;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.metric-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 8px;
+  border: 1px solid rgba(24, 144, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.metric-item:hover {
+  background: rgba(24, 144, 255, 0.05);
+  border-color: rgba(24, 144, 255, 0.2);
+}
+
+.metric-icon {
+  width: 32px;
+  height: 32px;
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-size: 14px;
+}
+
+.metric-info {
+  flex: 1;
+}
+
+.metric-value {
+  font-size: 18px;
+  font-weight: 700;
+  color: #1890ff;
+  line-height: 1;
+}
+
+.metric-label {
+  font-size: 12px;
+  color: #666;
+  margin-top: 2px;
+}
+
+.metric-status .status-icon {
+  font-size: 16px;
+}
+
+.metric-status .status-icon.success {
+  color: #52c41a;
+}
+
+.ai-capabilities {
+  display: grid;
+  gap: 12px;
+}
+
+.capability-item {
+  padding: 12px;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 8px;
+  border: 1px solid rgba(24, 144, 255, 0.08);
+}
+
+.capability-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.capability-header span {
+  font-weight: 500;
+  color: #333;
+  flex: 1;
+}
+
+.capability-desc {
+  font-size: 12px;
+  color: #666;
+  line-height: 1.4;
+}
+
+.processing-stats {
+  margin-top: 16px;
+  padding-top: 16px;
+  border-top: 1px solid rgba(24, 144, 255, 0.1);
+}
+
+.stat-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 6px 0;
+  font-size: 13px;
+}
+
+.stat-label {
+  color: #666;
+}
+
+.stat-value {
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.status-header,
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 12px; /* 减少底部间距 */
+}
+
+.status-header h3,
+.panel-header h4 {
+  margin: 0;
+  color: #262626;
+  font-size: 16px;
+}
+
+.spark-icon {
+  color: #1890ff;
+}
+
+.status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.status-indicator.active {
+  color: #52c41a;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #d9d9d9;
+  transition: all 0.3s;
+}
+
+.status-indicator.active .status-dot {
+  background: #52c41a;
+  box-shadow: 0 0 8px rgba(82, 196, 26, 0.5);
+}
+
+.score-overview {
+  display: flex;
+  gap: 16px;
+}
+
+.overall-score {
+  text-align: center;
+  min-width: 80px;
+}
+
+.score-number {
+  font-size: 32px;
+  font-weight: bold;
+  color: #1890ff;
+  line-height: 1;
+}
+
+.score-label {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 4px;
+}
+
+.score-breakdown {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.score-name {
+  width: 60px;
+  font-size: 12px;
+  color: #262626;
+}
+
+.score-bar {
+  flex: 1;
+  height: 6px;
+  background: #f5f5f5;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1890ff, #40a9ff);
+  border-radius: 3px;
+  transition: width 0.3s;
+}
+
+.score-value {
+  width: 30px;
+  text-align: right;
+  font-size: 12px;
+  color: #262626;
+}
+
+/* 增强的自定义滚动条样式 */
+.messages-container {
+  scroll-behavior: smooth; /* 添加平滑滚动 */
+}
+
+.messages-container::-webkit-scrollbar {
+  width: 8px; /* 增加滚动条宽度 */
+}
+
+.messages-container::-webkit-scrollbar-track {
+  background: #f5f5f5;
+  border-radius: 4px;
+  margin: 4px 0; /* 添加上下边距 */
+}
+
+.messages-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #d9d9d9 0%, #bfbfbf 100%);
+  border-radius: 4px;
+  transition: all 0.3s ease; /* 添加过渡效果 */
+}
+
+.messages-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #bfbfbf 0%, #8c8c8c 100%);
+  transform: scaleX(1.2); /* 悬停时稍微放大 */
+}
+
+.messages-container::-webkit-scrollbar-thumb:active {
+  background: linear-gradient(135deg, #8c8c8c 0%, #595959 100%);
+}
+
+/* 回到最新消息按钮 */
+.scroll-to-bottom-hint {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  animation: fadeInUp 0.3s ease-out;
+  cursor: pointer;
+}
+
+.scroll-to-bottom-hint .el-button {
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.3);
+  border: none;
+  background: linear-gradient(135deg, #1890ff 0%, #0066cc 100%);
+  color: white;
+  font-weight: 500;
+  padding: 8px 16px;
+  transition: all 0.3s ease;
+}
+
+.scroll-to-bottom-hint .el-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(24, 144, 255, 0.4);
+  background: linear-gradient(135deg, #40a9ff 0%, #1890ff 100%);
+}
+
+.scroll-to-bottom-hint .el-button .el-icon {
+  margin-right: 4px;
+  transform: rotate(90deg); /* 向下箭头 */
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 确保输入区域始终可见 */
+.answer-input-panel {
+  margin-top: auto; /* 推到底部 */
+}
+
+/* 对话区域优化 */
+.conversation-history {
+  /* 确保对话区域能够充分利用可用空间 */
+  flex-grow: 1;
+  flex-basis: 0;
+}
+
+/* 消息动画效果 */
+.message-animating {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 思考状态指示器样式 */
+.thinking-indicator {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  background: #fff7e6;
+  border: 1px solid #ffd591;
+  border-radius: 8px;
+  color: #fa8c16;
+  font-style: italic;
+  margin-bottom: 12px;
+}
+
+/* 增强的可折叠思考过程样式 */
+.thinking-process-container {
+  margin-bottom: 16px;
+  position: relative; /* 确保定位上下文 */
+  z-index: 20; /* 设置较高的z-index，确保在其他元素之上 */
+}
+
+.enhanced-thinking {
+  border-radius: 12px;
+  overflow: visible; /* 允许折叠内容完整显示 */
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.1);
+  position: relative; /* 确保定位上下文 */
+  z-index: 15; /* 设置z-index层级 */
+}
+
+.thinking-collapse {
+  border: none;
+  background: transparent;
+  position: relative; /* 确保定位上下文 */
+  z-index: 25; /* 设置最高的z-index */
+}
+
+/* 确保Element Plus折叠组件正常工作 */
+.thinking-collapse .el-collapse-item__wrap {
+  overflow: visible !important;
+  border-bottom: none;
+  position: relative !important;
+  z-index: 25 !important;
+}
+
+.thinking-collapse .el-collapse-item__content {
+  padding-bottom: 0;
+  overflow: visible !important;
+  position: relative !important;
+  z-index: 20 !important;
+}
+
+/* 确保折叠组件的箭头图标正常显示和点击 */
+.thinking-collapse .el-collapse-item__arrow {
+  position: relative !important;
+  z-index: 40 !important;
+  pointer-events: auto !important;
+}
+
+/* 确保整个折叠项可以正常点击 */
+.thinking-collapse .el-collapse-item {
+  position: relative !important;
+  z-index: 25 !important;
+}
+
+.thinking-collapse .el-collapse-item__header {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e6f7ff 100%);
+  border: 2px solid #91d5ff;
+  border-radius: 12px;
+  padding: 16px 20px;
+  font-size: 15px;
+  color: #1890ff;
+  transition: all 0.3s ease;
+  min-height: 50px; /* 减小最小高度，适应只显示标题的情况 */
+  position: relative; /* 确保定位上下文 */
+  z-index: 30; /* 设置最高的z-index，确保可点击 */
+  cursor: pointer; /* 明确指示可点击 */
+}
+
+.thinking-collapse .el-collapse-item__header:hover {
+  background: linear-gradient(135deg, #e6f7ff 0%, #bae7ff 100%);
+  border-color: #40a9ff;
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.15);
+}
+
+.thinking-summary {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  width: 100%;
+  position: relative; /* 确保定位上下文 */
+  z-index: 35; /* 设置最高的z-index */
+  pointer-events: auto; /* 确保可以接收点击事件 */
+  overflow: hidden; /* 防止内容溢出 */
+}
+
+.thinking-icon-wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+  border-radius: 50%;
+  color: white;
+  flex-shrink: 0;
+}
+
+.thinking-main-icon {
+  font-size: 18px;
+}
+
+.thinking-title-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0; /* 允许内容收缩 */
+  overflow: hidden; /* 防止内容溢出 */
+  max-width: calc(100% - 120px); /* 为状态标签和图标留出空间 */
+}
+
+.thinking-title {
+  font-weight: 600;
+  font-size: 16px;
+  color: #1890ff;
+  white-space: nowrap; /* 防止标题换行 */
+  overflow: hidden; /* 防止标题溢出 */
+  text-overflow: ellipsis; /* 如果标题过长则显示省略号 */
+  max-width: 100%; /* 确保标题不超出容器 */
+}
+
+.thinking-subtitle {
+  font-size: 13px;
+  color: #8c8c8c;
+  font-weight: normal;
+  white-space: nowrap; /* 防止副标题换行 */
+  overflow: hidden; /* 防止副标题溢出 */
+  text-overflow: ellipsis; /* 如果副标题过长则显示省略号 */
+  max-width: 100%; /* 确保副标题不超出容器 */
+  transition: all 0.3s ease; /* 添加过渡动画 */
+}
+
+.thinking-status {
+  flex-shrink: 0;
+}
+
+.thinking-content {
+  background: #f0f9ff;
+  border: 2px solid #91d5ff;
+  border-top: none;
+  border-radius: 0 0 12px 12px;
+  padding: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  color: #1890ff;
+  overflow: visible; /* 确保思考内容完整显示 */
+  max-height: none; /* 移除高度限制 */
+  position: relative; /* 确保定位上下文 */
+  z-index: 20; /* 设置z-index层级 */
+}
+
+.enhanced-content {
+  padding: 20px;
+  overflow: visible; /* 确保增强内容完整显示 */
+  max-height: none; /* 移除高度限制 */
+}
+
+.thinking-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.thinking-step {
+  background: white;
+  border-radius: 8px;
+  padding: 16px;
+  border-left: 4px solid #1890ff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+}
+
+.thinking-step:hover {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transform: translateX(2px);
+}
+
+.step-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.step-number {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  background: #1890ff;
+  color: white;
+  border-radius: 50%;
+  font-size: 12px;
+  font-weight: bold;
+  flex-shrink: 0;
+}
+
+.step-title {
+  font-weight: 600;
+  color: #1890ff;
+  font-size: 15px;
+}
+
+.step-content {
+  color: #262626;
+  line-height: 1.6;
+  white-space: pre-wrap;
+  margin-left: 36px;
+  overflow: visible; /* 确保步骤内容完整显示 */
+  word-wrap: break-word; /* 长文本自动换行 */
+  overflow-wrap: break-word; /* 现代浏览器支持 */
+}
+
+/* 打字机效果样式 */
+.typing-text {
+  position: relative;
+  line-height: 1.6;
+  white-space: pre-wrap;
+}
+
+.typing-cursor {
+  animation: blink 1s infinite;
+  color: #1890ff;
+  font-weight: bold;
+  display: inline-block;
+  width: 2px;
+  height: 1.2em;
+  background-color: #1890ff;
+  margin-left: 2px;
+  vertical-align: text-bottom;
+}
+
+@keyframes blink {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+/* 回复内容样式 */
+.final-response, .displayed-content, .default-content {
+  line-height: 1.6;
+  color: var(--iflytek-text-primary);
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+/* 过渡消息样式 */
+.message-item[data-transition="true"] .message-content {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #0ea5e9;
+  border-radius: 12px;
+  padding: 16px;
+  margin: 8px 0;
+}
+
+.message-item[data-transition="true"] .message-text {
+  color: #0369a1;
+  font-weight: 500;
+  text-align: center;
+}
+
+/* 增强消息样式 */
+.message-enhanced .message-text {
+  background: #e6f7ff;
+  border-left: 3px solid #1890ff;
+  border-radius: 8px;
+  padding: 12px 16px;
+}
+
+/* 响应式设计 - 平板设备 */
+@media (max-width: 1024px) {
+  .conversation-section {
+    padding: 24px;
+    height: calc(100vh - 120px);
+    max-width: 100%;
+  }
+
+  .messages-container {
+    max-height: calc(100vh - 350px); /* 为平板设备设置合理的最大高度 */
+    min-height: 300px; /* 减少最小高度 */
+  }
+
+  .message-content {
+    max-width: 85%;
+  }
+
+  .thinking-summary {
+    gap: 12px;
+  }
+
+  .thinking-title {
+    font-size: 15px;
+  }
+
+  .thinking-subtitle {
+    font-size: 12px;
+  }
+}
+
+/* 响应式设计 - 移动设备 */
+@media (max-width: 768px) {
+  .conversation-section {
+    padding: 16px;
+    height: calc(100vh - 100px);
+    border-radius: 8px;
+  }
+
+  .messages-container {
+    padding: 16px 0;
+    gap: 16px;
+    max-height: calc(100vh - 280px); /* 为手机设备设置合理的最大高度 */
+    min-height: 250px; /* 减少最小高度 */
+  }
+
+  .message-item {
+    gap: 8px;
+  }
+
+  .message-avatar {
+    width: 32px;
+    height: 32px;
+  }
+
+  .message-content {
+    max-width: 90%;
+  }
+
+  .message-text {
+    padding: 12px 14px;
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  .thinking-process-container {
+    margin-bottom: 12px;
+    z-index: 25 !important; /* 移动端确保更高的z-index */
+  }
+
+  .thinking-collapse .el-collapse-item__header {
+    padding: 12px 16px;
+    font-size: 14px;
+    min-height: 45px; /* 移动端进一步减小高度 */
+    z-index: 35 !important; /* 移动端确保可点击 */
+  }
+
+  .thinking-title {
+    font-size: 14px; /* 移动端减小标题字体 */
+  }
+
+  .thinking-subtitle {
+    font-size: 12px; /* 移动端减小副标题字体 */
+  }
+
+  .thinking-summary {
+    gap: 10px;
+  }
+
+  .thinking-title-content {
+    max-width: calc(100% - 100px); /* 移动端为状态标签留出更多空间 */
+  }
+
+  .thinking-icon-wrapper {
+    width: 32px;
+    height: 32px;
+  }
+
+  .thinking-main-icon {
+    font-size: 16px;
+  }
+
+  .thinking-title {
+    font-size: 14px;
+  }
+
+  .thinking-subtitle {
+    font-size: 11px;
+  }
+
+  .thinking-steps {
+    gap: 12px;
+  }
+
+  .thinking-step {
+    padding: 12px;
+  }
+
+  .step-number {
+    width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
+
+  .step-title {
+    font-size: 14px;
+  }
+
+  .step-content {
+    margin-left: 28px;
+    font-size: 13px;
+  }
+
+  .scroll-to-bottom-hint {
+    bottom: 16px;
+    right: 16px;
+  }
+
+  .scroll-to-bottom-hint .el-button {
+    padding: 6px 12px;
+    font-size: 12px;
+  }
+}
+
+/* 响应式设计 - 小屏幕移动设备 */
+@media (max-width: 480px) {
+  .conversation-section {
+    padding: 12px;
+    height: calc(100vh - 80px);
+  }
+
+  .messages-container {
+    padding: 12px 0;
+    gap: 12px;
+    max-height: calc(100vh - 220px); /* 为小屏手机设置合理的最大高度 */
+    min-height: 200px; /* 减少最小高度 */
+  }
+
+  .message-content {
+    max-width: 95%;
+  }
+
+  .message-text {
+    padding: 10px 12px;
+    font-size: 13px;
+  }
+
+  .thinking-collapse .el-collapse-item__header {
+    padding: 10px 12px;
+    font-size: 13px;
+    min-height: 40px; /* 小屏手机进一步减小高度 */
+    z-index: 40 !important; /* 小屏手机确保最高z-index */
+  }
+
+  .thinking-title {
+    font-size: 13px; /* 小屏手机进一步减小标题字体 */
+  }
+
+  .thinking-subtitle {
+    font-size: 11px; /* 小屏手机进一步减小副标题字体 */
+  }
+
+  .thinking-title-content {
+    max-width: calc(100% - 80px); /* 小屏手机为状态标签留出更多空间 */
+  }
+
+  .thinking-summary {
+    gap: 8px; /* 小屏手机减小间距 */
+  }
+
+  .thinking-icon-wrapper {
+    width: 28px;
+    height: 28px;
+  }
+
+  .thinking-main-icon {
+    font-size: 14px;
+  }
+
+  .thinking-title {
+    font-size: 13px;
+  }
+
+  .thinking-subtitle {
+    display: none; /* 在小屏幕上隐藏副标题 */
+  }
+
+  .enhanced-content {
+    padding: 16px;
+  }
+
+  .thinking-step {
+    padding: 10px;
+  }
+
+  .step-content {
+    margin-left: 24px;
+    font-size: 12px;
+  }
+}
+
+.thinking-icon {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* 思考文本特殊样式 */
+.thinking-text {
+  position: relative;
+  overflow: hidden;
+}
+
+.thinking-text::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent 0%, rgba(255,255,255,0.8) 50%, transparent 100%);
+  animation: shimmer 2s infinite;
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+/* 改进消息文本样式 */
+.message-text {
+  position: relative;
+  transition: all 0.3s ease;
+}
+
+.message-item.ai .message-text {
+  background: #e6f7ff;
+  border-left: 3px solid #1890ff;
+}
+
+.message-item.user .message-text {
+  background: #f6ffed;
+  border-left: 3px solid #52c41a;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .interview-layout {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .analysis-panels-container {
+    flex-direction: column;
+    height: auto;
+    min-height: 300px;
+  }
+
+  .conversation-section {
+    min-height: calc(100vh - 180px);
+    max-height: calc(100vh - 180px);
+    padding: 16px; /* 移动端减少内边距 */
+  }
+
+  .messages-container {
+    min-height: 250px; /* 移动端减少最小高度 */
+    max-height: calc(100vh - 300px); /* 移动端设置合理的最大高度 */
+  }
+
+  .current-question-panel {
+    padding: 12px; /* 移动端减少内边距 */
+    max-height: 160px; /* 移动端减少最大高度 */
+  }
+
+  .answer-input-panel {
+    max-height: 180px; /* 移动端减少最大高度 */
+  }
+
+  .message-content {
+    max-width: 85%;
+  }
+}
+
+
+
+.status-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: #f5f5f5;
+  border-radius: 6px;
+  font-size: 12px;
+  color: #8c8c8c;
+}
+
+.status-item.active {
+  background: #e6f7ff;
+  color: #1890ff;
+}
+
+
+
+.metric-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 12px;
+}
+
+.metric-label {
+  color: #8c8c8c;
+}
+
+.metric-value {
+  color: #262626;
+  font-weight: 500;
+}
+
+.candidate-content {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.candidate-basic {
+  text-align: center;
+}
+
+.candidate-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 4px;
+}
+
+.candidate-position {
+  font-size: 14px;
+  color: #8c8c8c;
+}
+
+.skills-label {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-bottom: 8px;
+}
+
+.skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+/* 右侧问题控制面板样式 */
+.question-control-section {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  padding: 0;
+}
+
+.current-question-panel {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border-radius: 16px;
+  padding: 20px;
+  color: white;
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.3);
+}
+
+.question-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.question-header h3 {
+  margin: 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.question-content {
+  background: rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 16px;
+  backdrop-filter: blur(10px);
+}
+
+.question-text {
+  font-size: 16px;
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+
+.question-meta {
+  display: flex;
+  gap: 12px;
+  font-size: 14px;
+  opacity: 0.9;
+}
+
+.quick-actions-panel {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+}
+
+.actions-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+  color: #262626;
+}
+
+.actions-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.actions-content {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.question-navigation,
+.interview-controls {
+  padding: 16px;
+  background: #fafafa;
+  border-radius: 12px;
+}
+
+.nav-title,
+.controls-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.question-buttons {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 8px;
+  max-width: 280px;
+  align-items: center;
+  justify-items: center;
+}
+
+.question-nav-btn {
+  width: 40px;
+  height: 32px;
+  min-width: 40px;
+  max-width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+.control-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* 右侧候选人信息面板样式 */
+.candidate-info-panel {
+  background: white;
+  border-radius: 16px;
+  padding: 20px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  border: 1px solid #f0f0f0;
+}
+
+.candidate-info-panel .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.candidate-info-panel .panel-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.candidate-info-panel .candidate-info {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.candidate-info-panel .candidate-basic {
+  text-align: center;
+  padding: 12px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.candidate-info-panel .candidate-name {
+  font-size: 18px;
+  font-weight: 600;
+  color: #262626;
+  margin-bottom: 8px;
+}
+
+.candidate-info-panel .candidate-stats {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-top: 8px;
+}
+
+.candidate-info-panel .candidate-skills .skills-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: center;
+}
+
+/* 底部分析面板样式 - 重新设计 */
+.bottom-analysis-section {
+  margin-top: 8px;
+  padding: 16px;
+  background: #f8f9fa;
+  border-top: 1px solid #e9ecef;
+  width: 100%;
+  overflow-x: auto;
+}
+
+/* 全宽分析容器 */
+.full-width-analysis-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  width: 100%;
+}
+
+/* 全宽面板样式 */
+.full-width-panel {
+  width: 100%;
+}
+
+.full-width-panel .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+  padding-bottom: 16px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.full-width-panel .header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.full-width-panel .header-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* 增强的评分布局 */
+.enhanced-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 32px;
+}
+
+.score-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+/* 右侧面板样式 */
+.right-side-panel {
+  margin-top: 16px;
+  background: white;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+}
+
+.right-side-panel:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+}
+
+.right-side-panel .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid #f0f0f0;
+}
+
+.right-side-panel .panel-header h4 {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.right-side-panel .spark-icon {
+  color: #1890ff;
+  font-size: 16px;
+}
+
+.right-side-panel .processing-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+
+.right-side-panel .stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 6px;
+  text-align: center;
+}
+
+.right-side-panel .stat-label {
+  font-size: 11px;
+  color: #8c8c8c;
+  margin-bottom: 4px;
+}
+
+.right-side-panel .stat-value {
+  font-size: 14px;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.analysis-panels-container {
+  display: flex;
+  flex-direction: row;
+  gap: 16px;
+  max-width: 1400px;
+  margin: 0 auto;
+  align-items: stretch;
+  width: 100%;
+  height: calc(40vh - 60px); /* 占用剩余空间 */
+  min-height: 200px;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 20px;
+  padding: 20px;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.12),
+    0 2px 8px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.analysis-panel {
+  background: white;
+  border-radius: 12px;
+  padding: 16px; /* 减少内边距 */
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e9ecef;
+  transition: all 0.3s ease;
+  min-height: 160px; /* 减少最小高度 */
+  flex: 1; /* 让面板自适应高度 */
+}
+
+.analysis-panel:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.12);
+}
+
+/* 左侧实时分析状态面板 - 较窄 */
+.status-panel {
+  flex: 0 0 280px;
+  min-width: 280px;
+}
+
+/* 右侧文本分析结果面板 - 较宽 */
+.results-panel {
+  flex: 1;
+  min-width: 350px;
+}
+
+.analysis-panel .panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px; /* 减少底部间距 */
+  padding-bottom: 12px; /* 减少内边距 */
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.analysis-panel .panel-header h4 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+  color: #262626;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.analysis-panel .panel-header .el-icon {
+  color: #1890ff;
+  font-size: 18px;
+}
+
+.status-panel .status-indicator {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+}
+
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #52c41a;
+  animation: pulse 2s infinite;
+}
+
+.processing-stats {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.stat-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 8px;
+  background: #f8f9fa;
+  border-radius: 8px;
+}
+
+.stat-label {
+  font-size: 12px;
+  color: #8c8c8c;
+  margin-bottom: 4px;
+}
+
+.stat-value {
+  font-size: 16px;
+  font-weight: 600;
+  color: #1890ff;
+}
+
+.results-panel .score-breakdown {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.score-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.score-name {
+  font-size: 12px;
+  color: #8c8c8c;
+  min-width: 60px;
+}
+
+.score-bar {
+  flex: 1;
+  height: 6px;
+  background: #f0f0f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.score-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #1890ff, #52c41a);
+  transition: width 0.3s ease;
+}
+
+.score-value {
+  font-size: 12px;
+  font-weight: 600;
+  color: #262626;
+  min-width: 30px;
+  text-align: right;
+}
+
+
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}
+
+/* 响应式设计 - 新布局适配 */
+@media (max-width: 1200px) {
+  .enhanced-layout {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .question-control-section {
+    width: 100%;
+    padding: 0 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  .full-width-analysis-container {
+    padding: 0 8px;
+  }
+
+  .full-width-panel {
+    padding: 12px;
+  }
+
+  .full-width-panel .panel-header {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+  }
+
+  .right-side-panel .processing-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .right-side-panel .stat-item {
+    padding: 12px 8px;
+  }
+
+  .enhanced-layout {
+    grid-template-columns: 1fr;
+    gap: 12px;
+  }
+
+  .score-column {
+    gap: 12px;
+  }
+}
+</style>

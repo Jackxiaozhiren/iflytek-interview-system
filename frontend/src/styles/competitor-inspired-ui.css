@@ -1,0 +1,337 @@
+/* 🎯 基于竞品分析的现代UI组件样式 */
+
+/* === 借鉴面试猫的现代按钮设计 === */
+.btn-offermore-style {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  border: none;
+  border-radius: 12px;
+  color: white;
+  font-weight: 600;
+  padding: 16px 32px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+}
+
+.btn-offermore-style:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+}
+
+.btn-offermore-style:active {
+  transform: translateY(0);
+}
+
+.btn-offermore-secondary {
+  background: transparent;
+  border: 2px solid #667eea;
+  color: #667eea;
+  border-radius: 12px;
+  font-weight: 600;
+  padding: 14px 30px;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.btn-offermore-secondary:hover {
+  background: #667eea;
+  color: white;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+/* === 借鉴海纳AI的数据展示卡片 === */
+.stats-card-hina-style {
+  background: white;
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid rgba(24, 144, 255, 0.1);
+}
+
+.stats-card-hina-style:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.12);
+  border-color: rgba(24, 144, 255, 0.3);
+}
+
+.stats-number-hina {
+  font-size: 48px;
+  font-weight: 700;
+  color: #1890ff;
+  margin-bottom: 8px;
+  background: linear-gradient(135deg, #1890ff, #667eea);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stats-label-hina {
+  font-size: 16px;
+  color: #666;
+  font-weight: 500;
+}
+
+/* === 借鉴用友大易的企业级功能卡片 === */
+.feature-card-dayee-style {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  border: 1px solid #f0f0f0;
+  cursor: pointer;
+  position: relative;
+  overflow: hidden;
+}
+
+.feature-card-dayee-style::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: linear-gradient(180deg, #1890ff, #667eea);
+  transform: scaleY(0);
+  transition: transform 0.3s ease;
+}
+
+.feature-card-dayee-style:hover::before {
+  transform: scaleY(1);
+}
+
+.feature-card-dayee-style:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+  border-color: rgba(24, 144, 255, 0.2);
+}
+
+.feature-icon-dayee {
+  width: 64px;
+  height: 64px;
+  background: linear-gradient(135deg, #1890ff, #667eea);
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  color: white;
+  font-size: 24px;
+}
+
+.feature-title-dayee {
+  font-size: 20px;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+}
+
+.feature-description-dayee {
+  font-size: 14px;
+  color: #666;
+  line-height: 1.6;
+}
+
+/* === 现代化导航栏样式 === */
+.navbar-modern {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+  padding: 16px 0;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  transition: all 0.3s ease;
+}
+
+.navbar-modern.scrolled {
+  background: rgba(255, 255, 255, 0.98);
+  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.1);
+}
+
+.nav-link-modern {
+  color: #333;
+  text-decoration: none;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  position: relative;
+}
+
+.nav-link-modern:hover {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.1);
+}
+
+.nav-link-modern.active {
+  color: #1890ff;
+  background: rgba(24, 144, 255, 0.15);
+}
+
+/* === 现代化英雄区域样式 === */
+.hero-section-modern {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 120px 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section-modern::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="50" cy="50" r="1" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+  opacity: 0.3;
+}
+
+.hero-title-modern {
+  font-size: 56px;
+  font-weight: 700;
+  margin-bottom: 24px;
+  line-height: 1.2;
+}
+
+.hero-subtitle-modern {
+  font-size: 24px;
+  font-weight: 400;
+  margin-bottom: 16px;
+  opacity: 0.9;
+}
+
+.hero-description-modern {
+  font-size: 18px;
+  line-height: 1.6;
+  margin-bottom: 40px;
+  opacity: 0.8;
+  max-width: 600px;
+}
+
+/* === 现代化表单样式 === */
+.form-modern {
+  background: white;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 8px 40px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(0, 0, 0, 0.05);
+}
+
+.form-group-modern {
+  margin-bottom: 24px;
+}
+
+.form-label-modern {
+  display: block;
+  font-weight: 600;
+  color: #333;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+.form-input-modern {
+  width: 100%;
+  padding: 16px;
+  border: 2px solid #e8e8e8;
+  border-radius: 12px;
+  font-size: 16px;
+  transition: all 0.3s ease;
+  background: #fafafa;
+}
+
+.form-input-modern:focus {
+  outline: none;
+  border-color: #1890ff;
+  background: white;
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+/* === 现代化加载状态 === */
+.loading-modern {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  color: #666;
+  font-size: 14px;
+}
+
+.loading-spinner-modern {
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e8e8e8;
+  border-top: 2px solid #1890ff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+/* === 现代化标签样式 === */
+.tag-modern {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 12px;
+  background: rgba(24, 144, 255, 0.1);
+  color: #1890ff;
+  border-radius: 20px;
+  font-size: 12px;
+  font-weight: 500;
+  border: 1px solid rgba(24, 144, 255, 0.2);
+}
+
+.tag-modern.success {
+  background: rgba(82, 196, 26, 0.1);
+  color: #52c41a;
+  border-color: rgba(82, 196, 26, 0.2);
+}
+
+.tag-modern.warning {
+  background: rgba(250, 173, 20, 0.1);
+  color: #faad14;
+  border-color: rgba(250, 173, 20, 0.2);
+}
+
+.tag-modern.error {
+  background: rgba(255, 77, 79, 0.1);
+  color: #ff4d4f;
+  border-color: rgba(255, 77, 79, 0.2);
+}
+
+/* === 响应式设计 === */
+@media (max-width: 768px) {
+  .hero-title-modern {
+    font-size: 36px;
+  }
+  
+  .hero-subtitle-modern {
+    font-size: 20px;
+  }
+  
+  .hero-description-modern {
+    font-size: 16px;
+  }
+  
+  .stats-card-hina-style {
+    padding: 24px 16px;
+  }
+  
+  .stats-number-hina {
+    font-size: 36px;
+  }
+  
+  .feature-card-dayee-style {
+    padding: 20px;
+  }
+  
+  .form-modern {
+    padding: 24px;
+  }
+}

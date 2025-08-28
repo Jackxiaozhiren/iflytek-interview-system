@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>企业管理界面诊断脚本</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .diagnostic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .diagnostic-title {
+            color: #1890ff;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .diagnostic-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .diagnostic-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 14px;
+        }
+        
+        .diagnostic-button:hover {
+            background: #0066cc;
+        }
+        
+        .code-block {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            overflow-x: auto;
+            white-space: pre-wrap;
+        }
+        
+        .highlight {
+            background: #fff2e8;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <h1 class="diagnostic-title">🔍 企业管理界面全面诊断工具</h1>
+        
+        <div class="diagnostic-section">
+            <h3>🚀 快速访问</h3>
+            <button class="diagnostic-button" onclick="window.open('http://localhost:5173/enterprise', '_blank')">
+                打开企业管理界面
+            </button>
+        </div>
+        
+        <div class="diagnostic-section">
+            <h3>🔍 全面诊断脚本</h3>
+            <p>请在企业管理界面的控制台中运行以下脚本：</p>
+            
+            <div class="code-block">
+// 全面诊断企业管理界面
+function fullDiagnostic() {
+    console.log('🔍 开始全面诊断企业管理界面...');
+    console.log('=====================================');
+    
+    // 1. 检查页面基本信息
+    console.log('📄 页面基本信息:');
+    console.log('- URL:', window.location.href);
+    console.log('- 标题:', document.title);
+    console.log('- 页面加载状态:', document.readyState);
+    
+    // 2. 查找所有可能的洞察相关元素
+    console.log('\n🔍 查找洞察相关元素:');
+    const insightSelectors = [
+        '.insights-section',
+        '.insight-section', 
+        '[class*="insight"]',
+        '[class*="洞察"]',
+        '[class*="AI"]'
+    ];
+    
+    insightSelectors.forEach(selector => {
+        const elements = document.querySelectorAll(selector);
+        console.log(`- ${selector}: 找到 ${elements.length} 个元素`);
+        if (elements.length > 0) {
+            elements.forEach((el, index) => {
+                console.log(`  元素 ${index + 1}:`, el.className, el.textContent?.substring(0, 50) + '...');
+            });
+        }
+    });
+    
+    // 3. 查找包含"AI智能洞察"文本的元素
+    console.log('\n📝 查找包含"AI智能洞察"文本的元素:');
+    const allElements = document.querySelectorAll('*');
+    const aiInsightElements = [];
+    allElements.forEach(el => {
+        if (el.textContent && el.textContent.includes('AI智能洞察')) {
+            aiInsightElements.push(el);
+        }
+    });
+    console.log(`- 找到 ${aiInsightElements.length} 个包含"AI智能洞察"的元素`);
+    aiInsightElements.forEach((el, index) => {
+        console.log(`  元素 ${index + 1}:`, {
+            tagName: el.tagName,
+            className: el.className,
+            id: el.id,
+            textContent: el.textContent?.substring(0, 100) + '...'
+        });
+    });
+    
+    // 4. 检查所有模块section
+    console.log('\n📦 检查所有模块section:');
+    const moduleSections = document.querySelectorAll('.module-section');
+    console.log(`- 找到 ${moduleSections.length} 个模块section`);
+    moduleSections.forEach((section, index) => {
+        const title = section.querySelector('h3')?.textContent || '未知标题';
+        const styles = window.getComputedStyle(section);
+        console.log(`  模块 ${index + 1}: "${title}"`, {
+            className: section.className,
+            marginBottom: styles.marginBottom,
+            padding: styles.padding
+        });
+    });
+    
+    // 5. 检查Vue组件是否正确挂载
+    console.log('\n⚛️ 检查Vue组件状态:');
+    const app = document.querySelector('#app');
+    if (app) {
+        console.log('- Vue应用容器存在');
+        console.log('- 子元素数量:', app.children.length);
+        console.log('- 主要内容区域:', app.querySelector('.ai-main') ? '存在' : '不存在');
+        console.log('- 企业管理界面:', app.querySelector('.enterprise-dashboard') ? '存在' : '不存在');
+    } else {
+        console.log('❌ Vue应用容器不存在');
+    }
+    
+    // 6. 检查CSS样式加载
+    console.log('\n🎨 检查CSS样式加载:');
+    const stylesheets = document.querySelectorAll('link[rel="stylesheet"], style');
+    console.log(`- 样式表数量: ${stylesheets.length}`);
+    
+    // 检查关键CSS变量
+    const rootStyles = getComputedStyle(document.documentElement);
+    const iflytekPrimary = rootStyles.getPropertyValue('--iflytek-primary');
+    console.log('- iFlytek主色调:', iflytekPrimary || '未定义');
+    
+    // 7. 检查JavaScript错误
+    console.log('\n🐛 JavaScript错误检查:');
+    console.log('- 控制台错误请查看上方红色信息');
+    
+    // 8. 生成修复建议
+    console.log('\n💡 修复建议:');
+    if (aiInsightElements.length === 0) {
+        console.log('❌ 未找到"AI智能洞察"模块，可能原因:');
+        console.log('  1. 组件未正确渲染');
+        console.log('  2. 文本内容不匹配');
+        console.log('  3. 组件加载失败');
+    } else {
+        console.log('✅ 找到"AI智能洞察"相关元素');
+        console.log('  请检查这些元素的CSS类名和样式');
+    }
+    
+    console.log('\n=====================================');
+    console.log('🔍 诊断完成！请查看上方详细信息。');
+    
+    return {
+        pageInfo: {
+            url: window.location.href,
+            title: document.title,
+            readyState: document.readyState
+        },
+        aiInsightElements: aiInsightElements.length,
+        moduleSections: moduleSections.length,
+        vueApp: !!app,
+        enterpriseDashboard: !!app?.querySelector('.enterprise-dashboard')
+    };
+}
+
+// 运行诊断
+fullDiagnostic();
+            </div>
+            
+            <button class="diagnostic-button" onclick="copyDiagnosticScript()">
+                复制诊断脚本
+            </button>
+        </div>
+        
+        <div class="diagnostic-section">
+            <h3>🛠️ 快速修复脚本</h3>
+            <p>如果诊断发现问题，可以尝试运行以下修复脚本：</p>
+            
+            <div class="code-block">
+// 快速修复脚本
+function quickFix() {
+    console.log('🛠️ 开始快速修复...');
+    
+    // 强制刷新页面
+    console.log('1. 准备强制刷新页面...');
+    setTimeout(() => {
+        window.location.reload(true);
+    }, 3000);
+    
+    console.log('⏰ 3秒后将强制刷新页面...');
+}
+
+// 运行快速修复
+// quickFix();
+            </div>
+            
+            <button class="diagnostic-button" onclick="copyQuickFixScript()">
+                复制快速修复脚本
+            </button>
+        </div>
+        
+        <div class="diagnostic-section">
+            <h3>📋 手动检查清单</h3>
+            <div style="background: #e6f7ff; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <h4>请在企业管理界面中手动检查：</h4>
+                <ul>
+                    <li>□ 页面是否完全加载（没有白屏或加载中状态）</li>
+                    <li>□ 是否能看到"企业招聘中心"标题</li>
+                    <li>□ 是否能看到"招聘数据概览"部分</li>
+                    <li>□ 页面底部是否有"AI智能洞察"相关内容</li>
+                    <li>□ 浏览器控制台是否有红色错误信息</li>
+                    <li>□ 网络面板是否有失败的请求</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #fff2f0; border-radius: 8px;">
+            <h3 style="color: #ff4d4f; margin-bottom: 10px;">⚠️ 重要提示</h3>
+            <p style="color: #64748b; margin: 0;">
+                请先运行诊断脚本，然后将完整的控制台输出发送给我。<br>
+                这将帮助我准确定位问题并提供针对性的解决方案。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyDiagnosticScript() {
+            const scriptText = document.querySelectorAll('.code-block')[0].textContent;
+            navigator.clipboard.writeText(scriptText).then(function() {
+                alert('诊断脚本已复制到剪贴板！请在企业管理界面的控制台中粘贴运行。');
+            });
+        }
+        
+        function copyQuickFixScript() {
+            const scriptText = document.querySelectorAll('.code-block')[1].textContent;
+            navigator.clipboard.writeText(scriptText).then(function() {
+                alert('快速修复脚本已复制到剪贴板！');
+            });
+        }
+    </script>
+</body>
+</html>

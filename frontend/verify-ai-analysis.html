@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI分析功能验证</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+        .test-section {
+            background: white;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .test-title {
+            color: #1890ff;
+            border-bottom: 2px solid #1890ff;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .result-box {
+            background: #f8fafc;
+            border: 1px solid #e5e7eb;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .btn {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .btn:hover {
+            background: #40a9ff;
+        }
+        .success { color: #52c41a; }
+        .error { color: #ff4d4f; }
+        .info { color: #1890ff; }
+    </style>
+</head>
+<body>
+    <h1>iFlytek Spark AI分析功能验证</h1>
+    
+    <div class="test-section">
+        <h2 class="test-title">四个分析板块差异化测试</h2>
+        <button class="btn" onclick="testPositionTrends()">职位趋势分析</button>
+        <button class="btn" onclick="testRecruitmentOptimization()">招聘效率优化</button>
+        <button class="btn" onclick="testCandidateMatching()">候选人匹配</button>
+        <button class="btn" onclick="testMarketInsights()">市场洞察</button>
+        <button class="btn" onclick="testAllAnalysis()">测试全部</button>
+        <div id="testResults"></div>
+    </div>
+
+    <script type="module">
+        // 模拟AI分析服务
+        class MockAIAnalysisService {
+            async generateDataDrivenInsights(request) {
+                const type = request.type || 'general'
+                
+                // 模拟网络延迟
+                await new Promise(resolve => setTimeout(resolve, 500))
+                
+                switch (type) {
+                    case 'position_trends':
+                        return this.generatePositionTrendsInsights()
+                    case 'recruitment_optimization':
+                        return this.generateRecruitmentOptimizationInsights()
+                    case 'candidate_matching':
+                        return this.generateCandidateMatchingInsights()
+                    case 'market_insights':
+                        return this.generateMarketInsights()
+                    default:
+                        return this.generateGeneralInsights()
+                }
+            }
+            
+            generatePositionTrendsInsights() {
+                return {
+                    summary: '2024年Q4职位趋势深度分析报告',
+                    insights: [
+                        'AI工程师职位需求增长45%，成为最热门技术岗位',
+                        '大数据分析师薪资水平较去年同期上涨18%',
+                        '物联网开发岗位虽然数量较少，但薪资增幅达到22%'
+                    ],
+                    predictions: {
+                        successRate: 0.82,
+                        growthRate: 0.45,
+                        demandIndex: 95,
+                        salaryGrowth: 0.28
+                    },
+                    recommendations: [
+                        { id: 1, text: '重点关注AI领域人才储备，建议提前6个月开始布局' },
+                        { id: 2, text: '调整薪资策略，保持在市场75分位以上的竞争力' }
+                    ],
+                    marketAnalysis: {
+                        hotSkills: ['机器学习', 'Kubernetes', '微服务', 'React/Vue', 'Python'],
+                        salaryBenchmarks: {
+                            'AI工程师': '30-80万',
+                            '大数据工程师': '25-60万',
+                            '全栈工程师': '20-45万'
+                        }
+                    }
+                }
+            }
+            
+            generateRecruitmentOptimizationInsights() {
+                return {
+                    summary: '招聘效率深度优化分析报告 - 基于iFlytek Spark AI智能分析',
+                    insights: [
+                        '当前平均招聘周期为18天，比行业平均水平快15%',
+                        '简历筛选环节耗时最长(平均5.2天)，引入AI预筛选可节省60%时间'
+                    ],
+                    predictions: {
+                        efficiencyScore: 85,
+                        timeReduction: 0.35,
+                        costSaving: 0.42,
+                        throughputIncrease: 0.48
+                    },
+                    recommendations: [
+                        { id: 1, text: '部署iFlytek Spark AI简历筛选系统，预计可节省60%初筛时间' },
+                        { id: 2, text: '实施智能面试排期系统，基于面试官专长自动匹配' }
+                    ],
+                    processOptimization: {
+                        currentBottlenecks: ['简历筛选', '面试排期', '背景调查'],
+                        quickWins: ['AI简历筛选', '自动化排期', '在线背调'],
+                        costAnalysis: {
+                            currentCost: '每个岗位平均招聘成本15,000元',
+                            optimizedCost: '预计优化后降至8,500元',
+                            savings: '年度预计节省成本120万元'
+                        }
+                    }
+                }
+            }
+            
+            generateCandidateMatchingInsights() {
+                return {
+                    summary: 'iFlytek Spark AI驱动的候选人智能匹配深度分析报告',
+                    insights: [
+                        '技能匹配度平均为85%，其中AI岗位匹配度最高(92%)',
+                        '文化适应性评估准确率达到88%，基于语义分析提升15%'
+                    ],
+                    predictions: {
+                        matchAccuracy: 0.85,
+                        retentionRate: 0.91,
+                        skillGrowthPotential: 0.82,
+                        teamIntegrationScore: 0.89
+                    },
+                    recommendations: [
+                        { id: 1, text: '建立基于iFlytek Spark的多维度人才画像模型' },
+                        { id: 2, text: '加强软技能评估体系，引入情商测试和团队协作模拟' }
+                    ],
+                    matchingStrategies: [
+                        'iFlytek Spark语义理解的技能图谱智能匹配',
+                        '基于大数据的性格特质相似度分析',
+                        'AI驱动的职业发展路径规划和预测'
+                    ]
+                }
+            }
+            
+            generateMarketInsights() {
+                return {
+                    summary: '2024年技术人才市场深度洞察报告 - iFlytek Spark AI市场分析',
+                    insights: [
+                        '技术人才市场整体供不应求，缺口达到185万人',
+                        '一线城市薪资水平领先全国35%，但人才向新一线城市流动'
+                    ],
+                    predictions: {
+                        marketGrowth: 0.28,
+                        salaryInflation: 0.18,
+                        talentShortage: 0.42,
+                        remoteWorkAdoption: 0.78
+                    },
+                    recommendations: [
+                        { id: 1, text: '重点布局新一线城市人才市场，成本效益比一线城市高30%' },
+                        { id: 2, text: '建立远程工作友好的制度和文化，吸引全国优秀人才' }
+                    ],
+                    industryInsights: {
+                        hotSectors: ['人工智能', '新能源', '生物医药', '半导体', '新材料'],
+                        salaryTrends: {
+                            'AI工程师': '+28%',
+                            '大数据工程师': '+18%',
+                            '云计算工程师': '+22%'
+                        }
+                    }
+                }
+            }
+        }
+        
+        const mockService = new MockAIAnalysisService()
+        
+        // 测试函数
+        window.testPositionTrends = async () => {
+            await runTest('position_trends', '职位趋势分析')
+        }
+        
+        window.testRecruitmentOptimization = async () => {
+            await runTest('recruitment_optimization', '招聘效率优化')
+        }
+        
+        window.testCandidateMatching = async () => {
+            await runTest('candidate_matching', '候选人匹配')
+        }
+        
+        window.testMarketInsights = async () => {
+            await runTest('market_insights', '市场洞察')
+        }
+        
+        window.testAllAnalysis = async () => {
+            const types = [
+                { type: 'position_trends', name: '职位趋势分析' },
+                { type: 'recruitment_optimization', name: '招聘效率优化' },
+                { type: 'candidate_matching', name: '候选人匹配' },
+                { type: 'market_insights', name: '市场洞察' }
+            ]
+            
+            for (const { type, name } of types) {
+                await runTest(type, name)
+                await new Promise(resolve => setTimeout(resolve, 200))
+            }
+        }
+        
+        async function runTest(analysisType, displayName) {
+            const resultsDiv = document.getElementById('testResults')
+            
+            try {
+                resultsDiv.innerHTML += `<div class="info">🧪 开始测试: ${displayName}</div>`
+                
+                const request = {
+                    type: analysisType,
+                    dataScope: 'position_management',
+                    currentData: {
+                        positions: [],
+                        stats: {},
+                        filters: {}
+                    }
+                }
+                
+                const result = await mockService.generateDataDrivenInsights(request)
+                
+                resultsDiv.innerHTML += `<div class="success">✅ ${displayName} 测试成功</div>`
+                resultsDiv.innerHTML += `<div class="result-box">${JSON.stringify(result, null, 2)}</div>`
+                
+                // 验证差异化内容
+                const uniqueFields = getUniqueFields(analysisType, result)
+                if (uniqueFields.length > 0) {
+                    resultsDiv.innerHTML += `<div class="info">🎯 差异化字段: ${uniqueFields.join(', ')}</div>`
+                } else {
+                    resultsDiv.innerHTML += `<div class="error">⚠️ 未检测到差异化字段</div>`
+                }
+                
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="error">❌ ${displayName} 测试失败: ${error.message}</div>`
+            }
+            
+            resultsDiv.innerHTML += '<hr>'
+        }
+        
+        function getUniqueFields(analysisType, result) {
+            const uniqueFields = []
+            
+            if (analysisType === 'position_trends' && result.marketAnalysis) {
+                uniqueFields.push('marketAnalysis')
+            }
+            if (analysisType === 'recruitment_optimization' && result.processOptimization) {
+                uniqueFields.push('processOptimization')
+            }
+            if (analysisType === 'candidate_matching' && result.matchingStrategies) {
+                uniqueFields.push('matchingStrategies')
+            }
+            if (analysisType === 'market_insights' && result.industryInsights) {
+                uniqueFields.push('industryInsights')
+            }
+            
+            return uniqueFields
+        }
+    </script>
+</body>
+</html>

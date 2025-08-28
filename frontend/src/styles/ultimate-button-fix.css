@@ -1,0 +1,302 @@
+/**
+ * iFlytek 星火大模型智能面试系统 - 终极按钮对齐修复
+ * Ultimate Button Alignment Fix for iFlytek Spark Interview System
+ *
+ * 版本: 5.0
+ * 更新: 2025-07-20
+ * 优先级: 最终解决方案 (!important)
+ *
+ * 专门解决主页快速开始按钮的对齐问题
+ * 使用最高优先级的CSS规则强制覆盖所有可能的样式冲突
+ */
+
+/* ===== 终极按钮容器修复 ===== */
+
+/* 快速开始按钮容器 - 最高优先级 */
+.quick-start-actions {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+  width: 100% !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== 终极按钮修复 - 使用最具体的选择器 ===== */
+
+/* 所有可能的按钮选择器组合 */
+.quick-start-actions .el-button,
+.quick-start-actions .el-button.start-btn,
+.quick-start-actions .el-button.demo-btn,
+.quick-start-actions .el-button.report-btn,
+.quick-start-actions .el-button.iflytek-btn-primary,
+.quick-start-actions .el-button.iflytek-btn-secondary,
+.quick-start-actions .el-button[class*="start-btn"],
+.quick-start-actions .el-button[class*="demo-btn"],
+.quick-start-actions .el-button[class*="report-btn"],
+.quick-start-actions .el-button[class*="iflytek-btn"],
+.el-button.start-btn,
+.el-button.demo-btn,
+.el-button.report-btn,
+.el-button.iflytek-btn-primary,
+.el-button.iflytek-btn-secondary {
+  /* 强制重置所有可能影响布局的属性 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  
+  /* 文本和对齐 */
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+  
+  /* 盒模型重置 */
+  box-sizing: border-box !important;
+  padding: 16px 24px !important;
+  margin: 0 !important;
+  border-collapse: separate !important;
+  
+  /* 位置和变换重置 */
+  position: relative !important;
+  transform: none !important;
+  float: none !important;
+  clear: none !important;
+  
+  /* 尺寸控制 */
+  min-height: 48px !important;
+  height: auto !important;
+  width: auto !important;
+  
+  /* 字体设置 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  
+  /* 其他重置 */
+  overflow: visible !important;
+  text-decoration: none !important;
+  outline: none !important;
+  cursor: pointer !important;
+}
+
+/* ===== 终极图标修复 - 最具体的选择器 ===== */
+
+/* 所有可能的图标选择器组合 */
+.quick-start-actions .el-button .el-icon,
+.quick-start-actions .el-button .btn-icon,
+.quick-start-actions .el-button.start-btn .el-icon,
+.quick-start-actions .el-button.start-btn .btn-icon,
+.quick-start-actions .el-button.demo-btn .el-icon,
+.quick-start-actions .el-button.demo-btn .btn-icon,
+.quick-start-actions .el-button.report-btn .el-icon,
+.quick-start-actions .el-button.report-btn .btn-icon,
+.quick-start-actions .el-button.iflytek-btn-primary .el-icon,
+.quick-start-actions .el-button.iflytek-btn-primary .btn-icon,
+.quick-start-actions .el-button.iflytek-btn-secondary .el-icon,
+.quick-start-actions .el-button.iflytek-btn-secondary .btn-icon,
+.quick-start-actions .el-button[class*="start-btn"] .el-icon,
+.quick-start-actions .el-button[class*="start-btn"] .btn-icon,
+.quick-start-actions .el-button[class*="demo-btn"] .el-icon,
+.quick-start-actions .el-button[class*="demo-btn"] .btn-icon,
+.quick-start-actions .el-button[class*="report-btn"] .el-icon,
+.quick-start-actions .el-button[class*="report-btn"] .btn-icon,
+.quick-start-actions .el-button[class*="iflytek-btn"] .el-icon,
+.quick-start-actions .el-button[class*="iflytek-btn"] .btn-icon,
+.el-button.start-btn .el-icon,
+.el-button.start-btn .btn-icon,
+.el-button.demo-btn .el-icon,
+.el-button.demo-btn .btn-icon,
+.el-button.report-btn .el-icon,
+.el-button.report-btn .btn-icon,
+.el-button.iflytek-btn-primary .el-icon,
+.el-button.iflytek-btn-primary .btn-icon,
+.el-button.iflytek-btn-secondary .el-icon,
+.el-button.iflytek-btn-secondary .btn-icon {
+  /* 强制重置所有可能影响图标对齐的属性 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  
+  /* 尺寸强制设置 */
+  width: 16px !important;
+  height: 16px !important;
+  min-width: 16px !important;
+  min-height: 16px !important;
+  max-width: 16px !important;
+  max-height: 16px !important;
+  font-size: 16px !important;
+  
+  /* 间距强制设置 */
+  margin: 0 8px 0 0 !important;
+  padding: 0 !important;
+  
+  /* 位置和对齐强制设置 */
+  position: relative !important;
+  top: -0.05em !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  vertical-align: middle !important;
+  
+  /* 变换和浮动重置 */
+  transform: none !important;
+  float: none !important;
+  clear: none !important;
+  
+  /* 边框和背景重置 */
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  /* 文本和字体重置 */
+  line-height: 1 !important;
+  text-align: center !important;
+  text-decoration: none !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  
+  /* 其他重置 */
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: auto !important;
+}
+
+/* ===== 终极文本修复 ===== */
+
+/* 所有可能的文本选择器组合 */
+.quick-start-actions .el-button span,
+.quick-start-actions .el-button.start-btn span,
+.quick-start-actions .el-button.demo-btn span,
+.quick-start-actions .el-button.report-btn span,
+.quick-start-actions .el-button.iflytek-btn-primary span,
+.quick-start-actions .el-button.iflytek-btn-secondary span,
+.quick-start-actions .el-button[class*="start-btn"] span,
+.quick-start-actions .el-button[class*="demo-btn"] span,
+.quick-start-actions .el-button[class*="report-btn"] span,
+.quick-start-actions .el-button[class*="iflytek-btn"] span,
+.el-button.start-btn span,
+.el-button.demo-btn span,
+.el-button.report-btn span,
+.el-button.iflytek-btn-primary span,
+.el-button.iflytek-btn-secondary span {
+  /* 强制文本对齐 */
+  display: inline-block !important;
+  vertical-align: middle !important;
+  text-align: center !important;
+  line-height: 1.2 !important;
+  
+  /* 中文字体微调 */
+  position: relative !important;
+  top: 0.02em !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  
+  /* 字体强制设置 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+  font-style: normal !important;
+  
+  /* 间距重置 */
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  /* 边框和背景重置 */
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  box-shadow: none !important;
+  
+  /* 变换重置 */
+  transform: none !important;
+  float: none !important;
+  clear: none !important;
+  
+  /* 文本属性 */
+  text-decoration: none !important;
+  text-transform: none !important;
+  letter-spacing: normal !important;
+  word-spacing: normal !important;
+  white-space: nowrap !important;
+  
+  /* 其他重置 */
+  overflow: visible !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  z-index: auto !important;
+  box-sizing: border-box !important;
+}
+
+/* ===== 响应式终极修复 ===== */
+
+/* 平板端终极修复 */
+@media (max-width: 768px) {
+  .quick-start-actions .el-button,
+  .quick-start-actions .el-button[class*="btn"] {
+    min-height: 44px !important;
+    padding: 12px 20px !important;
+    font-size: 14px !important;
+  }
+  
+  .quick-start-actions .el-button .el-icon,
+  .quick-start-actions .el-button .btn-icon,
+  .quick-start-actions .el-button[class*="btn"] .el-icon,
+  .quick-start-actions .el-button[class*="btn"] .btn-icon {
+    width: 14px !important;
+    height: 14px !important;
+    font-size: 14px !important;
+    margin-right: 6px !important;
+    top: -0.04em !important;
+  }
+  
+  .quick-start-actions .el-button span,
+  .quick-start-actions .el-button[class*="btn"] span {
+    font-size: 14px !important;
+    top: 0.01em !important;
+  }
+}
+
+/* 手机端终极修复 */
+@media (max-width: 480px) {
+  .quick-start-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  
+  .quick-start-actions .el-button,
+  .quick-start-actions .el-button[class*="btn"] {
+    width: 100% !important;
+    min-height: 40px !important;
+    padding: 10px 16px !important;
+    font-size: 12px !important;
+  }
+  
+  .quick-start-actions .el-button .el-icon,
+  .quick-start-actions .el-button .btn-icon,
+  .quick-start-actions .el-button[class*="btn"] .el-icon,
+  .quick-start-actions .el-button[class*="btn"] .btn-icon {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 12px !important;
+    margin-right: 4px !important;
+    top: -0.03em !important;
+  }
+  
+  .quick-start-actions .el-button span,
+  .quick-start-actions .el-button[class*="btn"] span {
+    font-size: 12px !important;
+    top: 0 !important;
+  }
+}

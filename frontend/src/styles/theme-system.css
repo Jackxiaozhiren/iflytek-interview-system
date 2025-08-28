@@ -1,0 +1,421 @@
+/* 🎨 iFlytek多模态AI面试系统 - 完整主题切换系统 */
+/* 支持明亮/暗黑主题切换，保持iFlytek品牌色彩一致性 */
+
+:root {
+  /* ===== iFlytek 品牌色彩基础 ===== */
+  --iflytek-primary: #1890ff;
+  --iflytek-primary-light: #40a9ff;
+  --iflytek-primary-dark: #096dd9;
+  --iflytek-secondary: #667eea;
+  --iflytek-accent: #0066cc;
+  --iflytek-purple: #4c51bf;
+  --iflytek-gradient: #764ba2;
+  
+  /* ===== 明亮主题色彩 ===== */
+  --light-bg-primary: #ffffff;
+  --light-bg-secondary: #fafafa;
+  --light-bg-tertiary: #f5f5f5;
+  --light-bg-overlay: rgba(255, 255, 255, 0.9);
+  
+  --light-text-primary: #262626;
+  --light-text-secondary: #595959;
+  --light-text-tertiary: #8c8c8c;
+  --light-text-disabled: #bfbfbf;
+  
+  --light-border-primary: #d9d9d9;
+  --light-border-secondary: #f0f0f0;
+  --light-border-hover: #40a9ff;
+  
+  --light-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+  --light-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+  --light-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.12);
+  
+  /* ===== 暗黑主题色彩 ===== */
+  --dark-bg-primary: #141414;
+  --dark-bg-secondary: #1f1f1f;
+  --dark-bg-tertiary: #262626;
+  --dark-bg-overlay: rgba(20, 20, 20, 0.9);
+  
+  --dark-text-primary: #ffffff;
+  --dark-text-secondary: #d9d9d9;
+  --dark-text-tertiary: #8c8c8c;
+  --dark-text-disabled: #595959;
+  
+  --dark-border-primary: #434343;
+  --dark-border-secondary: #303030;
+  --dark-border-hover: #4299e1;
+  
+  --dark-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.3);
+  --dark-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.4);
+  --dark-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.5);
+  
+  /* ===== 暗黑主题下的iFlytek品牌色调整 ===== */
+  --dark-iflytek-primary: #4299e1;
+  --dark-iflytek-primary-light: #63b3ed;
+  --dark-iflytek-primary-dark: #2b77cb;
+  --dark-iflytek-secondary: #805ad5;
+  --dark-iflytek-accent: #3182ce;
+}
+
+/* ===== 明亮主题（默认） ===== */
+.theme-light,
+body {
+  --current-bg-primary: var(--light-bg-primary);
+  --current-bg-secondary: var(--light-bg-secondary);
+  --current-bg-tertiary: var(--light-bg-tertiary);
+  --current-bg-overlay: var(--light-bg-overlay);
+  
+  --current-text-primary: var(--light-text-primary);
+  --current-text-secondary: var(--light-text-secondary);
+  --current-text-tertiary: var(--light-text-tertiary);
+  --current-text-disabled: var(--light-text-disabled);
+  
+  --current-border-primary: var(--light-border-primary);
+  --current-border-secondary: var(--light-border-secondary);
+  --current-border-hover: var(--light-border-hover);
+  
+  --current-shadow-sm: var(--light-shadow-sm);
+  --current-shadow-md: var(--light-shadow-md);
+  --current-shadow-lg: var(--light-shadow-lg);
+  
+  --current-iflytek-primary: var(--iflytek-primary);
+  --current-iflytek-secondary: var(--iflytek-secondary);
+  --current-iflytek-accent: var(--iflytek-accent);
+  
+  background-color: var(--current-bg-primary);
+  color: var(--current-text-primary);
+}
+
+/* ===== 暗黑主题 ===== */
+.theme-dark {
+  --current-bg-primary: var(--dark-bg-primary);
+  --current-bg-secondary: var(--dark-bg-secondary);
+  --current-bg-tertiary: var(--dark-bg-tertiary);
+  --current-bg-overlay: var(--dark-bg-overlay);
+  
+  --current-text-primary: var(--dark-text-primary);
+  --current-text-secondary: var(--dark-text-secondary);
+  --current-text-tertiary: var(--dark-text-tertiary);
+  --current-text-disabled: var(--dark-text-disabled);
+  
+  --current-border-primary: var(--dark-border-primary);
+  --current-border-secondary: var(--dark-border-secondary);
+  --current-border-hover: var(--dark-border-hover);
+  
+  --current-shadow-sm: var(--dark-shadow-sm);
+  --current-shadow-md: var(--dark-shadow-md);
+  --current-shadow-lg: var(--dark-shadow-lg);
+  
+  --current-iflytek-primary: var(--dark-iflytek-primary);
+  --current-iflytek-secondary: var(--dark-iflytek-secondary);
+  --current-iflytek-accent: var(--dark-iflytek-accent);
+  
+  background-color: var(--current-bg-primary);
+  color: var(--current-text-primary);
+}
+
+/* ===== Element Plus 组件主题适配 ===== */
+
+/* 卡片组件 */
+.el-card {
+  background-color: var(--current-bg-primary);
+  border-color: var(--current-border-secondary);
+  box-shadow: var(--current-shadow-sm);
+}
+
+.el-card__header {
+  background-color: var(--current-bg-secondary);
+  border-bottom-color: var(--current-border-secondary);
+  color: var(--current-text-primary);
+}
+
+.el-card__body {
+  color: var(--current-text-primary);
+}
+
+/* 按钮组件 */
+.el-button {
+  border-color: var(--current-border-primary);
+  color: var(--current-text-primary);
+}
+
+.el-button--primary {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+  color: #ffffff;
+}
+
+.el-button--primary:hover {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+  opacity: 0.8;
+}
+
+/* 输入框组件 */
+.el-input__inner {
+  background-color: var(--current-bg-primary);
+  border-color: var(--current-border-primary);
+  color: var(--current-text-primary);
+}
+
+.el-input__inner:focus {
+  border-color: var(--current-iflytek-primary);
+}
+
+.el-input__inner::placeholder {
+  color: var(--current-text-tertiary);
+}
+
+/* 菜单组件 */
+.el-menu {
+  background-color: var(--current-bg-secondary);
+  border-right-color: var(--current-border-secondary);
+}
+
+.el-menu-item {
+  color: var(--current-text-secondary);
+}
+
+.el-menu-item:hover {
+  background-color: var(--current-bg-tertiary);
+  color: var(--current-iflytek-primary);
+}
+
+.el-menu-item.is-active {
+  background-color: var(--current-bg-tertiary);
+  color: var(--current-iflytek-primary);
+  border-right: 3px solid var(--current-iflytek-primary);
+}
+
+/* 表格组件 */
+.el-table {
+  background-color: var(--current-bg-primary);
+  color: var(--current-text-primary);
+}
+
+.el-table th {
+  background-color: var(--current-bg-secondary);
+  color: var(--current-text-primary);
+  border-bottom-color: var(--current-border-secondary);
+}
+
+.el-table td {
+  border-bottom-color: var(--current-border-secondary);
+}
+
+.el-table--striped .el-table__body tr.el-table__row--striped td {
+  background-color: var(--current-bg-secondary);
+}
+
+/* 对话框组件 */
+.el-dialog {
+  background-color: var(--current-bg-primary);
+  box-shadow: var(--current-shadow-lg);
+}
+
+.el-dialog__header {
+  border-bottom-color: var(--current-border-secondary);
+}
+
+.el-dialog__title {
+  color: var(--current-text-primary);
+}
+
+.el-dialog__body {
+  color: var(--current-text-primary);
+}
+
+/* 消息提示组件 */
+.el-message {
+  background-color: var(--current-bg-overlay);
+  border-color: var(--current-border-primary);
+  color: var(--current-text-primary);
+  box-shadow: var(--current-shadow-md);
+}
+
+/* 下拉选择组件 */
+.el-select-dropdown {
+  background-color: var(--current-bg-primary);
+  border-color: var(--current-border-primary);
+  box-shadow: var(--current-shadow-md);
+}
+
+.el-select-dropdown__item {
+  color: var(--current-text-primary);
+}
+
+.el-select-dropdown__item:hover {
+  background-color: var(--current-bg-tertiary);
+}
+
+.el-select-dropdown__item.selected {
+  background-color: var(--current-iflytek-primary);
+  color: #ffffff;
+}
+
+/* 开关组件 */
+.el-switch.is-checked .el-switch__core {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+}
+
+/* 单选框组件 */
+.el-radio__input.is-checked .el-radio__inner {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+}
+
+.el-radio__input.is-checked + .el-radio__label {
+  color: var(--current-iflytek-primary);
+}
+
+/* 复选框组件 */
+.el-checkbox__input.is-checked .el-checkbox__inner {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+}
+
+.el-checkbox__input.is-checked + .el-checkbox__label {
+  color: var(--current-iflytek-primary);
+}
+
+/* ===== 主题切换动画 ===== */
+* {
+  transition: 
+    background-color 0.3s ease,
+    color 0.3s ease,
+    border-color 0.3s ease,
+    box-shadow 0.3s ease;
+}
+
+/* ===== 滚动条主题适配 ===== */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--current-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--current-border-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--current-iflytek-primary);
+}
+
+/* ===== 特殊组件主题适配 ===== */
+
+/* 面包屑导航 */
+.el-breadcrumb__inner {
+  color: var(--current-text-secondary);
+}
+
+.el-breadcrumb__inner:hover {
+  color: var(--current-iflytek-primary);
+}
+
+/* 分页组件 */
+.el-pagination {
+  color: var(--current-text-primary);
+}
+
+.el-pagination .el-pager li {
+  background-color: var(--current-bg-primary);
+  color: var(--current-text-primary);
+  border: 1px solid var(--current-border-primary);
+}
+
+.el-pagination .el-pager li:hover {
+  color: var(--current-iflytek-primary);
+}
+
+.el-pagination .el-pager li.active {
+  background-color: var(--current-iflytek-primary);
+  color: #ffffff;
+}
+
+/* 标签页组件 */
+.el-tabs__header {
+  border-bottom-color: var(--current-border-secondary);
+}
+
+.el-tabs__item {
+  color: var(--current-text-secondary);
+}
+
+.el-tabs__item:hover {
+  color: var(--current-iflytek-primary);
+}
+
+.el-tabs__item.is-active {
+  color: var(--current-iflytek-primary);
+}
+
+.el-tabs__active-bar {
+  background-color: var(--current-iflytek-primary);
+}
+
+/* 步骤条组件 */
+.el-steps .el-step__title {
+  color: var(--current-text-primary);
+}
+
+.el-steps .el-step__description {
+  color: var(--current-text-secondary);
+}
+
+.el-steps .el-step.is-process .el-step__icon {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+}
+
+.el-steps .el-step.is-finish .el-step__icon {
+  background-color: var(--current-iflytek-primary);
+  border-color: var(--current-iflytek-primary);
+}
+
+/* ===== 自定义组件主题适配 ===== */
+
+/* 页面头部 */
+.page-header {
+  background-color: var(--current-bg-primary);
+  border-bottom: 1px solid var(--current-border-secondary);
+  box-shadow: var(--current-shadow-sm);
+}
+
+/* 设置面板 */
+.settings-panel {
+  background-color: var(--current-bg-primary);
+}
+
+.settings-nav {
+  background-color: var(--current-bg-secondary);
+  border-right: 1px solid var(--current-border-secondary);
+}
+
+/* 表单区域 */
+.form-section {
+  background-color: var(--current-bg-primary);
+  border: 1px solid var(--current-border-secondary);
+  border-radius: 8px;
+}
+
+/* 统计卡片 */
+.stats-card {
+  background-color: var(--current-bg-primary);
+  border: 1px solid var(--current-border-secondary);
+  box-shadow: var(--current-shadow-sm);
+}
+
+/* 确保主题切换的平滑过渡 */
+html {
+  transition: background-color 0.3s ease;
+}
+
+body {
+  transition: background-color 0.3s ease, color 0.3s ease;
+}

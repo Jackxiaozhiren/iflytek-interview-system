@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek 导航交互问题诊断</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .diagnostic-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+        }
+        .section h3 {
+            color: #1890ff;
+            margin-top: 0;
+        }
+        .test-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #0066cc;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+            font-family: monospace;
+        }
+        .success {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            color: #52c41a;
+        }
+        .error {
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+            color: #ff4d4f;
+        }
+        .warning {
+            background: #fffbe6;
+            border: 1px solid #ffe58f;
+            color: #faad14;
+        }
+        .info {
+            background: #f0f9ff;
+            border: 1px solid #91d5ff;
+            color: #1890ff;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <h1>🔍 iFlytek 面试系统导航交互问题诊断</h1>
+        
+        <div class="section">
+            <h3>1. 基础环境检查</h3>
+            <button class="test-button" onclick="checkBasicEnvironment()">检查基础环境</button>
+            <div id="basic-env-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>2. Vue.js 应用状态检查</h3>
+            <button class="test-button" onclick="checkVueApp()">检查Vue应用</button>
+            <div id="vue-app-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>3. 路由系统检查</h3>
+            <button class="test-button" onclick="checkRouter()">检查路由配置</button>
+            <button class="test-button" onclick="testNavigation()">测试导航功能</button>
+            <div id="router-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>4. Element Plus 组件检查</h3>
+            <button class="test-button" onclick="checkElementPlus()">检查Element Plus</button>
+            <div id="element-plus-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>5. 事件监听器检查</h3>
+            <button class="test-button" onclick="checkEventListeners()">检查事件绑定</button>
+            <div id="event-listeners-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>6. CSS 样式冲突检查</h3>
+            <button class="test-button" onclick="checkCSSConflicts()">检查样式冲突</button>
+            <div id="css-conflicts-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>7. JavaScript 错误检查</h3>
+            <button class="test-button" onclick="checkJSErrors()">检查JS错误</button>
+            <div id="js-errors-result" class="result"></div>
+        </div>
+
+        <div class="section">
+            <h3>8. 实时导航测试</h3>
+            <button class="test-button" onclick="testDirectNavigation()">直接导航测试</button>
+            <div id="direct-nav-result" class="result"></div>
+        </div>
+    </div>
+
+    <script>
+        // 错误收集器
+        const errors = [];
+        const originalConsoleError = console.error;
+        console.error = function(...args) {
+            errors.push({
+                type: 'error',
+                message: args.join(' '),
+                timestamp: new Date().toISOString()
+            });
+            originalConsoleError.apply(console, args);
+        };
+
+        // 1. 基础环境检查
+        function checkBasicEnvironment() {
+            const result = document.getElementById('basic-env-result');
+            let html = '<h4>基础环境检查结果:</h4>';
+            
+            // 检查Vue
+            if (typeof Vue !== 'undefined') {
+                html += '<div class="success">✅ Vue.js 已加载</div>';
+            } else {
+                html += '<div class="error">❌ Vue.js 未加载</div>';
+            }
+            
+            // 检查Vue Router
+            if (typeof VueRouter !== 'undefined' || window.VueRouter) {
+                html += '<div class="success">✅ Vue Router 已加载</div>';
+            } else {
+                html += '<div class="warning">⚠️ Vue Router 状态未知</div>';
+            }
+            
+            // 检查Element Plus
+            if (typeof ElementPlus !== 'undefined' || window.ElementPlus) {
+                html += '<div class="success">✅ Element Plus 已加载</div>';
+            } else {
+                html += '<div class="warning">⚠️ Element Plus 状态未知</div>';
+            }
+            
+            result.innerHTML = html;
+            result.className = 'result info';
+        }
+
+        // 2. Vue应用状态检查
+        function checkVueApp() {
+            const result = document.getElementById('vue-app-result');
+            let html = '<h4>Vue应用状态:</h4>';
+            
+            try {
+                // 检查Vue应用实例
+                const app = document.getElementById('app');
+                if (app) {
+                    html += '<div class="success">✅ Vue应用容器存在</div>';
+                    
+                    // 检查Vue实例
+                    if (app.__vue_app__) {
+                        html += '<div class="success">✅ Vue应用实例已挂载</div>';
+                    } else {
+                        html += '<div class="error">❌ Vue应用实例未找到</div>';
+                    }
+                } else {
+                    html += '<div class="error">❌ Vue应用容器不存在</div>';
+                }
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ 检查失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 3. 路由系统检查
+        function checkRouter() {
+            const result = document.getElementById('router-result');
+            let html = '<h4>路由系统检查:</h4>';
+            
+            try {
+                // 检查当前路由
+                html += `<div class="info">📍 当前路径: ${window.location.pathname}</div>`;
+                html += `<div class="info">🔗 当前URL: ${window.location.href}</div>`;
+                
+                // 检查history API
+                if (window.history && window.history.pushState) {
+                    html += '<div class="success">✅ History API 支持</div>';
+                } else {
+                    html += '<div class="error">❌ History API 不支持</div>';
+                }
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ 路由检查失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 4. Element Plus检查
+        function checkElementPlus() {
+            const result = document.getElementById('element-plus-result');
+            let html = '<h4>Element Plus组件检查:</h4>';
+            
+            try {
+                // 检查Element Plus样式
+                const elementStyles = document.querySelector('link[href*="element-plus"]');
+                if (elementStyles) {
+                    html += '<div class="success">✅ Element Plus 样式已加载</div>';
+                } else {
+                    html += '<div class="warning">⚠️ Element Plus 样式未检测到</div>';
+                }
+                
+                // 检查Element Plus组件
+                const elButtons = document.querySelectorAll('.el-button');
+                if (elButtons.length > 0) {
+                    html += `<div class="success">✅ 找到 ${elButtons.length} 个 Element Plus 按钮</div>`;
+                } else {
+                    html += '<div class="warning">⚠️ 未找到 Element Plus 按钮</div>';
+                }
+                
+                const elMenus = document.querySelectorAll('.el-menu');
+                if (elMenus.length > 0) {
+                    html += `<div class="success">✅ 找到 ${elMenus.length} 个 Element Plus 菜单</div>`;
+                } else {
+                    html += '<div class="warning">⚠️ 未找到 Element Plus 菜单</div>';
+                }
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ Element Plus检查失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 5. 事件监听器检查
+        function checkEventListeners() {
+            const result = document.getElementById('event-listeners-result');
+            let html = '<h4>事件监听器检查:</h4>';
+            
+            try {
+                // 检查按钮点击事件
+                const buttons = document.querySelectorAll('button, .el-button');
+                let buttonsWithEvents = 0;
+                
+                buttons.forEach(button => {
+                    const events = getEventListeners ? getEventListeners(button) : null;
+                    if (events && Object.keys(events).length > 0) {
+                        buttonsWithEvents++;
+                    }
+                });
+                
+                html += `<div class="info">🔍 总按钮数: ${buttons.length}</div>`;
+                if (buttonsWithEvents > 0) {
+                    html += `<div class="success">✅ ${buttonsWithEvents} 个按钮有事件监听器</div>`;
+                } else {
+                    html += '<div class="warning">⚠️ 无法检测事件监听器 (需要开发者工具)</div>';
+                }
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ 事件监听器检查失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 6. CSS样式冲突检查
+        function checkCSSConflicts() {
+            const result = document.getElementById('css-conflicts-result');
+            let html = '<h4>CSS样式冲突检查:</h4>';
+            
+            try {
+                // 检查z-index冲突
+                const elements = document.querySelectorAll('*');
+                let highZIndex = [];
+                
+                elements.forEach(el => {
+                    const zIndex = window.getComputedStyle(el).zIndex;
+                    if (zIndex !== 'auto' && parseInt(zIndex) > 1000) {
+                        highZIndex.push({
+                            element: el.tagName + (el.className ? '.' + el.className.split(' ')[0] : ''),
+                            zIndex: zIndex
+                        });
+                    }
+                });
+                
+                if (highZIndex.length > 0) {
+                    html += `<div class="warning">⚠️ 发现 ${highZIndex.length} 个高z-index元素</div>`;
+                    highZIndex.slice(0, 5).forEach(item => {
+                        html += `<div class="info">📌 ${item.element}: z-index ${item.zIndex}</div>`;
+                    });
+                } else {
+                    html += '<div class="success">✅ 未发现明显的z-index冲突</div>';
+                }
+                
+                // 检查pointer-events
+                const disabledElements = document.querySelectorAll('[style*="pointer-events: none"]');
+                if (disabledElements.length > 0) {
+                    html += `<div class="warning">⚠️ 发现 ${disabledElements.length} 个禁用指针事件的元素</div>`;
+                } else {
+                    html += '<div class="success">✅ 未发现禁用指针事件的元素</div>';
+                }
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ CSS冲突检查失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 7. JavaScript错误检查
+        function checkJSErrors() {
+            const result = document.getElementById('js-errors-result');
+            let html = '<h4>JavaScript错误检查:</h4>';
+            
+            if (errors.length === 0) {
+                html += '<div class="success">✅ 未发现JavaScript错误</div>';
+            } else {
+                html += `<div class="error">❌ 发现 ${errors.length} 个错误:</div>`;
+                errors.slice(-5).forEach(error => {
+                    html += `<div class="error">🚫 ${error.message}</div>`;
+                });
+            }
+            
+            result.innerHTML = html;
+            result.className = 'result info';
+        }
+
+        // 8. 直接导航测试
+        function testDirectNavigation() {
+            const result = document.getElementById('direct-nav-result');
+            let html = '<h4>直接导航测试:</h4>';
+            
+            try {
+                // 测试History API
+                const originalPath = window.location.pathname;
+                
+                // 尝试导航到测试路径
+                window.history.pushState({}, '', '/test-navigation');
+                html += '<div class="success">✅ History.pushState 工作正常</div>';
+                
+                // 恢复原路径
+                window.history.pushState({}, '', originalPath);
+                html += '<div class="success">✅ 路径恢复成功</div>';
+                
+                // 测试点击事件模拟
+                const testButton = document.createElement('button');
+                testButton.textContent = '测试按钮';
+                testButton.onclick = () => {
+                    html += '<div class="success">✅ 点击事件触发正常</div>';
+                    result.innerHTML = html;
+                };
+                
+                // 模拟点击
+                testButton.click();
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = `<div class="error">❌ 导航测试失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 导航功能测试
+        function testNavigation() {
+            const result = document.getElementById('router-result');
+            let html = result.innerHTML + '<h4>导航功能测试:</h4>';
+            
+            try {
+                // 尝试查找导航元素
+                const navItems = document.querySelectorAll('.el-menu-item');
+                if (navItems.length > 0) {
+                    html += `<div class="success">✅ 找到 ${navItems.length} 个导航项</div>`;
+                    
+                    // 检查每个导航项的点击处理
+                    navItems.forEach((item, index) => {
+                        const text = item.textContent.trim();
+                        html += `<div class="info">📋 导航项 ${index + 1}: ${text}</div>`;
+                    });
+                } else {
+                    html += '<div class="warning">⚠️ 未找到导航菜单项</div>';
+                }
+                
+                // 检查主要按钮
+                const primaryButtons = document.querySelectorAll('.primary-cta, .secondary-cta');
+                if (primaryButtons.length > 0) {
+                    html += `<div class="success">✅ 找到 ${primaryButtons.length} 个主要操作按钮</div>`;
+                } else {
+                    html += '<div class="warning">⚠️ 未找到主要操作按钮</div>';
+                }
+                
+                result.innerHTML = html;
+                result.className = 'result info';
+            } catch (error) {
+                result.innerHTML = html + `<div class="error">❌ 导航测试失败: ${error.message}</div>`;
+                result.className = 'result error';
+            }
+        }
+
+        // 页面加载完成后自动运行基础检查
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                checkBasicEnvironment();
+                checkVueApp();
+                checkRouter();
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

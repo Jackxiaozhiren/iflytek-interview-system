@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek界面显示问题检查工具</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Microsoft YaHei', 'PingFang SC', 'Hiragino Sans GB', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #1890ff, #40a9ff);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        
+        .header h1 {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        
+        .main-content {
+            padding: 30px;
+        }
+        
+        .check-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #f0f0f0;
+            border-radius: 12px;
+            background: #fafafa;
+        }
+        
+        .check-section h2 {
+            color: #1890ff;
+            margin-bottom: 20px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .test-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .test-item {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 1px solid #e8e8e8;
+            transition: all 0.3s ease;
+        }
+        
+        .test-item:hover {
+            border-color: #1890ff;
+            box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+        }
+        
+        .test-item h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 16px;
+        }
+        
+        .test-button {
+            width: 100%;
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .test-button:hover {
+            background: #40a9ff;
+        }
+        
+        .test-result {
+            margin-top: 15px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 13px;
+            display: none;
+        }
+        
+        .test-result.success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        
+        .test-result.error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+        
+        .test-result.warning {
+            background: #fffbe6;
+            color: #faad14;
+            border: 1px solid #ffe58f;
+        }
+        
+        .page-preview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .preview-card {
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .preview-card:hover {
+            border-color: #1890ff;
+            transform: translateY(-2px);
+        }
+        
+        .preview-header {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-bottom: 1px solid #e8e8e8;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .preview-content {
+            padding: 15px;
+        }
+        
+        .preview-link {
+            color: #1890ff;
+            text-decoration: none;
+            font-size: 13px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .preview-link:hover {
+            text-decoration: underline;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-indicator.success { background: #52c41a; }
+        .status-indicator.error { background: #ff4d4f; }
+        .status-indicator.warning { background: #faad14; }
+        .status-indicator.pending { background: #d9d9d9; }
+        
+        .log-panel {
+            background: #001529;
+            color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            margin-top: 20px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            display: none;
+        }
+        
+        .log-panel.show {
+            display: block;
+        }
+        
+        .font-test {
+            margin: 15px 0;
+            padding: 15px;
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+        }
+        
+        .font-sample {
+            margin: 8px 0;
+            padding: 8px;
+            border-left: 3px solid #1890ff;
+            background: #f8f9fa;
+        }
+        
+        .responsive-test {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .viewport-test {
+            background: white;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+            padding: 15px;
+            text-align: center;
+        }
+        
+        .viewport-size {
+            font-weight: 600;
+            color: #1890ff;
+            margin-bottom: 5px;
+        }
+        
+        .viewport-status {
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎨 iFlytek界面显示问题检查工具</h1>
+            <p>检查UI元素渲染、中文字体显示、响应式布局和图标按钮显示</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- UI元素渲染检查 -->
+            <div class="check-section">
+                <h2>🖼️ UI元素渲染检查</h2>
+                <div class="test-grid">
+                    <div class="test-item">
+                        <h3>页面加载状态检查</h3>
+                        <button class="test-button" onclick="checkPageLoading()">检查页面加载</button>
+                        <div class="test-result" id="page-loading-result"></div>
+                    </div>
+                    <div class="test-item">
+                        <h3>图片资源检查</h3>
+                        <button class="test-button" onclick="checkImageResources()">检查图片资源</button>
+                        <div class="test-result" id="image-resources-result"></div>
+                    </div>
+                    <div class="test-item">
+                        <h3>CSS样式加载检查</h3>
+                        <button class="test-button" onclick="checkCSSLoading()">检查CSS样式</button>
+                        <div class="test-result" id="css-loading-result"></div>
+                    </div>
+                    <div class="test-item">
+                        <h3>Element Plus组件检查</h3>
+                        <button class="test-button" onclick="checkElementPlusComponents()">检查组件</button>
+                        <div class="test-result" id="element-plus-result"></div>
+                    </div>
+                </div>
+                
+                <div class="page-preview">
+                    <div class="preview-card">
+                        <div class="preview-header">主要页面</div>
+                        <div class="preview-content">
+                            <a href="http://localhost:5173/" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="home-status"></span>主页
+                            </a>
+                            <a href="http://localhost:5173/#/select-interview-mode" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="mode-selector-status"></span>面试模式选择
+                            </a>
+                            <a href="http://localhost:5173/#/text-based-interview" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="text-interview-status"></span>文字面试
+                            </a>
+                            <a href="http://localhost:5173/#/voice-interview" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="voice-interview-status"></span>语音面试
+                            </a>
+                        </div>
+                    </div>
+                    <div class="preview-card">
+                        <div class="preview-header">演示页面</div>
+                        <div class="preview-content">
+                            <a href="http://localhost:5173/#/demo" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="demo-status"></span>产品演示
+                            </a>
+                            <a href="http://localhost:5173/#/enhanced-demo" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="enhanced-demo-status"></span>增强演示
+                            </a>
+                            <a href="http://localhost:5173/#/media-showcase" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="media-showcase-status"></span>媒体展示
+                            </a>
+                        </div>
+                    </div>
+                    <div class="preview-card">
+                        <div class="preview-header">管理页面</div>
+                        <div class="preview-content">
+                            <a href="http://localhost:5173/#/enterprise-home" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="enterprise-status"></span>企业主页
+                            </a>
+                            <a href="http://localhost:5173/#/candidate-portal" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="candidate-status"></span>候选人门户
+                            </a>
+                            <a href="http://localhost:5173/#/intelligent-dashboard" class="preview-link" target="_blank">
+                                <span class="status-indicator pending" id="dashboard-status"></span>智能仪表板
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 中文字体显示检查 -->
+            <div class="check-section">
+                <h2>🔤 中文字体显示检查</h2>
+                <div class="test-grid">
+                    <div class="test-item">
+                        <h3>字体加载检查</h3>
+                        <button class="test-button" onclick="checkFontLoading()">检查字体加载</button>
+                        <div class="test-result" id="font-loading-result"></div>
+                    </div>
+                    <div class="test-item">
+                        <h3>字体渲染质量检查</h3>
+                        <button class="test-button" onclick="checkFontRendering()">检查渲染质量</button>
+                        <div class="test-result" id="font-rendering-result"></div>
+                    </div>
+                </div>
+                
+                <div class="font-test">
+                    <h3>字体样本测试</h3>
+                    <div class="font-sample" style="font-family: 'Microsoft YaHei';">
+                        <strong>Microsoft YaHei:</strong> iFlytek星火大模型多模态面试评估系统 - 让招聘更智能
+                    </div>
+                    <div class="font-sample" style="font-family: 'PingFang SC';">
+                        <strong>PingFang SC:</strong> 基于人工智能的智能面试解决方案，提升招聘效率
+                    </div>
+                    <div class="font-sample" style="font-family: 'SimHei';">
+                        <strong>SimHei:</strong> 支持语音识别、视频分析、文本理解等多种模态
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 响应式布局检查 -->
+            <div class="check-section">
+                <h2>📱 响应式布局检查</h2>
+                <div class="test-grid">
+                    <div class="test-item">
+                        <h3>断点适配检查</h3>
+                        <button class="test-button" onclick="checkResponsiveBreakpoints()">检查断点</button>
+                        <div class="test-result" id="responsive-result"></div>
+                    </div>
+                    <div class="test-item">
+                        <h3>移动端适配检查</h3>
+                        <button class="test-button" onclick="checkMobileAdaptation()">检查移动端</button>
+                        <div class="test-result" id="mobile-result"></div>
+                    </div>
+                </div>
+                
+                <div class="responsive-test">
+                    <div class="viewport-test">
+                        <div class="viewport-size">桌面端</div>
+                        <div class="viewport-status" id="desktop-status">≥1200px</div>
+                    </div>
+                    <div class="viewport-test">
+                        <div class="viewport-size">平板端</div>
+                        <div class="viewport-status" id="tablet-status">768px-1199px</div>
+                    </div>
+                    <div class="viewport-test">
+                        <div class="viewport-size">移动端</div>
+                        <div class="viewport-status" id="mobile-status">≤767px</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- 图标按钮显示检查 -->
+            <div class="check-section">
+                <h2>🎯 图标按钮显示检查</h2>
+                <div class="test-grid">
+                    <div class="test-item">
+                        <h3>Element Plus图标检查</h3>
+                        <button class="test-button" onclick="checkElementPlusIcons()">检查图标</button>
+                        <div class="test-result" id="icons-result"></div>
+                    </div>
+                    <div class="test-item">
+                        <h3>按钮交互检查</h3>
+                        <button class="test-button" onclick="checkButtonInteractions()">检查交互</button>
+                        <div class="test-result" id="button-interactions-result"></div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="log-panel" id="logPanel">
+                <div id="logContent"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 日志功能
+        function log(message, type = 'info') {
+            const logContent = document.getElementById('logContent');
+            const logPanel = document.getElementById('logPanel');
+            
+            logPanel.classList.add('show');
+            
+            const timestamp = new Date().toLocaleTimeString();
+            const logEntry = document.createElement('div');
+            logEntry.innerHTML = `[${timestamp}] ${message}`;
+            
+            if (type === 'error') {
+                logEntry.style.color = '#ff4d4f';
+            } else if (type === 'success') {
+                logEntry.style.color = '#52c41a';
+            } else if (type === 'warning') {
+                logEntry.style.color = '#faad14';
+            }
+            
+            logContent.appendChild(logEntry);
+            logContent.scrollTop = logContent.scrollHeight;
+        }
+
+        // 显示测试结果
+        function showResult(elementId, type, message) {
+            const element = document.getElementById(elementId);
+            element.className = `test-result ${type}`;
+            element.textContent = message;
+            element.style.display = 'block';
+        }
+
+        // 更新状态指示器
+        function updateStatusIndicator(elementId, status) {
+            const element = document.getElementById(elementId);
+            if (element) {
+                element.className = `status-indicator ${status}`;
+            }
+        }
+
+        // 页面加载状态检查
+        async function checkPageLoading() {
+            log('🖼️ 开始页面加载状态检查...', 'info');
+
+            const pages = [
+                { url: 'http://localhost:5173/', name: '主页', id: 'home-status' },
+                { url: 'http://localhost:5173/#/select-interview-mode', name: '面试模式选择', id: 'mode-selector-status' },
+                { url: 'http://localhost:5173/#/text-based-interview', name: '文字面试', id: 'text-interview-status' },
+                { url: 'http://localhost:5173/#/voice-interview', name: '语音面试', id: 'voice-interview-status' },
+                { url: 'http://localhost:5173/#/demo', name: '产品演示', id: 'demo-status' },
+                { url: 'http://localhost:5173/#/enhanced-demo', name: '增强演示', id: 'enhanced-demo-status' },
+                { url: 'http://localhost:5173/#/enterprise-home', name: '企业主页', id: 'enterprise-status' },
+                { url: 'http://localhost:5173/#/candidate-portal', name: '候选人门户', id: 'candidate-status' }
+            ];
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const page of pages) {
+                try {
+                    const response = await fetch(page.url);
+                    if (response.ok) {
+                        updateStatusIndicator(page.id, 'success');
+                        log(`✅ ${page.name} 页面加载正常`, 'success');
+                        successCount++;
+                    } else {
+                        updateStatusIndicator(page.id, 'error');
+                        log(`❌ ${page.name} 页面加载失败: HTTP ${response.status}`, 'error');
+                        errorCount++;
+                    }
+                } catch (error) {
+                    updateStatusIndicator(page.id, 'error');
+                    log(`❌ ${page.name} 页面无法访问: ${error.message}`, 'error');
+                    errorCount++;
+                }
+
+                // 添加延迟避免请求过快
+                await new Promise(resolve => setTimeout(resolve, 200));
+            }
+
+            if (errorCount === 0) {
+                showResult('page-loading-result', 'success', `所有 ${successCount} 个页面加载正常`);
+            } else {
+                showResult('page-loading-result', 'warning', `${successCount} 个页面正常，${errorCount} 个页面有问题`);
+            }
+        }
+
+        // 图片资源检查
+        async function checkImageResources() {
+            log('🖼️ 开始图片资源检查...', 'info');
+
+            const imageUrls = [
+                '/images/iflytek-spark-logo.svg',
+                '/images/iflytek-logo.svg',
+                '/images/case-ai.jpg',
+                '/images/case-bigdata.jpg',
+                '/images/case-iot.jpg',
+                '/images/placeholder-demo.svg',
+                '/images/video-poster-ai.svg'
+            ];
+
+            let successCount = 0;
+            let errorCount = 0;
+
+            for (const imageUrl of imageUrls) {
+                try {
+                    const response = await fetch(`http://localhost:5173${imageUrl}`);
+                    if (response.ok) {
+                        log(`✅ 图片资源正常: ${imageUrl}`, 'success');
+                        successCount++;
+                    } else {
+                        log(`❌ 图片资源缺失: ${imageUrl}`, 'error');
+                        errorCount++;
+                    }
+                } catch (error) {
+                    log(`❌ 图片资源检查失败: ${imageUrl}`, 'error');
+                    errorCount++;
+                }
+
+                await new Promise(resolve => setTimeout(resolve, 100));
+            }
+
+            if (errorCount === 0) {
+                showResult('image-resources-result', 'success', `所有 ${successCount} 个图片资源正常`);
+            } else {
+                showResult('image-resources-result', 'warning', `${successCount} 个正常，${errorCount} 个缺失`);
+            }
+        }
+
+        // CSS样式加载检查
+        function checkCSSLoading() {
+            log('🎨 开始CSS样式加载检查...', 'info');
+
+            const testElement = document.createElement('div');
+            testElement.style.cssText = `
+                font-family: 'Microsoft YaHei', sans-serif;
+                color: #1890ff;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                border-radius: 8px;
+                padding: 10px;
+                margin: 10px 0;
+                transition: all 0.3s ease;
+            `;
+            testElement.textContent = 'CSS样式测试元素';
+            document.body.appendChild(testElement);
+
+            setTimeout(() => {
+                const computedStyle = window.getComputedStyle(testElement);
+                const fontFamily = computedStyle.fontFamily;
+                const color = computedStyle.color;
+                const borderRadius = computedStyle.borderRadius;
+                const background = computedStyle.background;
+
+                document.body.removeChild(testElement);
+
+                let issues = [];
+
+                if (!fontFamily.includes('Microsoft YaHei')) {
+                    issues.push('中文字体未正确加载');
+                }
+
+                if (color !== 'rgb(24, 144, 255)') {
+                    issues.push('主题色彩未正确应用');
+                }
+
+                if (borderRadius !== '8px') {
+                    issues.push('圆角样式未正确应用');
+                }
+
+                if (issues.length === 0) {
+                    showResult('css-loading-result', 'success', 'CSS样式加载正常');
+                    log('✅ CSS样式系统工作正常', 'success');
+                } else {
+                    showResult('css-loading-result', 'warning', `发现 ${issues.length} 个样式问题`);
+                    issues.forEach(issue => log(`⚠️ ${issue}`, 'warning'));
+                }
+            }, 500);
+        }
+
+        // Element Plus组件检查
+        function checkElementPlusComponents() {
+            log('🧩 开始Element Plus组件检查...', 'info');
+
+            // 检查Element Plus是否已加载
+            if (typeof window.ElementPlus !== 'undefined' || document.querySelector('.el-button')) {
+                showResult('element-plus-result', 'success', 'Element Plus组件库已正确加载');
+                log('✅ Element Plus组件库正常', 'success');
+            } else {
+                // 创建测试按钮检查样式
+                const testButton = document.createElement('button');
+                testButton.className = 'el-button el-button--primary';
+                testButton.textContent = '测试按钮';
+                testButton.style.display = 'none';
+                document.body.appendChild(testButton);
+
+                setTimeout(() => {
+                    const computedStyle = window.getComputedStyle(testButton);
+                    const hasElementStyles = computedStyle.backgroundColor !== 'rgba(0, 0, 0, 0)';
+
+                    document.body.removeChild(testButton);
+
+                    if (hasElementStyles) {
+                        showResult('element-plus-result', 'success', 'Element Plus样式正常');
+                        log('✅ Element Plus样式系统正常', 'success');
+                    } else {
+                        showResult('element-plus-result', 'warning', 'Element Plus可能未完全加载');
+                        log('⚠️ Element Plus组件库可能未完全加载', 'warning');
+                    }
+                }, 300);
+            }
+        }
+
+        // 字体加载检查
+        function checkFontLoading() {
+            log('🔤 开始字体加载检查...', 'info');
+
+            const fontTests = [
+                { family: 'Microsoft YaHei', name: '微软雅黑' },
+                { family: 'PingFang SC', name: '苹方' },
+                { family: 'Hiragino Sans GB', name: '冬青黑体' },
+                { family: 'SimHei', name: '黑体' }
+            ];
+
+            let loadedFonts = [];
+            let fallbackFonts = [];
+
+            fontTests.forEach(font => {
+                const testElement = document.createElement('div');
+                testElement.style.fontFamily = font.family;
+                testElement.style.fontSize = '16px';
+                testElement.textContent = '测试中文字体显示效果';
+                testElement.style.position = 'absolute';
+                testElement.style.visibility = 'hidden';
+                document.body.appendChild(testElement);
+
+                const computedStyle = window.getComputedStyle(testElement);
+                const actualFont = computedStyle.fontFamily;
+
+                if (actualFont.includes(font.family)) {
+                    loadedFonts.push(font.name);
+                    log(`✅ ${font.name} 字体加载正常`, 'success');
+                } else {
+                    fallbackFonts.push(font.name);
+                    log(`⚠️ ${font.name} 字体未加载，使用备用字体`, 'warning');
+                }
+
+                document.body.removeChild(testElement);
+            });
+
+            if (loadedFonts.length >= 2) {
+                showResult('font-loading-result', 'success', `${loadedFonts.length} 个字体正常加载`);
+            } else {
+                showResult('font-loading-result', 'warning', `仅 ${loadedFonts.length} 个字体正常，建议检查字体配置`);
+            }
+        }
+
+        // 字体渲染质量检查
+        function checkFontRendering() {
+            log('🎨 开始字体渲染质量检查...', 'info');
+
+            const testTexts = [
+                '讯飞星火大模型多模态面试评估系统',
+                '人工智能、大数据、物联网技术领域',
+                '语音识别、视频分析、文本理解能力',
+                '企业招聘、候选人评估、智能匹配'
+            ];
+
+            let renderingIssues = 0;
+
+            testTexts.forEach((text, index) => {
+                const testElement = document.createElement('div');
+                testElement.style.cssText = `
+                    font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif;
+                    font-size: 16px;
+                    line-height: 1.5;
+                    color: #333;
+                    text-rendering: optimizeLegibility;
+                    -webkit-font-smoothing: antialiased;
+                    -moz-osx-font-smoothing: grayscale;
+                `;
+                testElement.textContent = text;
+                testElement.style.position = 'absolute';
+                testElement.style.visibility = 'hidden';
+                document.body.appendChild(testElement);
+
+                const computedStyle = window.getComputedStyle(testElement);
+                const lineHeight = parseFloat(computedStyle.lineHeight);
+                const fontSize = parseFloat(computedStyle.fontSize);
+
+                // 检查行高是否合理
+                if (lineHeight / fontSize < 1.2 || lineHeight / fontSize > 2.0) {
+                    renderingIssues++;
+                    log(`⚠️ 文本 "${text.substring(0, 10)}..." 行高可能不合理`, 'warning');
+                }
+
+                document.body.removeChild(testElement);
+            });
+
+            if (renderingIssues === 0) {
+                showResult('font-rendering-result', 'success', '字体渲染质量良好');
+                log('✅ 中文字体渲染质量检查通过', 'success');
+            } else {
+                showResult('font-rendering-result', 'warning', `发现 ${renderingIssues} 个渲染问题`);
+            }
+        }
+
+        // 响应式断点检查
+        function checkResponsiveBreakpoints() {
+            log('📱 开始响应式断点检查...', 'info');
+
+            const currentWidth = window.innerWidth;
+            const breakpoints = {
+                mobile: { min: 0, max: 767, name: '移动端' },
+                tablet: { min: 768, max: 1199, name: '平板端' },
+                desktop: { min: 1200, max: Infinity, name: '桌面端' }
+            };
+
+            let currentBreakpoint = '';
+            for (const [key, bp] of Object.entries(breakpoints)) {
+                if (currentWidth >= bp.min && currentWidth <= bp.max) {
+                    currentBreakpoint = key;
+                    document.getElementById(`${key}-status`).textContent = `当前视口 ✓`;
+                    log(`✅ 当前处于${bp.name}断点 (${currentWidth}px)`, 'success');
+                } else {
+                    document.getElementById(`${key}-status`).textContent = `${bp.min}px-${bp.max === Infinity ? '∞' : bp.max + 'px'}`;
+                }
+            }
+
+            // 测试CSS媒体查询
+            const mediaQueries = [
+                { query: '(max-width: 767px)', name: '移动端媒体查询' },
+                { query: '(min-width: 768px) and (max-width: 1199px)', name: '平板端媒体查询' },
+                { query: '(min-width: 1200px)', name: '桌面端媒体查询' }
+            ];
+
+            let workingQueries = 0;
+            mediaQueries.forEach(mq => {
+                if (window.matchMedia(mq.query).matches) {
+                    log(`✅ ${mq.name} 正常工作`, 'success');
+                    workingQueries++;
+                }
+            });
+
+            if (workingQueries > 0) {
+                showResult('responsive-result', 'success', `响应式断点检查通过 (${currentBreakpoint})`);
+            } else {
+                showResult('responsive-result', 'error', '响应式断点可能有问题');
+            }
+        }
+
+        // 移动端适配检查
+        function checkMobileAdaptation() {
+            log('📱 开始移动端适配检查...', 'info');
+
+            const viewport = document.querySelector('meta[name="viewport"]');
+            if (!viewport) {
+                log('❌ 缺少viewport meta标签', 'error');
+                showResult('mobile-result', 'error', '缺少viewport配置');
+                return;
+            }
+
+            const viewportContent = viewport.getAttribute('content');
+            log(`📱 Viewport配置: ${viewportContent}`, 'info');
+
+            // 检查触摸友好性
+            const testButton = document.createElement('button');
+            testButton.style.cssText = `
+                width: 44px;
+                height: 44px;
+                touch-action: manipulation;
+                -webkit-tap-highlight-color: transparent;
+            `;
+            document.body.appendChild(testButton);
+
+            const computedStyle = window.getComputedStyle(testButton);
+            const width = parseFloat(computedStyle.width);
+            const height = parseFloat(computedStyle.height);
+
+            document.body.removeChild(testButton);
+
+            let issues = [];
+
+            if (width < 44 || height < 44) {
+                issues.push('按钮尺寸可能不够触摸友好');
+            }
+
+            if (!viewportContent.includes('width=device-width')) {
+                issues.push('viewport未设置device-width');
+            }
+
+            if (issues.length === 0) {
+                showResult('mobile-result', 'success', '移动端适配良好');
+                log('✅ 移动端适配检查通过', 'success');
+            } else {
+                showResult('mobile-result', 'warning', `发现 ${issues.length} 个适配问题`);
+                issues.forEach(issue => log(`⚠️ ${issue}`, 'warning'));
+            }
+        }
+
+        // Element Plus图标检查
+        function checkElementPlusIcons() {
+            log('🎯 开始Element Plus图标检查...', 'info');
+
+            const iconTests = [
+                { name: 'Plus', className: 'el-icon-plus' },
+                { name: 'Check', className: 'el-icon-check' },
+                { name: 'Close', className: 'el-icon-close' },
+                { name: 'Search', className: 'el-icon-search' },
+                { name: 'Edit', className: 'el-icon-edit' }
+            ];
+
+            let workingIcons = 0;
+            let brokenIcons = 0;
+
+            iconTests.forEach(icon => {
+                const testIcon = document.createElement('i');
+                testIcon.className = icon.className;
+                testIcon.style.cssText = `
+                    font-size: 16px;
+                    position: absolute;
+                    visibility: hidden;
+                `;
+                document.body.appendChild(testIcon);
+
+                const computedStyle = window.getComputedStyle(testIcon);
+                const fontSize = computedStyle.fontSize;
+                const fontFamily = computedStyle.fontFamily;
+
+                // 检查图标是否正确渲染
+                if (fontSize === '16px' && (fontFamily.includes('element') || testIcon.offsetWidth > 0)) {
+                    workingIcons++;
+                    log(`✅ ${icon.name} 图标正常`, 'success');
+                } else {
+                    brokenIcons++;
+                    log(`❌ ${icon.name} 图标可能有问题`, 'error');
+                }
+
+                document.body.removeChild(testIcon);
+            });
+
+            if (brokenIcons === 0) {
+                showResult('icons-result', 'success', `所有 ${workingIcons} 个图标正常`);
+            } else {
+                showResult('icons-result', 'warning', `${workingIcons} 个正常，${brokenIcons} 个有问题`);
+            }
+        }
+
+        // 按钮交互检查
+        function checkButtonInteractions() {
+            log('🎯 开始按钮交互检查...', 'info');
+
+            const testButton = document.createElement('button');
+            testButton.className = 'test-button';
+            testButton.textContent = '测试按钮';
+            testButton.style.cssText = `
+                padding: 10px 20px;
+                border: 1px solid #1890ff;
+                background: #1890ff;
+                color: white;
+                border-radius: 4px;
+                cursor: pointer;
+                transition: all 0.3s ease;
+                position: absolute;
+                top: -100px;
+                left: -100px;
+            `;
+
+            document.body.appendChild(testButton);
+
+            let interactionTests = {
+                hover: false,
+                focus: false,
+                click: false
+            };
+
+            // 测试悬停效果
+            testButton.addEventListener('mouseenter', () => {
+                interactionTests.hover = true;
+                log('✅ 按钮悬停效果正常', 'success');
+            });
+
+            // 测试焦点效果
+            testButton.addEventListener('focus', () => {
+                interactionTests.focus = true;
+                log('✅ 按钮焦点效果正常', 'success');
+            });
+
+            // 测试点击效果
+            testButton.addEventListener('click', () => {
+                interactionTests.click = true;
+                log('✅ 按钮点击效果正常', 'success');
+            });
+
+            // 模拟交互
+            setTimeout(() => {
+                testButton.dispatchEvent(new MouseEvent('mouseenter'));
+                testButton.focus();
+                testButton.click();
+
+                setTimeout(() => {
+                    const workingInteractions = Object.values(interactionTests).filter(Boolean).length;
+
+                    if (workingInteractions >= 2) {
+                        showResult('button-interactions-result', 'success', `${workingInteractions}/3 个交互正常`);
+                    } else {
+                        showResult('button-interactions-result', 'warning', `仅 ${workingInteractions}/3 个交互正常`);
+                    }
+
+                    document.body.removeChild(testButton);
+                }, 500);
+            }, 300);
+        }
+
+        // 全面检查函数
+        async function runFullUICheck() {
+            log('🚀 开始全面界面检查...', 'info');
+
+            await checkPageLoading();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            await checkImageResources();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkCSSLoading();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkElementPlusComponents();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkFontLoading();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkFontRendering();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkResponsiveBreakpoints();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkMobileAdaptation();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkElementPlusIcons();
+            await new Promise(resolve => setTimeout(resolve, 1000));
+
+            checkButtonInteractions();
+
+            log('🎉 全面界面检查完成！', 'success');
+        }
+
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('🎨 iFlytek界面显示问题检查工具已启动', 'info');
+            log('📋 请点击各项检查按钮开始检查', 'info');
+
+            // 检查当前视口大小
+            const width = window.innerWidth;
+            const currentViewport = width >= 1200 ? 'desktop' : width >= 768 ? 'tablet' : 'mobile';
+            log(`📱 当前视口: ${width}px (${currentViewport})`, 'info');
+
+            // 添加全面检查按钮
+            const fullCheckButton = document.createElement('button');
+            fullCheckButton.textContent = '🚀 运行全面界面检查';
+            fullCheckButton.className = 'test-button';
+            fullCheckButton.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                z-index: 1000;
+                background: #52c41a;
+                padding: 12px 20px;
+                font-size: 14px;
+                font-weight: 600;
+            `;
+            fullCheckButton.onclick = runFullUICheck;
+            document.body.appendChild(fullCheckButton);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,337 @@
+/* 增强的控制按钮样式 */
+.enhanced-controls {
+  background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
+  transition: all 0.3s ease;
+  animation: slideInLeft 0.6s ease-out;
+}
+
+.enhanced-controls:hover {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  transform: translateY(-2px);
+}
+
+.controls-left,
+.controls-right {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+}
+
+.zoom-controls {
+  display: flex;
+  gap: 2px;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.control-btn {
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+  border-radius: 0 !important;
+  font-weight: 500;
+}
+
+.control-btn:hover {
+  transform: translateY(-2px);
+  z-index: 2;
+  box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+}
+
+.control-btn:active {
+  transform: translateY(0);
+}
+
+.control-btn.zoom-in-btn {
+  background: linear-gradient(135deg, #0066cc 0%, #4c51bf 100%);
+  border-color: #0066cc;
+  color: white;
+}
+
+.control-btn.zoom-out-btn {
+  background: linear-gradient(135deg, #4c51bf 0%, #764ba2 100%);
+  border-color: #4c51bf;
+  color: white;
+}
+
+.control-btn.reset-btn {
+  background: linear-gradient(135deg, #2d7d32 0%, #388e3c 100%);
+  border-color: #2d7d32;
+  color: white;
+}
+
+.control-btn.fullscreen-btn {
+  background: linear-gradient(135deg, #bf8f00 0%, #f57c00 100%);
+  border-color: #bf8f00;
+  color: white;
+}
+
+.control-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+.control-btn::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: left 0.5s;
+}
+
+.control-btn:hover::before {
+  left: 100%;
+}
+
+/* 信息标签动画 */
+.animated-info {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.info-tag {
+  transition: all 0.3s ease;
+  cursor: default;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  animation: popIn 0.4s ease-out;
+}
+
+.info-tag:hover {
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+}
+
+.nodes-tag {
+  background: linear-gradient(135deg, #0066cc 0%, #4c51bf 100%);
+  border-color: #0066cc;
+  color: white;
+}
+
+.connections-tag {
+  background: linear-gradient(135deg, #2d7d32 0%, #388e3c 100%);
+  border-color: #2d7d32;
+  color: white;
+}
+
+.zoom-tag {
+  background: linear-gradient(135deg, #bf8f00 0%, #f57c00 100%);
+  border-color: #bf8f00;
+  color: white;
+}
+
+/* 节点详情面板样式 */
+.enhanced-panel {
+  margin-top: 30px;
+  animation: slideInRight 0.5s ease-out;
+}
+
+.interactive-card {
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+}
+
+.interactive-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.animated-header {
+  background: linear-gradient(135deg, #0066cc 0%, #4c51bf 100%);
+  color: white;
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.node-icon {
+  font-size: 1.5rem;
+  animation: popIn 0.4s ease-out;
+}
+
+.node-title {
+  font-size: 1.2rem;
+  font-weight: 600;
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.close-btn {
+  color: white !important;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  transform: rotate(90deg) scale(1.1);
+  background: rgba(255, 255, 255, 0.2) !important;
+}
+
+.animated-content {
+  padding: 25px;
+}
+
+.description-section {
+  margin-bottom: 20px;
+}
+
+.node-description {
+  font-size: 16px;
+  line-height: 1.6;
+  color: #4a5568;
+  margin: 0;
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.section-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 18px;
+  font-weight: 600;
+  color: #2d3748;
+  margin: 0 0 15px 0;
+  animation: slideInLeft 0.5s ease-out;
+}
+
+.details-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.detail-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  padding: 8px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  color: #4a5568;
+  animation: slideInLeft 0.4s ease-out;
+  animation-delay: var(--delay, 0s);
+  animation-fill-mode: both;
+}
+
+.detail-icon {
+  color: #2d7d32;
+  margin-top: 2px;
+  flex-shrink: 0;
+}
+
+/* 面板过渡动画 */
+.panel-slide-enter-active,
+.panel-slide-leave-active {
+  transition: all 0.4s ease;
+}
+
+.panel-slide-enter-from {
+  opacity: 0;
+  transform: translateX(30px);
+}
+
+.panel-slide-leave-to {
+  opacity: 0;
+  transform: translateX(-30px);
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .enhanced-controls {
+    flex-direction: column;
+    align-items: stretch;
+    padding: 15px;
+  }
+  
+  .controls-left,
+  .controls-right {
+    justify-content: center;
+    margin-bottom: 10px;
+  }
+  
+  .zoom-controls {
+    justify-content: center;
+  }
+  
+  .animated-info {
+    justify-content: center;
+    gap: 8px;
+  }
+  
+  .info-tag {
+    font-size: 12px;
+    padding: 4px 8px;
+  }
+  
+  .enhanced-panel {
+    margin-top: 20px;
+  }
+  
+  .animated-header {
+    padding: 15px;
+  }
+  
+  .node-title {
+    font-size: 1.1rem;
+  }
+  
+  .animated-content {
+    padding: 20px;
+  }
+}
+
+@media (max-width: 480px) {
+  .enhanced-controls {
+    padding: 10px;
+  }
+  
+  .control-btn {
+    font-size: 12px;
+    padding: 6px 10px;
+  }
+  
+  .info-tag {
+    font-size: 11px;
+    padding: 3px 6px;
+  }
+  
+  .node-icon {
+    font-size: 1.3rem;
+  }
+  
+  .node-title {
+    font-size: 1rem;
+  }
+  
+  .section-title {
+    font-size: 16px;
+  }
+  
+  .detail-item {
+    font-size: 13px;
+  }
+}

@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomePage 按钮测试</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .title {
+            color: #1890ff;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 24px;
+            font-weight: 600;
+        }
+        .test-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e8e8e8;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        .test-button {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 5px;
+            background: #1890ff;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .test-button:hover {
+            background: #40a9ff;
+            transform: translateY(-2px);
+        }
+        .console-output {
+            background: #1e1e1e;
+            color: #00ff00;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 15px;
+        }
+        .status {
+            padding: 10px;
+            border-radius: 4px;
+            margin-top: 10px;
+            font-weight: 500;
+        }
+        .status.success {
+            background: #f6ffed;
+            color: #52c41a;
+            border: 1px solid #b7eb8f;
+        }
+        .status.error {
+            background: #fff2f0;
+            color: #ff4d4f;
+            border: 1px solid #ffccc7;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">🔧 HomePage 按钮功能测试</h1>
+        
+        <div class="test-section">
+            <h3>🎯 按钮点击测试</h3>
+            <p>点击下面的按钮测试HomePage中的按钮功能：</p>
+            <button class="test-button" onclick="testHomePage()">测试主页按钮</button>
+            <button class="test-button" onclick="checkConsoleErrors()">检查控制台错误</button>
+            <button class="test-button" onclick="testRouterNavigation()">测试路由导航</button>
+            <div id="test-status" class="status success">
+                ✅ 测试工具已准备就绪
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>📊 测试结果</h3>
+            <div id="console-output" class="console-output">
+                等待测试结果...
+            </div>
+        </div>
+
+        <div class="test-section">
+            <h3>🔗 直接链接测试</h3>
+            <p>直接测试各个页面的访问：</p>
+            <a href="http://localhost:5173/" class="test-button" target="_blank">主页</a>
+            <a href="http://localhost:5173/enterprise" class="test-button" target="_blank">企业端</a>
+            <a href="http://localhost:5173/candidate" class="test-button" target="_blank">候选人端</a>
+        </div>
+    </div>
+
+    <script>
+        let consoleOutput = document.getElementById('console-output');
+        let testStatus = document.getElementById('test-status');
+        
+        function log(message, type = 'info') {
+            const timestamp = new Date().toLocaleTimeString();
+            const color = type === 'error' ? '#ff4444' : type === 'success' ? '#00ff00' : '#ffffff';
+            consoleOutput.innerHTML += `<div style="color: ${color}">[${timestamp}] ${message}</div>`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+        
+        function testHomePage() {
+            log('开始测试HomePage按钮功能...', 'info');
+            
+            // 测试主页是否可访问
+            fetch('http://localhost:5173/')
+                .then(response => {
+                    if (response.ok) {
+                        log('✅ 主页访问正常', 'success');
+                        return response.text();
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                })
+                .then(html => {
+                    // 检查关键按钮是否存在
+                    if (html.includes('企业端体验')) {
+                        log('✅ 找到"企业端体验"按钮', 'success');
+                    } else {
+                        log('❌ 未找到"企业端体验"按钮', 'error');
+                    }
+                    
+                    if (html.includes('候选人端体验')) {
+                        log('✅ 找到"候选人端体验"按钮', 'success');
+                    } else {
+                        log('❌ 未找到"候选人端体验"按钮', 'error');
+                    }
+                    
+                    if (html.includes('startEnterprise')) {
+                        log('✅ 找到startEnterprise方法引用', 'success');
+                    } else {
+                        log('❌ 未找到startEnterprise方法引用', 'error');
+                    }
+                    
+                    if (html.includes('startCandidate')) {
+                        log('✅ 找到startCandidate方法引用', 'success');
+                    } else {
+                        log('❌ 未找到startCandidate方法引用', 'error');
+                    }
+                })
+                .catch(error => {
+                    log(`❌ 主页访问失败: ${error.message}`, 'error');
+                    testStatus.className = 'status error';
+                    testStatus.textContent = '❌ 测试失败：主页无法访问';
+                });
+        }
+        
+        function checkConsoleErrors() {
+            log('检查浏览器控制台错误...', 'info');
+            
+            // 模拟检查常见的JavaScript错误
+            const commonErrors = [
+                'router is not defined',
+                'useRouter is not defined',
+                'navigateToFeature is not defined',
+                'startEnterprise is not defined',
+                'startCandidate is not defined',
+                'goToAdmin is not defined'
+            ];
+            
+            log('常见可能的错误类型:', 'info');
+            commonErrors.forEach(error => {
+                log(`  - ${error}`, 'info');
+            });
+            
+            log('请打开浏览器开发者工具(F12)查看实际控制台错误', 'info');
+        }
+        
+        function testRouterNavigation() {
+            log('测试路由导航功能...', 'info');
+            
+            const routes = [
+                { path: '/enterprise', name: '企业端' },
+                { path: '/candidate', name: '候选人端' },
+                { path: '/enhanced-demo', name: '产品演示' },
+                { path: '/interview-selection', name: '面试选择' }
+            ];
+            
+            routes.forEach(route => {
+                fetch(`http://localhost:5173${route.path}`)
+                    .then(response => {
+                        if (response.ok) {
+                            log(`✅ ${route.name} (${route.path}) 路由正常`, 'success');
+                        } else {
+                            log(`❌ ${route.name} (${route.path}) 路由异常: HTTP ${response.status}`, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        log(`❌ ${route.name} (${route.path}) 路由错误: ${error.message}`, 'error');
+                    });
+            });
+        }
+        
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            log('HomePage 按钮测试工具已启动', 'success');
+            log('请点击上方按钮开始测试', 'info');
+            log('', 'info');
+        });
+        
+        // 捕获全局错误
+        window.addEventListener('error', function(event) {
+            log(`全局错误: ${event.error.message}`, 'error');
+        });
+        
+        window.addEventListener('unhandledrejection', function(event) {
+            log(`未处理的Promise拒绝: ${event.reason}`, 'error');
+        });
+    </script>
+</body>
+</html>

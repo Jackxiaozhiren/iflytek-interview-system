@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>简单功能测试</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .test-container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 4px;
+            border-left: 4px solid #10b981;
+            background: #f0f9ff;
+            color: #065f46;
+        }
+        .test-error {
+            border-left-color: #ef4444;
+            background: #fef2f2;
+            color: #991b1b;
+        }
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .iframe-container {
+            margin-top: 20px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        iframe {
+            width: 100%;
+            height: 400px;
+            border: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="test-container">
+        <h1>🧪 iFlytek Spark 系统简单测试</h1>
+        
+        <div>
+            <button class="test-button" onclick="testMainApp()">测试主应用</button>
+            <button class="test-button" onclick="testResources()">测试资源加载</button>
+            <button class="test-button" onclick="loadMainApp()">加载主应用</button>
+        </div>
+
+        <div id="test-results"></div>
+
+        <div class="iframe-container" id="iframe-container" style="display: none;">
+            <iframe id="main-app-frame" src=""></iframe>
+        </div>
+    </div>
+
+    <script>
+        const resultsContainer = document.getElementById('test-results');
+
+        function addResult(message, isError = false) {
+            const div = document.createElement('div');
+            div.className = `test-result ${isError ? 'test-error' : ''}`;
+            div.textContent = message;
+            resultsContainer.appendChild(div);
+        }
+
+        function testMainApp() {
+            addResult('🔍 开始测试主应用...');
+            
+            fetch('http://localhost:5173/')
+                .then(response => {
+                    if (response.ok) {
+                        addResult('✅ 主应用服务器响应正常 (状态: ' + response.status + ')');
+                        return response.text();
+                    } else {
+                        throw new Error('HTTP ' + response.status);
+                    }
+                })
+                .then(html => {
+                    if (html.includes('app')) {
+                        addResult('✅ HTML包含app元素');
+                    } else {
+                        addResult('⚠️ HTML可能缺少app元素', true);
+                    }
+                    
+                    if (html.includes('main.js')) {
+                        addResult('✅ HTML包含main.js引用');
+                    } else {
+                        addResult('⚠️ HTML可能缺少main.js引用', true);
+                    }
+                })
+                .catch(error => {
+                    addResult('❌ 主应用测试失败: ' + error.message, true);
+                });
+        }
+
+        function testResources() {
+            addResult('🔍 开始测试资源加载...');
+            
+            const resources = [
+                '/src/main.js',
+                '/favicon.svg'
+            ];
+
+            resources.forEach(resource => {
+                fetch('http://localhost:5173' + resource)
+                    .then(response => {
+                        if (response.ok) {
+                            addResult('✅ 资源加载成功: ' + resource);
+                        } else {
+                            addResult('❌ 资源加载失败: ' + resource + ' (状态: ' + response.status + ')', true);
+                        }
+                    })
+                    .catch(error => {
+                        addResult('❌ 资源请求失败: ' + resource + ' (' + error.message + ')', true);
+                    });
+            });
+        }
+
+        function loadMainApp() {
+            addResult('🔍 尝试在iframe中加载主应用...');
+            
+            const iframe = document.getElementById('main-app-frame');
+            const container = document.getElementById('iframe-container');
+            
+            iframe.src = 'http://localhost:5173/';
+            container.style.display = 'block';
+            
+            iframe.onload = function() {
+                addResult('✅ 主应用在iframe中加载成功');
+                
+                // 尝试检查iframe内容
+                try {
+                    const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
+                    if (iframeDoc.getElementById('app')) {
+                        addResult('✅ 在iframe中找到app元素');
+                    } else {
+                        addResult('⚠️ 在iframe中未找到app元素', true);
+                    }
+                } catch (e) {
+                    addResult('⚠️ 无法访问iframe内容（可能是跨域限制）');
+                }
+            };
+            
+            iframe.onerror = function() {
+                addResult('❌ 主应用在iframe中加载失败', true);
+            };
+            
+            // 设置超时
+            setTimeout(() => {
+                if (!iframe.contentDocument && !iframe.contentWindow) {
+                    addResult('⚠️ iframe加载超时或失败', true);
+                }
+            }, 10000);
+        }
+
+        // 页面加载时自动运行基础测试
+        window.addEventListener('load', () => {
+            addResult('🚀 测试工具已启动');
+            setTimeout(testMainApp, 1000);
+        });
+    </script>
+</body>
+</html>

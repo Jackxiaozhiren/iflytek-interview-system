@@ -1,0 +1,553 @@
+/* 首页紫色背景文字专项修复样式 - iFlytek 多模态面试评估系统 */
+
+/* 首页主要区域紫色背景文字修复 */
+.homepage,
+.home-page,
+.landing-page,
+#homepage,
+#home-page {
+  color: var(--wcag-text-primary) !important;
+}
+
+/* 首页英雄区域紫色背景修复 */
+.hero-section,
+.hero-banner,
+.home-hero,
+.landing-hero,
+.homepage .hero,
+.home-page .hero {
+  background: var(--cloud-module-gradient) !important;
+  color: #ffffff !important;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-section *,
+.hero-banner *,
+.home-hero *,
+.landing-hero *,
+.homepage .hero *,
+.home-page .hero * {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+.hero-section::before,
+.hero-banner::before,
+.home-hero::before,
+.landing-hero::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.1);
+  z-index: 1;
+}
+
+.hero-section > *,
+.hero-banner > *,
+.home-hero > *,
+.landing-hero > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* 首页标题区域修复 */
+.homepage-title,
+.home-title,
+.landing-title,
+.hero-title,
+.main-title {
+  color: #ffffff !important;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8) !important;
+  font-weight: 700 !important;
+  font-size: clamp(2rem, 5vw, 4rem) !important;
+  line-height: 1.2 !important;
+}
+
+.homepage-subtitle,
+.home-subtitle,
+.landing-subtitle,
+.hero-subtitle,
+.main-subtitle {
+  color: rgba(255, 255, 255, 0.95) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+  font-weight: 500 !important;
+  font-size: clamp(1rem, 3vw, 1.5rem) !important;
+  line-height: 1.4 !important;
+  margin-top: 16px !important;
+}
+
+/* 首页描述文本修复 */
+.homepage-description,
+.home-description,
+.landing-description,
+.hero-description,
+.intro-text {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  font-size: clamp(0.9rem, 2.5vw, 1.2rem) !important;
+  line-height: 1.6 !important;
+  margin-top: 20px !important;
+}
+
+/* 首页按钮区域修复 */
+.homepage-buttons,
+.home-buttons,
+.landing-buttons,
+.hero-buttons,
+.cta-buttons {
+  margin-top: 32px !important;
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.homepage-buttons .btn,
+.home-buttons .btn,
+.landing-buttons .btn,
+.hero-buttons .btn,
+.cta-buttons .btn,
+.homepage-buttons .button,
+.home-buttons .button,
+.landing-buttons .button,
+.hero-buttons .button,
+.cta-buttons .button {
+  background-color: rgba(255, 255, 255, 0.9) !important;
+  color: var(--cloud-module-primary) !important;
+  border: 2px solid rgba(255, 255, 255, 0.5) !important;
+  padding: 14px 28px !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  font-size: 16px !important;
+  text-shadow: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.homepage-buttons .btn:hover,
+.home-buttons .btn:hover,
+.landing-buttons .btn:hover,
+.hero-buttons .btn:hover,
+.cta-buttons .btn:hover {
+  background-color: #ffffff !important;
+  color: var(--cloud-module-primary) !important;
+  border-color: #ffffff !important;
+  transform: translateY(-2px) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.3) !important;
+}
+
+.homepage-buttons .btn-primary,
+.home-buttons .btn-primary,
+.landing-buttons .btn-primary,
+.hero-buttons .btn-primary,
+.cta-buttons .btn-primary {
+  background-color: var(--iflytek-primary) !important;
+  color: #ffffff !important;
+  border-color: var(--iflytek-primary) !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3) !important;
+}
+
+.homepage-buttons .btn-primary:hover,
+.home-buttons .btn-primary:hover,
+.landing-buttons .btn-primary:hover,
+.hero-buttons .btn-primary:hover,
+.cta-buttons .btn-primary:hover {
+  background-color: var(--iflytek-primary-dark) !important;
+  border-color: var(--iflytek-primary-dark) !important;
+  color: #ffffff !important;
+}
+
+/* 首页特性卡片紫色背景修复 */
+.homepage-features,
+.home-features,
+.landing-features,
+.features-section {
+  padding: 80px 0 !important;
+  background: linear-gradient(180deg, rgba(124, 58, 237, 0.05) 0%, rgba(109, 40, 217, 0.05) 100%) !important;
+}
+
+.feature-card,
+.homepage-card,
+.home-card {
+  background: var(--wcag-bg-primary) !important;
+  color: var(--wcag-text-primary) !important;
+  border: 2px solid var(--wcag-border-secondary) !important;
+  border-radius: 16px !important;
+  padding: 32px 24px !important;
+  text-align: center !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.feature-card::before,
+.homepage-card::before,
+.home-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--cloud-module-gradient) !important;
+}
+
+.feature-card:hover,
+.homepage-card:hover,
+.home-card:hover {
+  transform: translateY(-8px) !important;
+  box-shadow: 0 16px 48px rgba(124, 58, 237, 0.2) !important;
+  border-color: var(--cloud-module-primary) !important;
+}
+
+.feature-card .card-title,
+.homepage-card .card-title,
+.home-card .card-title,
+.feature-card h3,
+.homepage-card h3,
+.home-card h3 {
+  color: var(--cloud-module-primary) !important;
+  font-weight: 600 !important;
+  font-size: 1.5rem !important;
+  margin-bottom: 16px !important;
+}
+
+.feature-card .card-text,
+.homepage-card .card-text,
+.home-card .card-text,
+.feature-card p,
+.homepage-card p,
+.home-card p {
+  color: var(--wcag-text-secondary) !important;
+  line-height: 1.6 !important;
+  font-size: 1rem !important;
+}
+
+.feature-card .card-icon,
+.homepage-card .card-icon,
+.home-card .card-icon,
+.feature-icon {
+  width: 64px !important;
+  height: 64px !important;
+  background: var(--cloud-module-gradient) !important;
+  color: #ffffff !important;
+  border-radius: 16px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 32px !important;
+  margin: 0 auto 24px auto !important;
+  box-shadow: 0 8px 24px rgba(124, 58, 237, 0.3) !important;
+}
+
+/* 首页统计数据区域修复 */
+.homepage-stats,
+.home-stats,
+.landing-stats,
+.stats-section {
+  background: var(--cloud-module-gradient) !important;
+  color: #ffffff !important;
+  padding: 60px 0 !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.homepage-stats::before,
+.home-stats::before,
+.landing-stats::before,
+.stats-section::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='4'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E") repeat !important;
+  opacity: 0.3 !important;
+}
+
+.homepage-stats *,
+.home-stats *,
+.landing-stats *,
+.stats-section * {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5) !important;
+  position: relative !important;
+  z-index: 2 !important;
+}
+
+.stat-item,
+.stats-card {
+  text-align: center !important;
+  padding: 24px !important;
+}
+
+.stat-number,
+.stats-number {
+  font-size: 3rem !important;
+  font-weight: 700 !important;
+  color: #ffffff !important;
+  text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.7) !important;
+  margin-bottom: 8px !important;
+}
+
+.stat-label,
+.stats-label {
+  font-size: 1.1rem !important;
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  font-weight: 500 !important;
+}
+
+/* 首页导航栏紫色背景修复 */
+.homepage .navbar,
+.home-page .navbar,
+.landing-page .navbar {
+  background: rgba(124, 58, 237, 0.95) !important;
+  backdrop-filter: blur(10px) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1) !important;
+}
+
+.homepage .navbar *,
+.home-page .navbar *,
+.landing-page .navbar * {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.homepage .navbar .nav-link:hover,
+.home-page .navbar .nav-link:hover,
+.landing-page .navbar .nav-link:hover,
+.homepage .navbar .nav-link.active,
+.home-page .navbar .nav-link.active,
+.landing-page .navbar .nav-link.active {
+  background-color: rgba(255, 255, 255, 0.1) !important;
+  border-radius: 6px !important;
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+}
+
+/* 首页页脚紫色背景修复 */
+.homepage .footer,
+.home-page .footer,
+.landing-page .footer,
+.home-footer {
+  background: var(--cloud-module-gradient) !important;
+  color: #ffffff !important;
+  padding: 60px 0 30px 0 !important;
+}
+
+.homepage .footer *,
+.home-page .footer *,
+.landing-page .footer *,
+.home-footer * {
+  color: #ffffff !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.4) !important;
+}
+
+.homepage .footer a,
+.home-page .footer a,
+.landing-page .footer a,
+.home-footer a {
+  color: rgba(255, 255, 255, 0.9) !important;
+  text-decoration: none !important;
+  transition: all 0.3s ease !important;
+}
+
+.homepage .footer a:hover,
+.home-page .footer a:hover,
+.landing-page .footer a:hover,
+.home-footer a:hover {
+  color: #ffffff !important;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6) !important;
+  text-decoration: underline !important;
+}
+
+/* 首页表单区域紫色背景修复 */
+.homepage-form,
+.home-form,
+.landing-form,
+.contact-form {
+  background: rgba(124, 58, 237, 0.1) !important;
+  border: 2px solid var(--cloud-module-primary) !important;
+  border-radius: 16px !important;
+  padding: 32px !important;
+}
+
+.homepage-form .form-label,
+.home-form .form-label,
+.landing-form .form-label,
+.contact-form .form-label {
+  color: var(--cloud-module-primary) !important;
+  font-weight: 600 !important;
+  text-shadow: none !important;
+}
+
+.homepage-form .form-control,
+.home-form .form-control,
+.landing-form .form-control,
+.contact-form .form-control {
+  background-color: var(--wcag-bg-primary) !important;
+  color: var(--wcag-text-primary) !important;
+  border: 2px solid var(--cloud-module-primary) !important;
+  border-radius: 8px !important;
+}
+
+.homepage-form .form-control:focus,
+.home-form .form-control:focus,
+.landing-form .form-control:focus,
+.contact-form .form-control:focus {
+  border-color: var(--cloud-module-secondary) !important;
+  box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.2) !important;
+}
+
+/* 首页面包屑导航修复 */
+.homepage .breadcrumb,
+.home-page .breadcrumb,
+.landing-page .breadcrumb {
+  background: rgba(124, 58, 237, 0.1) !important;
+  border: 1px solid var(--cloud-module-primary) !important;
+  border-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+.homepage .breadcrumb-item,
+.home-page .breadcrumb-item,
+.landing-page .breadcrumb-item {
+  color: var(--cloud-module-primary) !important;
+  text-shadow: none !important;
+}
+
+.homepage .breadcrumb-item a,
+.home-page .breadcrumb-item a,
+.landing-page .breadcrumb-item a {
+  color: var(--cloud-module-primary) !important;
+  text-decoration: none !important;
+}
+
+.homepage .breadcrumb-item a:hover,
+.home-page .breadcrumb-item a:hover,
+.landing-page .breadcrumb-item a:hover {
+  color: var(--cloud-module-secondary) !important;
+  text-decoration: underline !important;
+}
+
+/* 首页响应式修复 */
+@media (max-width: 768px) {
+  .homepage-title,
+  .home-title,
+  .landing-title,
+  .hero-title,
+  .main-title {
+    font-size: 2rem !important;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7) !important;
+  }
+  
+  .homepage-subtitle,
+  .home-subtitle,
+  .landing-subtitle,
+  .hero-subtitle,
+  .main-subtitle {
+    font-size: 1.1rem !important;
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.6) !important;
+  }
+  
+  .homepage-buttons,
+  .home-buttons,
+  .landing-buttons,
+  .hero-buttons,
+  .cta-buttons {
+    flex-direction: column !important;
+    align-items: center !important;
+  }
+  
+  .homepage-buttons .btn,
+  .home-buttons .btn,
+  .landing-buttons .btn,
+  .hero-buttons .btn,
+  .cta-buttons .btn {
+    width: 100% !important;
+    max-width: 280px !important;
+  }
+  
+  .feature-card,
+  .homepage-card,
+  .home-card {
+    padding: 24px 20px !important;
+  }
+  
+  .stat-number,
+  .stats-number {
+    font-size: 2.5rem !important;
+  }
+}
+
+/* 首页打印样式修复 */
+@media print {
+  .homepage,
+  .home-page,
+  .landing-page {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .hero-section,
+  .hero-banner,
+  .home-hero,
+  .landing-hero,
+  .homepage-stats,
+  .home-stats,
+  .landing-stats {
+    background: #ffffff !important;
+    color: #000000 !important;
+  }
+  
+  .hero-section *,
+  .hero-banner *,
+  .home-hero *,
+  .landing-hero *,
+  .homepage-stats *,
+  .home-stats *,
+  .landing-stats * {
+    color: #000000 !important;
+    text-shadow: none !important;
+  }
+}
+
+/* 首页高对比度模式修复 */
+@media (prefers-contrast: high) {
+  .hero-section,
+  .hero-banner,
+  .home-hero,
+  .landing-hero,
+  .homepage-stats,
+  .home-stats,
+  .landing-stats {
+    background: #4a0080 !important;
+    color: #ffffff !important;
+    border: 3px solid #ffffff !important;
+  }
+  
+  .hero-section *,
+  .hero-banner *,
+  .home-hero *,
+  .landing-hero *,
+  .homepage-stats *,
+  .home-stats *,
+  .landing-stats * {
+    color: #ffffff !important;
+    text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.9) !important;
+  }
+  
+  .homepage-buttons .btn,
+  .home-buttons .btn,
+  .landing-buttons .btn,
+  .hero-buttons .btn,
+  .cta-buttons .btn {
+    border-width: 3px !important;
+    font-weight: 700 !important;
+  }
+}

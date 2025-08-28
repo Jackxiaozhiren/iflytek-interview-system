@@ -1,0 +1,462 @@
+/* iFlytek 品牌色彩系统 - 统一标准 */
+:root {
+  /* iFlytek 主品牌色 - 基于官方标准 */
+  --iflytek-primary: #1890ff;
+  --iflytek-primary-light: #40a9ff;
+  --iflytek-primary-dark: #096dd9;
+  --iflytek-primary-hover: #40a9ff;
+  --iflytek-primary-active: #096dd9;
+  --iflytek-primary-50: #e6f7ff;
+  --iflytek-primary-100: #bae7ff;
+  --iflytek-primary-200: #91d5ff;
+  --iflytek-primary-300: #69c0ff;
+  --iflytek-primary-400: #40a9ff;
+  --iflytek-primary-500: #1890ff;  /* 主色 */
+  --iflytek-primary-600: #096dd9;
+  --iflytek-primary-700: #0050b3;
+  --iflytek-primary-800: #003a8c;
+  --iflytek-primary-900: #002766;
+
+  /* iFlytek 辅助色 */
+  --iflytek-secondary: #667eea;
+  --iflytek-secondary-light: #8b9cf7;
+  --iflytek-secondary-dark: #4c51bf;
+  --iflytek-accent: #764ba2;
+  --iflytek-accent-light: #9f7aea;
+  --iflytek-accent-dark: #553c9a;
+
+  /* iFlytek 功能色 */
+  --iflytek-success: #52c41a;
+  --iflytek-warning: #faad14;
+  --iflytek-error: #ff4d4f;
+  --iflytek-info: #1890ff;
+
+  /* iFlytek 渐变色系统 */
+  --iflytek-gradient-primary: linear-gradient(135deg, #1890ff 0%, #667eea 100%);
+  --iflytek-gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --iflytek-gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --iflytek-gradient-card: linear-gradient(135deg, #40a9ff 0%, #8b9cf7 100%);
+  --iflytek-gradient-button: linear-gradient(135deg, #1890ff 0%, #40a9ff 100%);
+
+  /* iFlytek 中性色 */
+  --iflytek-gray-50: #fafafa;
+  --iflytek-gray-100: #f5f5f5;
+  --iflytek-gray-200: #f0f0f0;
+  --iflytek-gray-300: #d9d9d9;
+  --iflytek-gray-400: #bfbfbf;
+  --iflytek-gray-500: #8c8c8c;
+  --iflytek-gray-600: #595959;
+  --iflytek-gray-700: #434343;
+  --iflytek-gray-800: #262626;
+  --iflytek-gray-900: #1f1f1f;
+
+  /* iFlytek 语义化色彩 */
+  --iflytek-text-primary: #262626;
+  --iflytek-text-secondary: #595959;
+  --iflytek-text-tertiary: #8c8c8c;
+  --iflytek-text-white: #ffffff;
+  --iflytek-text-white-secondary: rgba(255, 255, 255, 0.9);
+  --iflytek-text-white-tertiary: rgba(255, 255, 255, 0.8);
+
+  --iflytek-bg-primary: #ffffff;
+  --iflytek-bg-secondary: #fafafa;
+  --iflytek-bg-tertiary: #f5f5f5;
+  --iflytek-bg-card: #ffffff;
+
+  --iflytek-border-light: #f0f0f0;
+  --iflytek-border-medium: #d9d9d9;
+  --iflytek-border-dark: #bfbfbf;
+
+  /* iFlytek 阴影系统 */
+  --iflytek-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+  --iflytek-shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+  --iflytek-shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.1);
+  --iflytek-shadow-xl: 0 20px 25px rgba(0, 0, 0, 0.1);
+  --iflytek-shadow-card: 0 8px 32px rgba(24, 144, 255, 0.12);
+  --iflytek-shadow-button: 0 4px 12px rgba(24, 144, 255, 0.3);
+}
+
+/* ===== iFlytek 品牌应用样式 ===== */
+
+/* 主要按钮 */
+.iflytek-btn-primary {
+  background: var(--iflytek-gradient-button);
+  color: var(--iflytek-text-white);
+  border: none;
+  box-shadow: var(--iflytek-shadow-button);
+  transition: all 0.3s ease;
+}
+
+.iflytek-btn-primary:hover {
+  background: var(--iflytek-primary-dark);
+  transform: translateY(-2px);
+  box-shadow: var(--iflytek-shadow-lg);
+}
+
+/* 次要按钮 */
+.iflytek-btn-secondary {
+  background: transparent;
+  color: var(--iflytek-primary);
+  border: 2px solid var(--iflytek-primary);
+  transition: all 0.3s ease;
+}
+
+.iflytek-btn-secondary:hover {
+  background: var(--iflytek-primary);
+  color: var(--iflytek-text-white);
+}
+
+/* 卡片样式 */
+.iflytek-card {
+  background: var(--iflytek-bg-card);
+  border: 1px solid var(--iflytek-border-light);
+  border-radius: 12px;
+  box-shadow: var(--iflytek-shadow-card);
+  transition: all 0.3s ease;
+}
+
+.iflytek-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--iflytek-shadow-xl);
+}
+
+/* 渐变背景 */
+.iflytek-gradient-bg {
+  background: var(--iflytek-gradient-hero);
+}
+
+/* 文字样式 */
+.iflytek-text-primary {
+  color: var(--iflytek-text-primary);
+}
+
+.iflytek-text-secondary {
+  color: var(--iflytek-text-secondary);
+}
+
+.iflytek-text-brand {
+  color: var(--iflytek-primary);
+  font-weight: 600;
+}
+
+/* 边框样式 */
+.iflytek-border {
+  border-color: var(--iflytek-border-medium);
+}
+
+/* 图标样式 */
+.iflytek-icon {
+  color: var(--iflytek-primary);
+}
+
+.iflytek-icon-white {
+  color: var(--iflytek-text-white);
+}gradient-primary: linear-gradient(135deg, #1890ff 0%, #667eea 100%);
+  --iflytek-gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --iflytek-gradient-accent: linear-gradient(135deg, #0066cc 0%, #4c51bf 100%);
+  
+  /* iFlytek 功能色 */
+  --iflytek-success: #52c41a;
+  --iflytek-warning: #faad14;
+  --iflytek-error: #ff4d4f;
+  --iflytek-info: #1890ff;
+  
+  /* iFlytek 中性色 */
+  --iflytek-text-primary: #262626;
+  --iflytek-text-secondary: #595959;
+  --iflytek-text-tertiary: #8c8c8c;
+  --iflytek-text-quaternary: #bfbfbf;
+  
+  /* iFlytek 背景色 */
+  --iflytek-bg-primary: #ffffff;
+  --iflytek-bg-secondary: #fafafa;
+  --iflytek-bg-tertiary: #f5f5f5;
+  --iflytek-bg-quaternary: #f0f0f0;
+  
+  /* iFlytek 边框色 */
+  --iflytek-border-primary: #d9d9d9;
+  --iflytek-border-secondary: #f0f0f0;
+  
+  /* iFlytek 阴影 */
+  --iflytek-shadow-sm: 0 2px 4px rgba(24, 144, 255, 0.1);
+  --iflytek-shadow-md: 0 4px 12px rgba(24, 144, 255, 0.15);
+  --iflytek-shadow-lg: 0 8px 24px rgba(24, 144, 255, 0.2);
+  --iflytek-shadow-xl: 0 12px 32px rgba(24, 144, 255, 0.25);
+}
+
+/* 暗色主题 */
+[data-theme="dark"] {
+  --iflytek-primary: #40a9ff;
+  --iflytek-primary-light: #69c0ff;
+  --iflytek-primary-dark: #1890ff;
+  
+  --iflytek-text-primary: #ffffff;
+  --iflytek-text-secondary: #d9d9d9;
+  --iflytek-text-tertiary: #8c8c8c;
+  --iflytek-text-quaternary: #595959;
+  
+  --iflytek-bg-primary: #141414;
+  --iflytek-bg-secondary: #1f1f1f;
+  --iflytek-bg-tertiary: #262626;
+  --iflytek-bg-quaternary: #2f2f2f;
+  
+  --iflytek-border-primary: #434343;
+  --iflytek-border-secondary: #303030;
+}
+
+/* iFlytek 品牌组件样式 */
+.iflytek-brand {
+  color: var(--iflytek-primary);
+}
+
+.iflytek-brand-bg {
+  background: var(--iflytek-gradient-primary);
+  color: white;
+}
+
+.iflytek-brand-border {
+  border: 2px solid var(--iflytek-primary);
+}
+
+.iflytek-brand-shadow {
+  box-shadow: var(--iflytek-shadow-md);
+}
+
+/* iFlytek 按钮样式 */
+.iflytek-btn-primary {
+  background: var(--iflytek-gradient-primary);
+  border: none;
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.iflytek-btn-primary:hover {
+  background: var(--iflytek-gradient-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--iflytek-shadow-lg);
+}
+
+.iflytek-btn-secondary {
+  background: transparent;
+  border: 2px solid var(--iflytek-primary);
+  color: var(--iflytek-primary);
+  transition: all 0.3s ease;
+}
+
+.iflytek-btn-secondary:hover {
+  background: var(--iflytek-primary);
+  color: white;
+}
+
+/* iFlytek 卡片样式 */
+.iflytek-card {
+  background: var(--iflytek-bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--iflytek-shadow-sm);
+  border: 1px solid var(--iflytek-border-secondary);
+  transition: all 0.3s ease;
+}
+
+.iflytek-card:hover {
+  box-shadow: var(--iflytek-shadow-md);
+  transform: translateY(-4px);
+}
+
+.iflytek-card-header {
+  background: var(--iflytek-gradient-primary);
+  color: white;
+  padding: 16px 24px;
+  border-radius: 12px 12px 0 0;
+  font-weight: 600;
+}
+
+/* iFlytek 标签样式 */
+.iflytek-tag {
+  background: var(--iflytek-primary);
+  color: white;
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.iflytek-tag-secondary {
+  background: var(--iflytek-secondary);
+  color: white;
+}
+
+.iflytek-tag-outline {
+  background: transparent;
+  border: 1px solid var(--iflytek-primary);
+  color: var(--iflytek-primary);
+}
+
+/* iFlytek 进度条样式 */
+.iflytek-progress {
+  background: var(--iflytek-bg-tertiary);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.iflytek-progress-bar {
+  background: var(--iflytek-gradient-primary);
+  height: 8px;
+  border-radius: 8px;
+  transition: width 0.3s ease;
+}
+
+/* iFlytek 输入框样式 */
+.iflytek-input {
+  border: 2px solid var(--iflytek-border-primary);
+  border-radius: 8px;
+  padding: 12px 16px;
+  transition: all 0.3s ease;
+}
+
+.iflytek-input:focus {
+  border-color: var(--iflytek-primary);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+  outline: none;
+}
+
+/* iFlytek 导航样式 */
+.iflytek-nav {
+  background: var(--iflytek-bg-primary);
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  box-shadow: var(--iflytek-shadow-sm);
+}
+
+.iflytek-nav-item {
+  color: var(--iflytek-text-secondary);
+  transition: all 0.3s ease;
+  padding: 12px 16px;
+  border-radius: 8px;
+}
+
+.iflytek-nav-item:hover,
+.iflytek-nav-item.active {
+  color: var(--iflytek-primary);
+  background: rgba(24, 144, 255, 0.1);
+}
+
+/* iFlytek 表格样式 */
+.iflytek-table {
+  background: var(--iflytek-bg-primary);
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: var(--iflytek-shadow-sm);
+}
+
+.iflytek-table th {
+  background: var(--iflytek-bg-secondary);
+  color: var(--iflytek-text-primary);
+  font-weight: 600;
+  padding: 16px;
+  border-bottom: 1px solid var(--iflytek-border-primary);
+}
+
+.iflytek-table td {
+  padding: 16px;
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+}
+
+.iflytek-table tr:hover {
+  background: var(--iflytek-bg-secondary);
+}
+
+/* iFlytek 模态框样式 */
+.iflytek-modal {
+  background: var(--iflytek-bg-primary);
+  border-radius: 12px;
+  box-shadow: var(--iflytek-shadow-xl);
+  border: 1px solid var(--iflytek-border-secondary);
+}
+
+.iflytek-modal-header {
+  background: var(--iflytek-gradient-primary);
+  color: white;
+  padding: 20px 24px;
+  border-radius: 12px 12px 0 0;
+  font-size: 18px;
+  font-weight: 600;
+}
+
+.iflytek-modal-body {
+  padding: 24px;
+}
+
+.iflytek-modal-footer {
+  padding: 16px 24px;
+  border-top: 1px solid var(--iflytek-border-secondary);
+  background: var(--iflytek-bg-secondary);
+  border-radius: 0 0 12px 12px;
+}
+
+/* iFlytek 通知样式 */
+.iflytek-notification {
+  background: var(--iflytek-bg-primary);
+  border-radius: 8px;
+  box-shadow: var(--iflytek-shadow-lg);
+  border-left: 4px solid var(--iflytek-primary);
+  padding: 16px;
+}
+
+.iflytek-notification-success {
+  border-left-color: var(--iflytek-success);
+}
+
+.iflytek-notification-warning {
+  border-left-color: var(--iflytek-warning);
+}
+
+.iflytek-notification-error {
+  border-left-color: var(--iflytek-error);
+}
+
+/* iFlytek 加载样式 */
+.iflytek-loading {
+  color: var(--iflytek-primary);
+}
+
+.iflytek-loading-spinner {
+  border: 3px solid var(--iflytek-bg-tertiary);
+  border-top: 3px solid var(--iflytek-primary);
+  border-radius: 50%;
+  animation: iflytek-spin 1s linear infinite;
+}
+
+@keyframes iflytek-spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* iFlytek 徽章样式 */
+.iflytek-badge {
+  background: var(--iflytek-primary);
+  color: white;
+  border-radius: 10px;
+  padding: 2px 8px;
+  font-size: 12px;
+  font-weight: 500;
+  min-width: 20px;
+  text-align: center;
+}
+
+.iflytek-badge-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--iflytek-primary);
+  border-radius: 50%;
+}
+
+/* iFlytek 分割线样式 */
+.iflytek-divider {
+  border-color: var(--iflytek-border-primary);
+  margin: 24px 0;
+}
+
+.iflytek-divider-text {
+  background: var(--iflytek-bg-primary);
+  color: var(--iflytek-text-secondary);
+  padding: 0 16px;
+}

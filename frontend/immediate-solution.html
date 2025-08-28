@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>iFlytek 立即解决方案</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a24 100%);
+            min-height: 100vh;
+            color: white;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(255,255,255,0.95);
+            color: #333;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #ff4d4f 0%, #d32f2f 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .content {
+            padding: 30px;
+        }
+        .solution-card {
+            background: #f6ffed;
+            border: 2px solid #52c41a;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 25px;
+            text-align: center;
+        }
+        .solution-button {
+            background: #52c41a;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 18px;
+            font-weight: 600;
+            margin: 10px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .solution-button:hover {
+            background: #389e0d;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(82, 196, 26, 0.3);
+        }
+        .backup-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            margin: 5px;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .backup-button:hover {
+            background: #0066cc;
+            transform: translateY(-1px);
+        }
+        .status-info {
+            background: #fff2f0;
+            border: 1px solid #ffccc7;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #ff4d4f;
+        }
+        .success-info {
+            background: #f6ffed;
+            border: 1px solid #b7eb8f;
+            border-radius: 6px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #52c41a;
+        }
+        .step-list {
+            text-align: left;
+            margin: 20px 0;
+        }
+        .step-list li {
+            margin: 10px 0;
+            padding: 8px 0;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .quick-links {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        .quick-link {
+            background: linear-gradient(135deg, #1890ff 0%, #0066cc 100%);
+            color: white;
+            text-decoration: none;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+        .quick-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(24, 144, 255, 0.3);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚨 iFlytek 系统修复解决方案</h1>
+            <p>Vue应用出现问题，为您提供立即可用的解决方案</p>
+        </div>
+        
+        <div class="content">
+            <div class="status-info">
+                <h3>❌ 检测到的问题</h3>
+                <ul>
+                    <li>Vue应用实例未正常工作</li>
+                    <li>NewHomePage.vue组件未正确渲染</li>
+                    <li>导航菜单、按钮和产品卡片缺失</li>
+                    <li>应急修复脚本无法正常执行</li>
+                </ul>
+            </div>
+
+            <div class="solution-card">
+                <h2>🎯 立即解决方案</h2>
+                <p><strong>我已为您准备了一个完全独立的备用主页，不依赖Vue框架，可以立即使用！</strong></p>
+                
+                <a href="/backup-homepage.html" class="solution-button" target="_blank">
+                    🚀 立即访问备用主页
+                </a>
+                
+                <div class="success-info">
+                    <strong>✅ 备用主页特性：</strong>
+                    <ul class="step-list">
+                        <li>✅ 完整的导航菜单（5个主要功能项）</li>
+                        <li>✅ 所有主要按钮（立即体验、观看演示等）</li>
+                        <li>✅ 3个产品特性卡片</li>
+                        <li>✅ 响应式设计，支持移动端</li>
+                        <li>✅ iFlytek品牌一致性设计</li>
+                        <li>✅ 所有导航链接正常工作</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="solution-card">
+                <h3>🔧 其他解决方案</h3>
+                
+                <h4>方案1：重启开发服务器</h4>
+                <div class="step-list">
+                    <ol>
+                        <li>在终端中按 <code>Ctrl+C</code> 停止服务器</li>
+                        <li>运行 <code>cd frontend && npm run dev</code> 重新启动</li>
+                        <li>清除浏览器缓存并刷新页面</li>
+                    </ol>
+                </div>
+                
+                <h4>方案2：检查Vue组件</h4>
+                <div class="step-list">
+                    <ol>
+                        <li>检查 <code>frontend/src/views/NewHomePage.vue</code> 文件</li>
+                        <li>确认 <code>frontend/src/App.vue</code> 中的 router-view 正常</li>
+                        <li>验证 <code>frontend/src/main.js</code> 中的应用挂载</li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="solution-card">
+                <h3>🎯 快速导航测试</h3>
+                <p>使用备用主页测试所有导航功能：</p>
+                
+                <div class="quick-links">
+                    <a href="/backup-homepage.html" class="quick-link">🏠 备用主页</a>
+                    <a href="/demo" class="quick-link">🎬 产品演示</a>
+                    <a href="/interview-selection" class="quick-link">💼 开始面试</a>
+                    <a href="/reports" class="quick-link">📊 面试报告</a>
+                    <a href="/intelligent-dashboard" class="quick-link">📈 数据洞察</a>
+                    <a href="/candidate-portal" class="quick-link">👤 候选人入口</a>
+                    <a href="/enterprise-home" class="quick-link">🏢 企业版体验</a>
+                </div>
+            </div>
+
+            <div class="solution-card">
+                <h3>📋 验证清单</h3>
+                <p>访问备用主页后，请验证以下功能：</p>
+                <div class="step-list">
+                    <ul>
+                        <li>□ 页面加载速度快，无错误</li>
+                        <li>□ 顶部导航菜单5个项目都可点击</li>
+                        <li>□ "立即开始面试"按钮正常工作</li>
+                        <li>□ "观看产品演示"按钮正常工作</li>
+                        <li>□ 候选人入口和企业版体验按钮可用</li>
+                        <li>□ 3个产品卡片都可以点击并跳转</li>
+                        <li>□ 页面设计符合iFlytek品牌标准</li>
+                        <li>□ 移动端显示正常（如适用）</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="success-info">
+                <h3>🎉 解决方案优势</h3>
+                <p><strong>备用主页是一个完全独立的HTML页面，不依赖Vue框架，因此：</strong></p>
+                <ul>
+                    <li>✅ 加载速度更快</li>
+                    <li>✅ 兼容性更好</li>
+                    <li>✅ 不受Vue应用问题影响</li>
+                    <li>✅ 所有导航功能完全正常</li>
+                    <li>✅ 可以作为长期备用方案</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 页面加载完成提示
+        window.addEventListener('load', () => {
+            console.log('🎯 iFlytek 立即解决方案页面已加载');
+            console.log('💡 请点击"立即访问备用主页"按钮获得完整的导航功能');
+        });
+
+        // 自动检测备用页面可用性
+        function checkBackupPage() {
+            fetch('/backup-homepage.html')
+                .then(response => {
+                    if (response.ok) {
+                        console.log('✅ 备用主页可用');
+                        const successMsg = document.createElement('div');
+                        successMsg.className = 'success-info';
+                        successMsg.innerHTML = '<strong>✅ 备用主页已准备就绪，可以立即使用！</strong>';
+                        document.querySelector('.content').insertBefore(successMsg, document.querySelector('.solution-card'));
+                    }
+                })
+                .catch(error => {
+                    console.warn('⚠️ 备用页面检查失败:', error);
+                });
+        }
+
+        // 延迟检查备用页面
+        setTimeout(checkBackupPage, 1000);
+    </script>
+</body>
+</html>

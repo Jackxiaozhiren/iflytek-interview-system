@@ -1,0 +1,269 @@
+/**
+ * iFlytek星火多模态面试AI系统 - 渐变背景设计系统
+ * 参考用友大易设计风格，结合iFlytek品牌色彩
+ * 
+ * 设计理念：
+ * - 平滑的渐变过渡效果
+ * - 自然的视觉衔接
+ * - iFlytek品牌色彩一致性
+ * - 优秀的文字可读性
+ */
+
+/* ===== CSS变量定义 ===== */
+:root {
+  /* iFlytek品牌色彩系统 */
+  --iflytek-primary: #1890ff;
+  --iflytek-secondary: #667eea;
+  --iflytek-accent: #764ba2;
+  --iflytek-success: #52c41a;
+  --iflytek-warning: #faad14;
+  
+  /* 渐变背景色彩 */
+  --gradient-hero: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-section: linear-gradient(180deg, #f8fafc 0%, #e2e8f0 100%);
+  --gradient-card: linear-gradient(145deg, #ffffff 0%, #f1f5f9 100%);
+  --gradient-overlay: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+  
+  /* 动态渐变效果 */
+  --gradient-animated: linear-gradient(-45deg, #667eea, #764ba2, #1890ff, #52c41a);
+  --gradient-subtle: linear-gradient(135deg, rgba(24, 144, 255, 0.03) 0%, rgba(102, 126, 234, 0.03) 50%, rgba(118, 75, 162, 0.03) 100%);
+  
+  /* 渐变淡出效果 */
+  --gradient-fade-top: linear-gradient(180deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  --gradient-fade-bottom: linear-gradient(0deg, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0) 100%);
+  --gradient-fade-sides: linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 50%, rgba(255, 255, 255, 0.8) 100%);
+}
+
+/* ===== 基础渐变背景类 ===== */
+
+/* 主要英雄区域背景 */
+.gradient-hero-bg {
+  background: var(--gradient-hero);
+  position: relative;
+  overflow: hidden;
+}
+
+.gradient-hero-bg::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.9) 0%, rgba(118, 75, 162, 0.9) 100%);
+  z-index: 1;
+}
+
+.gradient-hero-bg > * {
+  position: relative;
+  z-index: 2;
+}
+
+/* 页面主体背景 */
+.gradient-page-bg {
+  background: var(--gradient-section);
+  min-height: 100vh;
+  position: relative;
+}
+
+/* 卡片渐变背景 */
+.gradient-card-bg {
+  background: var(--gradient-card);
+  border: 1px solid rgba(102, 126, 234, 0.1);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
+}
+
+/* 微妙的覆盖层渐变 */
+.gradient-overlay-bg {
+  background: var(--gradient-overlay);
+  backdrop-filter: blur(10px);
+}
+
+/* ===== 动态渐变效果 ===== */
+
+/* 动画渐变背景 */
+.gradient-animated-bg {
+  background: var(--gradient-animated);
+  background-size: 400% 400%;
+  animation: gradientShift 15s ease infinite;
+}
+
+@keyframes gradientShift {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* 呼吸效果渐变 */
+.gradient-breathing-bg {
+  background: var(--gradient-hero);
+  animation: breathingGradient 6s ease-in-out infinite;
+}
+
+@keyframes breathingGradient {
+  0%, 100% { 
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    transform: scale(1);
+  }
+  50% { 
+    background: linear-gradient(135deg, #1890ff 0%, #667eea 100%);
+    transform: scale(1.02);
+  }
+}
+
+/* ===== 渐变淡出效果 ===== */
+
+/* 顶部淡出 */
+.gradient-fade-top {
+  position: relative;
+}
+
+.gradient-fade-top::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: var(--gradient-fade-top);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 底部淡出 */
+.gradient-fade-bottom {
+  position: relative;
+}
+
+.gradient-fade-bottom::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 100px;
+  background: var(--gradient-fade-bottom);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* 侧边淡出 */
+.gradient-fade-sides {
+  position: relative;
+}
+
+.gradient-fade-sides::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--gradient-fade-sides);
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ===== 特定页面背景 ===== */
+
+/* 首页背景 */
+.homepage-gradient {
+  background: linear-gradient(180deg, 
+    var(--gradient-hero) 0%, 
+    var(--gradient-section) 60%, 
+    #ffffff 100%
+  );
+}
+
+/* 企业端背景 */
+.enterprise-gradient {
+  background: linear-gradient(135deg, 
+    #f8fafc 0%, 
+    rgba(102, 126, 234, 0.05) 25%, 
+    rgba(24, 144, 255, 0.03) 50%, 
+    #ffffff 100%
+  );
+}
+
+/* 候选人端背景 */
+.candidate-gradient {
+  background: linear-gradient(135deg, 
+    rgba(82, 196, 26, 0.05) 0%, 
+    rgba(24, 144, 255, 0.03) 50%, 
+    #f8fafc 100%
+  );
+}
+
+/* 报告中心背景 */
+.report-gradient {
+  background: linear-gradient(180deg, 
+    rgba(102, 126, 234, 0.08) 0%, 
+    rgba(255, 255, 255, 0.95) 30%, 
+    #ffffff 100%
+  );
+}
+
+/* 演示页面背景 */
+.demo-gradient {
+  background: linear-gradient(135deg, 
+    var(--gradient-hero) 0%, 
+    rgba(102, 126, 234, 0.1) 50%, 
+    #f8fafc 100%
+  );
+}
+
+/* ===== 响应式优化 ===== */
+
+@media (max-width: 768px) {
+  .gradient-fade-top::after,
+  .gradient-fade-bottom::after {
+    height: 60px;
+  }
+  
+  .gradient-breathing-bg {
+    animation-duration: 8s;
+  }
+  
+  .gradient-animated-bg {
+    animation-duration: 20s;
+  }
+}
+
+/* ===== 可访问性优化 ===== */
+
+/* 减少动画效果（用户偏好） */
+@media (prefers-reduced-motion: reduce) {
+  .gradient-animated-bg,
+  .gradient-breathing-bg {
+    animation: none;
+  }
+}
+
+/* 高对比度模式支持 */
+@media (prefers-contrast: high) {
+  .gradient-card-bg {
+    border: 2px solid var(--iflytek-primary);
+  }
+  
+  .gradient-overlay-bg {
+    backdrop-filter: none;
+    background: rgba(255, 255, 255, 0.95);
+  }
+}
+
+/* ===== 性能优化 ===== */
+
+/* GPU加速 */
+.gradient-animated-bg,
+.gradient-breathing-bg {
+  will-change: background-position, transform;
+  transform: translateZ(0);
+}
+
+/* 减少重绘 */
+.gradient-hero-bg::before,
+.gradient-fade-top::after,
+.gradient-fade-bottom::after,
+.gradient-fade-sides::after {
+  will-change: opacity;
+}

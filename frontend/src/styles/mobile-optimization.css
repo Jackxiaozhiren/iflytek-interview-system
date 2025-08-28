@@ -1,0 +1,787 @@
+/* 移动端优化样式 - iFlytek 多模态面试评估系统 */
+
+/* 移动端断点定义 */
+:root {
+  --mobile-xs: 320px;
+  --mobile-sm: 375px;
+  --mobile-md: 414px;
+  --mobile-lg: 480px;
+  --tablet-sm: 768px;
+  --tablet-lg: 1024px;
+  --desktop: 1200px;
+}
+
+/* 基础移动端重置 */
+* {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  -ms-text-size-adjust: 100%;
+}
+
+body {
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+}
+
+/* 移动端容器 */
+.mobile-container {
+  width: 100%;
+  max-width: 100vw;
+  padding: 0 16px;
+  margin: 0 auto;
+  overflow-x: hidden;
+}
+
+/* 移动端网格系统 */
+.mobile-grid {
+  display: grid;
+  gap: 16px;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 768px) {
+  .mobile-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 24px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .mobile-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 32px;
+  }
+}
+
+/* 移动端导航 */
+.mobile-nav {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background: var(--iflytek-bg-primary);
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  padding: 12px 16px;
+  box-shadow: var(--iflytek-shadow-sm);
+}
+
+.mobile-nav-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+}
+
+.mobile-nav-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+  flex: 1;
+  text-align: center;
+}
+
+.mobile-nav-button {
+  background: none;
+  border: none;
+  padding: 8px;
+  color: var(--iflytek-text-primary);
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.mobile-nav-button:hover {
+  background: var(--iflytek-bg-secondary);
+}
+
+/* 移动端菜单 */
+.mobile-menu {
+  position: fixed;
+  top: 0;
+  left: -100%;
+  width: 280px;
+  height: 100vh;
+  background: var(--iflytek-bg-primary);
+  z-index: 1001;
+  transition: left 0.3s ease;
+  box-shadow: var(--iflytek-shadow-lg);
+  overflow-y: auto;
+}
+
+.mobile-menu.active {
+  left: 0;
+}
+
+.mobile-menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-menu-header {
+  padding: 20px 16px;
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  background: var(--iflytek-gradient-primary);
+  color: white;
+}
+
+.mobile-menu-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin: 0;
+}
+
+.mobile-menu-list {
+  padding: 16px 0;
+}
+
+.mobile-menu-item {
+  display: block;
+  padding: 16px 20px;
+  color: var(--iflytek-text-primary);
+  text-decoration: none;
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  transition: all 0.3s ease;
+}
+
+.mobile-menu-item:hover,
+.mobile-menu-item.active {
+  background: var(--iflytek-bg-secondary);
+  color: var(--iflytek-primary);
+}
+
+/* 移动端卡片 */
+.mobile-card {
+  background: var(--iflytek-bg-primary);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  box-shadow: var(--iflytek-shadow-sm);
+  border: 1px solid var(--iflytek-border-secondary);
+}
+
+.mobile-card-header {
+  margin-bottom: 12px;
+  padding-bottom: 12px;
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+}
+
+.mobile-card-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+.mobile-card-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--iflytek-text-secondary);
+  margin: 4px 0 0 0;
+}
+
+.mobile-card-content {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+  color: var(--iflytek-text-primary);
+}
+
+.mobile-card-footer {
+  margin-top: 16px;
+  padding-top: 12px;
+  border-top: 1px solid var(--iflytek-border-secondary);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* 移动端按钮 */
+.mobile-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  min-height: 44px; /* iOS 推荐的最小触摸目标 */
+  min-width: 44px;
+}
+
+.mobile-btn-primary {
+  background: var(--iflytek-gradient-primary);
+  color: white;
+}
+
+.mobile-btn-primary:hover {
+  background: var(--iflytek-gradient-secondary);
+  transform: translateY(-2px);
+}
+
+.mobile-btn-secondary {
+  background: transparent;
+  border: 2px solid var(--iflytek-primary);
+  color: var(--iflytek-primary);
+}
+
+.mobile-btn-secondary:hover {
+  background: var(--iflytek-primary);
+  color: white;
+}
+
+.mobile-btn-full {
+  width: 100%;
+  margin-bottom: 12px;
+}
+
+.mobile-btn-group {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.mobile-btn-group .mobile-btn {
+  flex: 1;
+  min-width: 0;
+}
+
+/* 移动端表单 */
+.mobile-form {
+  padding: 0;
+}
+
+.mobile-form-group {
+  margin-bottom: 20px;
+}
+
+.mobile-form-label {
+  display: block;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--iflytek-text-primary);
+  margin-bottom: 8px;
+}
+
+.mobile-form-input {
+  width: 100%;
+  padding: 12px 16px;
+  font-size: var(--font-size-base);
+  border: 2px solid var(--iflytek-border-primary);
+  border-radius: 8px;
+  background: var(--iflytek-bg-primary);
+  color: var(--iflytek-text-primary);
+  transition: all 0.3s ease;
+  min-height: 44px;
+}
+
+.mobile-form-input:focus {
+  outline: none;
+  border-color: var(--iflytek-primary);
+  box-shadow: 0 0 0 3px rgba(24, 144, 255, 0.1);
+}
+
+.mobile-form-textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.mobile-form-select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  background-size: 16px;
+  padding-right: 40px;
+}
+
+/* 移动端列表 */
+.mobile-list {
+  background: var(--iflytek-bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: var(--iflytek-shadow-sm);
+  border: 1px solid var(--iflytek-border-secondary);
+}
+
+.mobile-list-item {
+  padding: 16px;
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  display: flex;
+  align-items: center;
+  transition: background-color 0.3s ease;
+}
+
+.mobile-list-item:last-child {
+  border-bottom: none;
+}
+
+.mobile-list-item:hover {
+  background: var(--iflytek-bg-secondary);
+}
+
+.mobile-list-item-content {
+  flex: 1;
+  min-width: 0;
+}
+
+.mobile-list-item-title {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--iflytek-text-primary);
+  margin: 0 0 4px 0;
+}
+
+.mobile-list-item-subtitle {
+  font-size: var(--font-size-sm);
+  color: var(--iflytek-text-secondary);
+  margin: 0;
+}
+
+.mobile-list-item-action {
+  margin-left: 12px;
+  color: var(--iflytek-text-tertiary);
+}
+
+/* 移动端标签页 */
+.mobile-tabs {
+  background: var(--iflytek-bg-primary);
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.mobile-tabs-nav {
+  display: flex;
+  min-width: max-content;
+  padding: 0 16px;
+}
+
+.mobile-tab-item {
+  flex-shrink: 0;
+  padding: 16px 20px;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--iflytek-text-secondary);
+  text-decoration: none;
+  border-bottom: 2px solid transparent;
+  transition: all 0.3s ease;
+  white-space: nowrap;
+}
+
+.mobile-tab-item:hover,
+.mobile-tab-item.active {
+  color: var(--iflytek-primary);
+  border-bottom-color: var(--iflytek-primary);
+}
+
+.mobile-tab-content {
+  padding: 20px 16px;
+}
+
+/* 移动端模态框 */
+.mobile-modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.3s ease;
+}
+
+.mobile-modal.active {
+  opacity: 1;
+  visibility: visible;
+}
+
+.mobile-modal-content {
+  background: var(--iflytek-bg-primary);
+  border-radius: 16px 16px 0 0;
+  width: 100%;
+  max-height: 80vh;
+  overflow-y: auto;
+  transform: translateY(100%);
+  transition: transform 0.3s ease;
+}
+
+.mobile-modal.active .mobile-modal-content {
+  transform: translateY(0);
+}
+
+.mobile-modal-header {
+  padding: 20px 16px 16px;
+  border-bottom: 1px solid var(--iflytek-border-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.mobile-modal-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  margin: 0;
+}
+
+.mobile-modal-close {
+  background: none;
+  border: none;
+  font-size: var(--font-size-xl);
+  color: var(--iflytek-text-secondary);
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}
+
+.mobile-modal-close:hover {
+  background: var(--iflytek-bg-secondary);
+  color: var(--iflytek-text-primary);
+}
+
+.mobile-modal-body {
+  padding: 20px 16px;
+}
+
+.mobile-modal-footer {
+  padding: 16px;
+  border-top: 1px solid var(--iflytek-border-secondary);
+  background: var(--iflytek-bg-secondary);
+}
+
+/* 移动端工具栏 */
+.mobile-toolbar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: var(--iflytek-bg-primary);
+  border-top: 1px solid var(--iflytek-border-secondary);
+  padding: 12px 16px;
+  z-index: 1000;
+  box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.mobile-toolbar-content {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+/* 移动端加载状态 */
+.mobile-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  text-align: center;
+}
+
+.mobile-loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--iflytek-bg-tertiary);
+  border-top: 3px solid var(--iflytek-primary);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.mobile-loading-text {
+  font-size: var(--font-size-base);
+  color: var(--iflytek-text-secondary);
+}
+
+/* 移动端空状态 */
+.mobile-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 20px;
+  text-align: center;
+}
+
+.mobile-empty-icon {
+  font-size: 48px;
+  color: var(--iflytek-text-quaternary);
+  margin-bottom: 16px;
+}
+
+.mobile-empty-title {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-medium);
+  color: var(--iflytek-text-secondary);
+  margin: 0 0 8px 0;
+}
+
+.mobile-empty-description {
+  font-size: var(--font-size-sm);
+  color: var(--iflytek-text-tertiary);
+  margin: 0 0 20px 0;
+}
+
+/* 移动端工具类 */
+.mobile-only {
+  display: block;
+}
+
+.desktop-only {
+  display: none;
+}
+
+@media (min-width: 768px) {
+  .mobile-only {
+    display: none;
+  }
+  
+  .desktop-only {
+    display: block;
+  }
+}
+
+/* 移动端间距 */
+.mobile-p-xs { padding: 8px; }
+.mobile-p-sm { padding: 12px; }
+.mobile-p-md { padding: 16px; }
+.mobile-p-lg { padding: 20px; }
+.mobile-p-xl { padding: 24px; }
+
+.mobile-m-xs { margin: 8px; }
+.mobile-m-sm { margin: 12px; }
+.mobile-m-md { margin: 16px; }
+.mobile-m-lg { margin: 20px; }
+.mobile-m-xl { margin: 24px; }
+
+/* 移动端文本 */
+.mobile-text-center { text-align: center; }
+.mobile-text-left { text-align: left; }
+.mobile-text-right { text-align: right; }
+
+/* 移动端显示/隐藏 */
+.mobile-hidden { display: none; }
+.mobile-visible { display: block; }
+
+/* 触摸优化 */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 安全区域适配 */
+@supports (padding: max(0px)) {
+  .mobile-safe-area-top {
+    padding-top: max(20px, env(safe-area-inset-top));
+  }
+
+  .mobile-safe-area-bottom {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+
+  .mobile-safe-area-left {
+    padding-left: max(16px, env(safe-area-inset-left));
+  }
+
+  .mobile-safe-area-right {
+    padding-right: max(16px, env(safe-area-inset-right));
+  }
+}
+
+/* ===== iFlytek 系统特定移动端修复 ===== */
+
+/* 面试页面移动端特定修复 */
+@media (max-width: 768px) {
+  .modern-interview-page {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  .interview-header .header-container {
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+    align-items: center !important;
+  }
+
+  .interview-progress {
+    width: 100% !important;
+    max-width: none !important;
+    margin: 0 !important;
+    order: 1 !important;
+  }
+
+  .interview-timer {
+    order: 2 !important;
+    text-align: center !important;
+  }
+
+  .main-container {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+    padding: 0 16px !important;
+  }
+
+  .ai-card {
+    padding: 20px !important;
+    margin-bottom: 16px !important;
+  }
+
+  .interview-tabs .el-tabs__nav-wrap {
+    padding: 0 !important;
+  }
+
+  .interview-tabs .el-tabs__item {
+    padding: 12px 16px !important;
+    font-size: 14px !important;
+  }
+
+  .voice-visualizer {
+    padding: 20px !important;
+  }
+
+  .wave-container {
+    height: 60px !important;
+  }
+
+  .record-btn {
+    width: 60px !important;
+    height: 60px !important;
+  }
+
+  .text-interface {
+    padding: 20px !important;
+  }
+
+  .answer-textarea {
+    min-height: 120px !important;
+  }
+
+  .interview-footer .footer-container {
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 12px 16px !important;
+  }
+
+  .footer-left,
+  .footer-right {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .footer-center {
+    order: -1 !important;
+    text-align: center !important;
+  }
+}
+
+/* 报告页面移动端特定修复 */
+@media (max-width: 768px) {
+  .modern-report-page {
+    overflow-x: hidden !important;
+    width: 100% !important;
+  }
+
+  .report-header .header-container {
+    flex-direction: column !important;
+    gap: 16px !important;
+    padding: 16px !important;
+    align-items: flex-start !important;
+  }
+
+  .header-right {
+    width: 100% !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+
+  .export-btn,
+  .share-btn {
+    width: 100% !important;
+    justify-content: center !important;
+  }
+
+  .candidate-card {
+    flex-direction: column !important;
+    gap: 24px !important;
+    text-align: center !important;
+    padding: 24px !important;
+  }
+
+  .candidate-info {
+    flex-direction: column !important;
+    text-align: center !important;
+    gap: 16px !important;
+  }
+
+  .candidate-meta {
+    justify-content: center !important;
+    flex-wrap: wrap !important;
+    gap: 12px !important;
+  }
+
+  .meta-item {
+    flex-direction: column !important;
+    gap: 4px !important;
+    text-align: center !important;
+  }
+
+  .overall-score {
+    width: 100% !important;
+    display: flex !important;
+    justify-content: center !important;
+  }
+
+  .score-circle {
+    width: 120px !important;
+    height: 120px !important;
+  }
+
+  .score-value {
+    font-size: 2rem !important;
+  }
+
+  .metrics-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+
+  .metric-card {
+    padding: 20px !important;
+  }
+
+  .insights-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+}

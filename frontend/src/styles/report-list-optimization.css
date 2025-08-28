@@ -1,0 +1,524 @@
+/* 📋 iFlytek 星火大模型智能面试系统 - 报告列表界面优化样式 */
+/* Report List Interface Optimization Styles for iFlytek Spark Interview System */
+
+/* ===== 字体大小协调系统 ===== */
+:root {
+  /* 报告列表专用字体大小变量 */
+  --report-title-size: 16px;
+  --report-summary-size: 13px;
+  --report-meta-size: 12px;
+  --report-action-size: 11px;
+  --report-score-size: 18px;
+  --report-score-unit-size: 10px;
+  
+  /* 行高优化 */
+  --report-title-line-height: 1.4;
+  --report-summary-line-height: 1.3;
+  --report-meta-line-height: 1.4;
+  
+  /* 间距系统 */
+  --report-cell-padding-v: 12px;
+  --report-cell-padding-h: 8px;
+  --report-content-gap: 12px;
+  --report-action-gap: 8px;
+  
+  /* iFlytek 品牌色彩增强 */
+  --iflytek-table-header-bg: #f8fafc;
+  --iflytek-table-hover-bg: #f1f5f9;
+  --iflytek-table-border: #e2e8f0;
+  --iflytek-table-border-light: #f1f5f9;
+}
+
+/* ===== 表格整体优化 ===== */
+.reports-table-enhanced {
+  background: var(--iflytek-bg-primary);
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.08);
+  border: 1px solid var(--iflytek-table-border);
+}
+
+.reports-table-enhanced .el-table {
+  font-family: var(--font-family-chinese-base);
+  border-radius: 12px;
+}
+
+/* 表头样式优化 */
+.reports-table-enhanced .el-table__header-wrapper {
+  background: var(--iflytek-table-header-bg);
+}
+
+.reports-table-enhanced .el-table th {
+  background-color: var(--iflytek-table-header-bg) !important;
+  color: var(--iflytek-text-primary);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--font-size-sm);
+  padding: 16px var(--report-cell-padding-h);
+  border-bottom: 2px solid var(--iflytek-primary);
+  position: relative;
+}
+
+.reports-table-enhanced .el-table th::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--iflytek-primary) 0%, var(--iflytek-secondary) 100%);
+}
+
+/* 表格行样式优化 */
+.reports-table-enhanced .el-table td {
+  padding: var(--report-cell-padding-v) var(--report-cell-padding-h);
+  border-bottom: 1px solid var(--iflytek-table-border-light);
+  vertical-align: top;
+  transition: background-color 0.2s ease;
+}
+
+.reports-table-enhanced .el-table tbody tr {
+  transition: all 0.2s ease;
+}
+
+.reports-table-enhanced .el-table tbody tr:hover {
+  background-color: var(--iflytek-table-hover-bg);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(24, 144, 255, 0.1);
+}
+
+.reports-table-enhanced .el-table tbody tr:hover td {
+  background-color: transparent;
+  border-bottom-color: var(--iflytek-primary-light);
+}
+
+/* ===== 单元格内容优化 ===== */
+
+/* 标题单元格 */
+.report-title-cell-enhanced {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--report-content-gap);
+  padding: 4px 0;
+}
+
+.report-icon-enhanced {
+  color: var(--iflytek-primary);
+  font-size: 20px;
+  margin-top: 2px;
+  flex-shrink: 0;
+  transition: color 0.2s ease;
+}
+
+.title-content-enhanced {
+  flex: 1;
+  min-width: 0;
+}
+
+.title-text-enhanced {
+  font-size: var(--report-title-size);
+  font-weight: var(--font-weight-semibold);
+  color: var(--iflytek-text-primary);
+  line-height: var(--report-title-line-height);
+  margin-bottom: 6px;
+  font-family: var(--font-family-chinese-base);
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.title-text-enhanced:hover {
+  color: var(--iflytek-primary);
+}
+
+/* 摘要容器 - 支持滚动功能 */
+.title-summary-container {
+  max-height: 60px;
+  margin-top: 2px;
+  position: relative;
+}
+
+.title-summary-enhanced {
+  font-size: var(--report-summary-size);
+  color: var(--iflytek-text-secondary);
+  line-height: var(--report-summary-line-height);
+  font-family: var(--font-family-chinese-base);
+}
+
+/* 可滚动的摘要样式 */
+.title-summary-scrollable {
+  max-height: 60px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding-right: 4px;
+  margin-right: -4px;
+  word-wrap: break-word;
+  word-break: break-all;
+  white-space: pre-wrap;
+}
+
+/* 自定义滚动条样式 - iFlytek品牌风格 */
+.title-summary-scrollable::-webkit-scrollbar {
+  width: 4px;
+}
+
+.title-summary-scrollable::-webkit-scrollbar-track {
+  background: var(--iflytek-bg-tertiary);
+  border-radius: 2px;
+}
+
+.title-summary-scrollable::-webkit-scrollbar-thumb {
+  background: var(--iflytek-primary);
+  border-radius: 2px;
+  transition: background-color 0.2s ease;
+}
+
+.title-summary-scrollable::-webkit-scrollbar-thumb:hover {
+  background: var(--iflytek-primary-dark);
+}
+
+/* Firefox滚动条样式 */
+.title-summary-scrollable {
+  scrollbar-width: thin;
+  scrollbar-color: var(--iflytek-primary) var(--iflytek-bg-tertiary);
+}
+
+/* 候选人单元格 */
+.candidate-cell-enhanced {
+  padding: 6px 0;
+}
+
+.candidate-name-enhanced {
+  font-size: var(--report-meta-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--iflytek-text-primary);
+  font-family: var(--font-family-chinese-base);
+  line-height: var(--report-meta-line-height);
+}
+
+/* 评分单元格 */
+.score-cell-enhanced {
+  display: flex;
+  align-items: baseline;
+  gap: 3px;
+  padding: 6px 0;
+  justify-content: center;
+}
+
+.score-value-enhanced {
+  font-size: var(--report-score-size);
+  font-weight: var(--font-weight-bold);
+  font-family: 'Consolas', var(--font-family-chinese-base);
+  line-height: 1;
+}
+
+.score-unit-enhanced {
+  font-size: var(--report-score-unit-size);
+  color: var(--iflytek-text-secondary);
+  font-family: var(--font-family-chinese-base);
+  margin-left: 1px;
+}
+
+/* 时间单元格 */
+.time-cell-enhanced {
+  padding: 6px 0;
+}
+
+.time-text-enhanced {
+  font-size: var(--report-meta-size);
+  color: var(--iflytek-text-secondary);
+  font-family: var(--font-family-chinese-base);
+  line-height: var(--report-meta-line-height);
+}
+
+/* 标签优化 */
+.type-tag-enhanced, .domain-tag-enhanced {
+  font-family: var(--font-family-chinese-base);
+  font-size: var(--report-meta-size);
+  font-weight: var(--font-weight-medium);
+  border-radius: 6px;
+  padding: 4px 8px;
+  border: none;
+}
+
+/* ===== 操作按钮区域优化 ===== */
+.action-buttons-enhanced {
+  display: flex;
+  gap: var(--report-action-gap);
+  align-items: center;
+  justify-content: flex-start;
+  padding: 6px 0;
+}
+
+/* 统一尺寸的操作按钮容器 */
+.action-buttons-uniform {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  align-items: stretch;
+  width: 100%;
+}
+
+.action-btn-enhanced {
+  min-width: 64px;
+  height: 32px;
+  font-size: var(--report-action-size);
+  font-family: var(--font-family-chinese-base);
+  font-weight: var(--font-weight-medium);
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  border: 1px solid transparent;
+}
+
+/* 统一尺寸的操作按钮 */
+.action-btn-uniform {
+  width: 100%;
+  min-width: 72px;
+  height: 32px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  padding: 0 12px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.action-btn-uniform .el-icon {
+  font-size: 13px;
+  flex-shrink: 0;
+}
+
+.action-btn-uniform .btn-text {
+  flex: 1;
+  text-align: center;
+  font-size: var(--report-action-size);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+}
+
+.action-btn-enhanced .el-icon {
+  font-size: 13px;
+}
+
+.action-btn-enhanced:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(24, 144, 255, 0.2);
+}
+
+.action-btn-enhanced.el-button--primary {
+  background: linear-gradient(135deg, var(--iflytek-primary) 0%, var(--iflytek-secondary) 100%);
+  border-color: var(--iflytek-primary);
+}
+
+.action-btn-enhanced.el-button--primary:hover {
+  background: linear-gradient(135deg, var(--iflytek-primary-dark) 0%, var(--iflytek-secondary-dark) 100%);
+}
+
+/* ===== 响应式设计优化 ===== */
+@media (max-width: 1200px) {
+  :root {
+    --report-title-size: 15px;
+    --report-summary-size: 12px;
+    --report-meta-size: 11px;
+    --report-action-size: 10px;
+    --report-score-size: 16px;
+    --report-cell-padding-v: 10px;
+    --report-cell-padding-h: 6px;
+    --report-content-gap: 10px;
+    --report-action-gap: 6px;
+  }
+
+  /* 中等屏幕下的摘要滚动区域调整 */
+  .title-summary-container {
+    max-height: 50px;
+  }
+
+  .title-summary-scrollable {
+    max-height: 50px;
+  }
+
+  /* 中等屏幕下的按钮布局保持垂直 */
+  .action-buttons-enhanced {
+    flex-direction: column;
+    gap: 4px;
+    align-items: stretch;
+  }
+
+  .action-buttons-uniform {
+    gap: 4px;
+  }
+
+  .action-btn-enhanced {
+    min-width: 56px;
+    height: 28px;
+  }
+
+  .action-btn-uniform {
+    min-width: 68px;
+    height: 28px;
+    gap: 4px;
+    padding: 0 8px;
+  }
+
+  .action-btn-uniform .btn-text {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 768px) {
+  :root {
+    --report-title-size: 14px;
+    --report-summary-size: 11px;
+    --report-meta-size: 10px;
+    --report-action-size: 9px;
+    --report-score-size: 14px;
+    --report-cell-padding-v: 8px;
+    --report-cell-padding-h: 4px;
+    --report-content-gap: 8px;
+    --report-action-gap: 4px;
+  }
+  
+  .reports-table-enhanced .el-table th,
+  .reports-table-enhanced .el-table td {
+    padding: var(--report-cell-padding-v) var(--report-cell-padding-h);
+  }
+  
+  /* 平板端摘要滚动区域调整 */
+  .title-summary-container {
+    max-height: 40px;
+  }
+
+  .title-summary-scrollable {
+    max-height: 40px;
+  }
+
+  .title-summary-scrollable::-webkit-scrollbar {
+    width: 3px;
+  }
+
+  /* 平板端按钮布局 - 改为水平排列以节省空间 */
+  .action-buttons-enhanced {
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .action-buttons-uniform {
+    flex-direction: row;
+    gap: 2px;
+  }
+
+  .action-btn-enhanced {
+    min-width: 44px;
+    height: 26px;
+    font-size: 8px;
+    padding: 0 4px;
+  }
+
+  .action-btn-uniform {
+    min-width: 44px;
+    height: 26px;
+    gap: 2px;
+    padding: 0 4px;
+    flex: 1;
+  }
+
+  .action-btn-uniform .btn-text {
+    font-size: 8px;
+  }
+
+  .action-btn-enhanced .el-icon {
+    font-size: 10px;
+  }
+}
+
+@media (max-width: 480px) {
+  :root {
+    --report-title-size: 13px;
+    --report-summary-size: 10px;
+    --report-meta-size: 9px;
+    --report-action-size: 8px;
+    --report-score-size: 12px;
+    --report-cell-padding-v: 6px;
+    --report-cell-padding-h: 3px;
+  }
+  
+  /* 手机端摘要滚动区域调整 */
+  .title-summary-container {
+    max-height: 32px;
+  }
+
+  .title-summary-scrollable {
+    max-height: 32px;
+    font-size: 10px;
+  }
+
+  .title-summary-scrollable::-webkit-scrollbar {
+    width: 2px;
+  }
+
+  /* 手机端按钮布局 - 垂直排列确保可点击性 */
+  .action-buttons-enhanced {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .action-buttons-uniform {
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .action-btn-enhanced {
+    width: 100%;
+    min-width: unset;
+    height: 24px;
+  }
+
+  .action-btn-uniform {
+    width: 100%;
+    min-width: unset;
+    height: 24px;
+    gap: 2px;
+    padding: 0 6px;
+  }
+
+  .action-btn-uniform .btn-text {
+    font-size: 8px;
+  }
+
+  .report-icon-enhanced {
+    font-size: 16px;
+  }
+}
+
+/* ===== 无障碍访问优化 ===== */
+.action-btn-enhanced:focus {
+  outline: 2px solid var(--iflytek-primary);
+  outline-offset: 2px;
+}
+
+.title-text-enhanced:focus {
+  outline: 2px solid var(--iflytek-primary);
+  outline-offset: 1px;
+  border-radius: 2px;
+}
+
+/* ===== 打印样式优化 ===== */
+@media print {
+  .reports-table-enhanced {
+    box-shadow: none;
+    border: 1px solid #000;
+  }
+  
+  .action-buttons-enhanced {
+    display: none;
+  }
+  
+  .title-text-enhanced,
+  .candidate-name-enhanced,
+  .time-text-enhanced {
+    color: #000 !important;
+  }
+}

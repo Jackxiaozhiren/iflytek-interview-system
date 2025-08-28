@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>布局调试工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .debug-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .debug-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+        }
+        
+        .debug-title {
+            color: #1890ff;
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+        }
+        
+        .debug-item {
+            margin-bottom: 15px;
+            padding: 15px;
+            background: #f9f9f9;
+            border-radius: 4px;
+            border-left: 4px solid #1890ff;
+        }
+        
+        .debug-code {
+            background: #2d3748;
+            color: #e2e8f0;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            overflow-x: auto;
+            margin: 10px 0;
+        }
+        
+        .debug-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .debug-button:hover {
+            background: #0066cc;
+        }
+        
+        .status-success {
+            color: #52c41a;
+            font-weight: bold;
+        }
+        
+        .status-error {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        
+        .status-warning {
+            color: #fa8c16;
+            font-weight: bold;
+        }
+        
+        .highlight {
+            background: #fff2e8;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="debug-container">
+        <h1 style="text-align: center; color: #2c3e50;">🔧 企业管理界面布局调试工具</h1>
+        
+        <div class="debug-section">
+            <div class="debug-title">🚀 快速访问</div>
+            <div class="debug-item">
+                <p><strong>企业管理界面：</strong></p>
+                <button class="debug-button" onclick="window.open('http://localhost:5173/enterprise', '_blank')">
+                    打开企业管理界面
+                </button>
+                <button class="debug-button" onclick="location.reload()">
+                    强制刷新当前页面
+                </button>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <div class="debug-title">🔍 CSS调试步骤</div>
+            
+            <div class="debug-item">
+                <p><strong>步骤1：检查元素选择器</strong></p>
+                <p>在浏览器中按 <span class="highlight">F12</span> 打开开发者工具，然后：</p>
+                <div class="debug-code">
+1. 右键点击"AI智能洞察"模块
+2. 选择"检查元素"
+3. 查看元素是否有以下类名：
+   - class="module-section insights-section"
+                </div>
+            </div>
+            
+            <div class="debug-item">
+                <p><strong>步骤2：验证CSS样式应用</strong></p>
+                <p>在开发者工具的Elements面板中，检查以下样式是否被应用：</p>
+                <div class="debug-code">
+.module-section.insights-section {
+    margin-bottom: 48px !important;
+    padding: 32px;
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+                </div>
+            </div>
+            
+            <div class="debug-item">
+                <p><strong>步骤3：检查样式优先级</strong></p>
+                <p>在Styles面板中查看：</p>
+                <ul>
+                    <li>是否有样式被划掉（表示被覆盖）</li>
+                    <li>!important 声明是否生效</li>
+                    <li>scoped 属性是否正确应用</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <div class="debug-title">⚡ 问题排查清单</div>
+            
+            <div class="debug-item">
+                <p><strong>缓存问题排查：</strong></p>
+                <ul>
+                    <li>按 <span class="highlight">Ctrl+F5</span> 强制刷新页面</li>
+                    <li>按 <span class="highlight">Ctrl+Shift+R</span> 硬性重新加载</li>
+                    <li>在开发者工具中右键刷新按钮，选择"清空缓存并硬性重新加载"</li>
+                </ul>
+            </div>
+            
+            <div class="debug-item">
+                <p><strong>CSS优先级问题：</strong></p>
+                <div class="debug-code">
+/* 我们使用的高优先级选择器 */
+.module-section.insights-section {
+    /* 样式规则 */
+}
+
+/* 如果仍然不生效，可能需要更高优先级 */
+.enterprise-dashboard .module-section.insights-section {
+    /* 更高优先级的样式规则 */
+}
+                </div>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <div class="debug-title">🛠️ 手动验证工具</div>
+            
+            <div class="debug-item">
+                <p><strong>在浏览器控制台中运行以下代码：</strong></p>
+                <div class="debug-code">
+// 检查元素是否存在
+const insightsSection = document.querySelector('.insights-section');
+console.log('洞察模块元素:', insightsSection);
+
+// 检查计算后的样式
+if (insightsSection) {
+    const styles = window.getComputedStyle(insightsSection);
+    console.log('margin-bottom:', styles.marginBottom);
+    console.log('padding:', styles.padding);
+    console.log('background:', styles.background);
+}
+
+// 检查类名
+if (insightsSection) {
+    console.log('类名列表:', insightsSection.classList);
+}
+                </div>
+                <button class="debug-button" onclick="copyToClipboard(this.previousElementSibling.textContent)">
+                    复制代码
+                </button>
+            </div>
+        </div>
+        
+        <div class="debug-section">
+            <div class="debug-title">📋 修复验证清单</div>
+            
+            <div class="debug-item">
+                <p><strong>✅ 检查项目：</strong></p>
+                <ul>
+                    <li>□ "AI智能洞察"模块的margin-bottom是否为48px</li>
+                    <li>□ 模块header的字体大小是否为28px</li>
+                    <li>□ 洞察卡片的padding是否为32px</li>
+                    <li>□ 网格布局的最小宽度是否为350px</li>
+                    <li>□ 与其他模块的对齐是否一致</li>
+                    <li>□ 响应式布局是否正常工作</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #e6f7ff; border-radius: 8px;">
+            <h3 style="color: #1890ff; margin-bottom: 10px;">🔧 调试提示</h3>
+            <p style="color: #64748b; margin: 0;">
+                如果样式仍然不生效，请检查Vue组件的scoped样式和CSS优先级。<br>
+                使用!important和更具体的选择器可以解决大多数优先级问题。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function copyToClipboard(text) {
+            navigator.clipboard.writeText(text).then(function() {
+                alert('代码已复制到剪贴板！');
+            }, function(err) {
+                console.error('复制失败: ', err);
+            });
+        }
+    </script>
+</body>
+</html>

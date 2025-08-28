@@ -1,0 +1,17 @@
+{
+  "timestamp": "2025-07-09T08:10:15.498Z",
+  "wcag_standard": "WCAG 2.1 AA",
+  "system": "iFlytek Spark 多模态面试评估系统",
+  "results": {
+    "total_tests": 8,
+    "passed_tests": 7,
+    "compliance_rate": "87.5%",
+    "fully_compliant": false
+  },
+  "recommendations": [
+    "使用CSS变量统一管理颜色",
+    "增强字体粗细 (font-weight: 600+)",
+    "移除降低对比度的透明度",
+    "确保悬停状态也符合标准"
+  ]
+}

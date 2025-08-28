@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>布局修复验证工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .verification-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        .verification-title {
+            color: #1890ff;
+            font-size: 28px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .verification-section {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #e0e0e0;
+            border-radius: 8px;
+            background: #fafafa;
+        }
+        
+        .verification-button {
+            background: #1890ff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 14px;
+        }
+        
+        .verification-button:hover {
+            background: #0066cc;
+        }
+        
+        .status-success {
+            color: #52c41a;
+            font-weight: bold;
+        }
+        
+        .status-error {
+            color: #ff4d4f;
+            font-weight: bold;
+        }
+        
+        .status-warning {
+            color: #fa8c16;
+            font-weight: bold;
+        }
+        
+        .code-block {
+            background: #f6f8fa;
+            border: 1px solid #e1e4e8;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .results-container {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 15px;
+            margin-top: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .highlight {
+            background: #fff2e8;
+            padding: 2px 4px;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body>
+    <div class="verification-container">
+        <h1 class="verification-title">🔧 "AI智能洞察"模块布局修复验证</h1>
+        
+        <div class="verification-section">
+            <h3>🚀 快速访问</h3>
+            <button class="verification-button" onclick="window.open('http://localhost:5173/enterprise', '_blank')">
+                打开企业管理界面
+            </button>
+            <button class="verification-button" onclick="runLayoutVerification()">
+                运行布局验证
+            </button>
+            <button class="verification-button" onclick="checkCSSStyles()">
+                检查CSS样式
+            </button>
+        </div>
+        
+        <div class="verification-section">
+            <h3>🔍 自动化验证脚本</h3>
+            <p>点击下面的按钮在企业管理界面中运行验证脚本：</p>
+            
+            <div class="code-block">
+// 在企业管理界面的控制台中运行此脚本
+function verifyInsightsLayout() {
+    console.log('🔍 开始验证AI智能洞察模块布局...');
+    
+    // 查找洞察模块
+    const insightsSection = document.querySelector('.insights-section');
+    if (!insightsSection) {
+        console.error('❌ 未找到AI智能洞察模块');
+        return;
+    }
+    
+    console.log('✅ 找到AI智能洞察模块');
+    
+    // 检查计算后的样式
+    const computedStyles = window.getComputedStyle(insightsSection);
+    const marginBottom = computedStyles.marginBottom;
+    const padding = computedStyles.padding;
+    const background = computedStyles.background;
+    
+    console.log('📊 样式检查结果:');
+    console.log('- margin-bottom:', marginBottom);
+    console.log('- padding:', padding);
+    console.log('- background:', background);
+    
+    // 检查与其他模块的对齐
+    const allModuleSections = document.querySelectorAll('.module-section');
+    console.log('📐 模块对齐检查:');
+    console.log('- 总模块数:', allModuleSections.length);
+    
+    allModuleSections.forEach((section, index) => {
+        const styles = window.getComputedStyle(section);
+        const rect = section.getBoundingClientRect();
+        console.log(`- 模块 ${index + 1}:`, {
+            marginBottom: styles.marginBottom,
+            width: rect.width,
+            left: rect.left
+        });
+    });
+    
+    // 验证修复是否生效
+    const expectedMarginBottom = '48px';
+    if (marginBottom === expectedMarginBottom) {
+        console.log('✅ margin-bottom 修复成功!');
+    } else {
+        console.log('❌ margin-bottom 修复失败，期望:', expectedMarginBottom, '实际:', marginBottom);
+    }
+    
+    return {
+        found: true,
+        marginBottom,
+        padding,
+        background,
+        totalModules: allModuleSections.length,
+        fixApplied: marginBottom === expectedMarginBottom
+    };
+}
+
+// 运行验证
+verifyInsightsLayout();
+            </div>
+            
+            <button class="verification-button" onclick="copyVerificationScript()">
+                复制验证脚本
+            </button>
+        </div>
+        
+        <div class="verification-section">
+            <h3>📋 手动验证清单</h3>
+            <div style="background: #e6f7ff; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <h4>请在企业管理界面中检查以下项目：</h4>
+                <ul>
+                    <li>□ "AI智能洞察"模块是否与其他模块水平对齐</li>
+                    <li>□ 模块底部间距是否为48px（与其他模块一致）</li>
+                    <li>□ 模块内边距是否为32px</li>
+                    <li>□ 标题字体大小是否为28px</li>
+                    <li>□ 洞察卡片的圆角是否为16px</li>
+                    <li>□ 网格布局的最小宽度是否为350px</li>
+                    <li>□ 响应式布局在平板和手机端是否正常</li>
+                </ul>
+            </div>
+        </div>
+        
+        <div class="verification-section">
+            <h3>🛠️ 问题排查工具</h3>
+            <p>如果布局仍有问题，请尝试以下步骤：</p>
+            
+            <div style="background: #fff2f0; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <h4>强制刷新步骤：</h4>
+                <ol>
+                    <li>按 <span class="highlight">Ctrl+F5</span> 强制刷新页面</li>
+                    <li>按 <span class="highlight">F12</span> 打开开发者工具</li>
+                    <li>右键点击刷新按钮，选择"清空缓存并硬性重新加载"</li>
+                    <li>检查Network面板确认CSS文件已重新加载</li>
+                </ol>
+            </div>
+            
+            <div style="background: #f6ffed; padding: 15px; border-radius: 4px; margin: 10px 0;">
+                <h4>CSS优先级检查：</h4>
+                <ol>
+                    <li>在开发者工具中右键点击"AI智能洞察"模块</li>
+                    <li>选择"检查元素"</li>
+                    <li>在Styles面板中查看是否有样式被划掉</li>
+                    <li>确认 <code>.module-section.insights-section</code> 样式是否被应用</li>
+                    <li>检查是否有 <code>!important</code> 声明生效</li>
+                </ol>
+            </div>
+        </div>
+        
+        <div id="verification-results" class="verification-section" style="display: none;">
+            <h3>📊 验证结果</h3>
+            <div id="results-content" class="results-container"></div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 30px; padding: 20px; background: #e6f7ff; border-radius: 8px;">
+            <h3 style="color: #1890ff; margin-bottom: 10px;">🎯 验证完成后</h3>
+            <p style="color: #64748b; margin: 0;">
+                如果所有检查项目都通过，说明布局修复已成功！<br>
+                如果仍有问题，请将验证脚本的输出结果发送给我进行进一步分析。
+            </p>
+        </div>
+    </div>
+
+    <script>
+        function runLayoutVerification() {
+            const resultsDiv = document.getElementById('verification-results');
+            const contentDiv = document.getElementById('results-content');
+            
+            resultsDiv.style.display = 'block';
+            contentDiv.innerHTML = '<p>正在验证布局...</p>';
+            
+            // 模拟验证过程
+            setTimeout(() => {
+                contentDiv.innerHTML = `
+                    <div style="color: #52c41a; font-weight: bold; margin-bottom: 15px;">
+                        ✅ 验证工具已准备就绪
+                    </div>
+                    <div style="background: #f0f9ff; padding: 15px; border-radius: 4px;">
+                        <strong>下一步操作：</strong><br>
+                        1. 点击"打开企业管理界面"按钮<br>
+                        2. 在企业管理界面按F12打开控制台<br>
+                        3. 复制并运行上面的验证脚本<br>
+                        4. 查看控制台输出的验证结果
+                    </div>
+                `;
+            }, 1000);
+        }
+        
+        function checkCSSStyles() {
+            const resultsDiv = document.getElementById('verification-results');
+            const contentDiv = document.getElementById('results-content');
+            
+            resultsDiv.style.display = 'block';
+            contentDiv.innerHTML = `
+                <div style="color: #1890ff; font-weight: bold; margin-bottom: 15px;">
+                    🔍 CSS样式检查指南
+                </div>
+                <div style="background: #f6f8fa; padding: 15px; border-radius: 4px; font-family: monospace; font-size: 12px;">
+                    <strong>在企业管理界面的开发者工具中查找以下样式：</strong><br><br>
+                    .module-section.insights-section {<br>
+                    &nbsp;&nbsp;margin-bottom: 48px !important;<br>
+                    &nbsp;&nbsp;padding: 32px !important;<br>
+                    &nbsp;&nbsp;background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);<br>
+                    }<br><br>
+                    <strong>如果样式被划掉或不存在，说明CSS优先级有问题。</strong>
+                </div>
+            `;
+        }
+        
+        function copyVerificationScript() {
+            const scriptText = document.querySelector('.code-block').textContent;
+            navigator.clipboard.writeText(scriptText).then(function() {
+                alert('验证脚本已复制到剪贴板！请在企业管理界面的控制台中粘贴运行。');
+            });
+        }
+    </script>
+</body>
+</html>

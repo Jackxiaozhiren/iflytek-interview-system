@@ -1,0 +1,296 @@
+/**
+ * iFlytek 多模态面试系统 - 响应式设计框架
+ * 统一的响应式断点、变量和组件样式
+ */
+
+/* ===== 响应式断点定义 ===== */
+:root {
+  /* 断点变量 */
+  --breakpoint-xs: 320px;   /* 小型手机 */
+  --breakpoint-sm: 576px;   /* 大型手机 */
+  --breakpoint-md: 768px;   /* 平板 */
+  --breakpoint-lg: 992px;   /* 小型桌面 */
+  --breakpoint-xl: 1200px;  /* 大型桌面 */
+  --breakpoint-xxl: 1600px; /* 超大桌面 */
+
+  /* 响应式字体大小 */
+  --font-xs: clamp(10px, 2vw, 12px);
+  --font-sm: clamp(12px, 2.5vw, 14px);
+  --font-base: clamp(14px, 3vw, 16px);
+  --font-lg: clamp(16px, 3.5vw, 18px);
+  --font-xl: clamp(18px, 4vw, 20px);
+  --font-2xl: clamp(20px, 4.5vw, 24px);
+  --font-3xl: clamp(24px, 5vw, 32px);
+  --font-4xl: clamp(32px, 6vw, 48px);
+
+  /* 响应式图标大小 */
+  --icon-xs: clamp(12px, 2.5vw, 16px);
+  --icon-sm: clamp(16px, 3vw, 20px);
+  --icon-base: clamp(20px, 3.5vw, 24px);
+  --icon-lg: clamp(24px, 4vw, 32px);
+  --icon-xl: clamp(32px, 5vw, 48px);
+
+  /* 响应式间距 */
+  --space-responsive-xs: clamp(2px, 1vw, 4px);
+  --space-responsive-sm: clamp(4px, 1.5vw, 8px);
+  --space-responsive-md: clamp(8px, 2vw, 16px);
+  --space-responsive-lg: clamp(16px, 3vw, 24px);
+  --space-responsive-xl: clamp(24px, 4vw, 32px);
+  --space-responsive-2xl: clamp(32px, 5vw, 48px);
+
+  /* 响应式容器宽度 */
+  --container-xs: 100%;
+  --container-sm: 540px;
+  --container-md: 720px;
+  --container-lg: 960px;
+  --container-xl: 1140px;
+  --container-xxl: 1320px;
+
+  /* 响应式按钮尺寸 */
+  --btn-height-sm: clamp(28px, 4vw, 32px);
+  --btn-height-md: clamp(32px, 5vw, 40px);
+  --btn-height-lg: clamp(40px, 6vw, 48px);
+
+  /* 响应式表格行高 */
+  --table-row-height: clamp(40px, 5vw, 56px);
+}
+
+/* ===== 响应式容器系统 ===== */
+.responsive-container {
+  width: 100%;
+  margin: 0 auto;
+  padding: 0 var(--space-responsive-md);
+}
+
+/* 断点容器 */
+@media (min-width: 576px) {
+  .responsive-container { max-width: var(--container-sm); }
+}
+
+@media (min-width: 768px) {
+  .responsive-container { max-width: var(--container-md); }
+}
+
+@media (min-width: 992px) {
+  .responsive-container { max-width: var(--container-lg); }
+}
+
+@media (min-width: 1200px) {
+  .responsive-container { max-width: var(--container-xl); }
+}
+
+@media (min-width: 1600px) {
+  .responsive-container { max-width: var(--container-xxl); }
+}
+
+/* ===== 响应式栅格系统 ===== */
+.responsive-grid {
+  display: grid;
+  gap: var(--space-responsive-md);
+  width: 100%;
+}
+
+/* 自适应列数 */
+.grid-auto-fit {
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+}
+
+.grid-auto-fill {
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+}
+
+/* 响应式列数 */
+.grid-responsive {
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 576px) {
+  .grid-responsive { grid-template-columns: repeat(2, 1fr); }
+}
+
+@media (min-width: 768px) {
+  .grid-responsive { grid-template-columns: repeat(3, 1fr); }
+}
+
+@media (min-width: 992px) {
+  .grid-responsive { grid-template-columns: repeat(4, 1fr); }
+}
+
+/* ===== 响应式文字系统 ===== */
+.text-responsive {
+  font-size: var(--font-base);
+  line-height: 1.5;
+}
+
+.text-responsive-sm { font-size: var(--font-sm); }
+.text-responsive-lg { font-size: var(--font-lg); }
+.text-responsive-xl { font-size: var(--font-xl); }
+
+.heading-responsive {
+  font-size: var(--font-2xl);
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.title-responsive {
+  font-size: var(--font-3xl);
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.hero-title-responsive {
+  font-size: var(--font-4xl);
+  font-weight: 800;
+  line-height: 1;
+}
+
+/* ===== 响应式图标系统 ===== */
+.icon-responsive {
+  width: var(--icon-base);
+  height: var(--icon-base);
+  flex-shrink: 0;
+}
+
+.icon-responsive-sm { 
+  width: var(--icon-sm); 
+  height: var(--icon-sm); 
+}
+
+.icon-responsive-lg { 
+  width: var(--icon-lg); 
+  height: var(--icon-lg); 
+}
+
+.icon-responsive-xl { 
+  width: var(--icon-xl); 
+  height: var(--icon-xl); 
+}
+
+/* ===== 响应式按钮系统 ===== */
+.btn-responsive {
+  height: var(--btn-height-md);
+  padding: 0 var(--space-responsive-lg);
+  font-size: var(--font-base);
+  border-radius: var(--radius-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-responsive-sm);
+  min-width: 80px;
+  white-space: nowrap;
+}
+
+.btn-responsive-sm {
+  height: var(--btn-height-sm);
+  padding: 0 var(--space-responsive-md);
+  font-size: var(--font-sm);
+}
+
+.btn-responsive-lg {
+  height: var(--btn-height-lg);
+  padding: 0 var(--space-responsive-xl);
+  font-size: var(--font-lg);
+}
+
+/* ===== 响应式卡片系统 ===== */
+.card-responsive {
+  background: var(--bg-primary);
+  border-radius: var(--radius-lg);
+  padding: var(--space-responsive-lg);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+  transition: all 0.2s ease;
+}
+
+.card-responsive:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* ===== 响应式间距工具类 ===== */
+.p-responsive { padding: var(--space-responsive-md); }
+.p-responsive-sm { padding: var(--space-responsive-sm); }
+.p-responsive-lg { padding: var(--space-responsive-lg); }
+.p-responsive-xl { padding: var(--space-responsive-xl); }
+
+.m-responsive { margin: var(--space-responsive-md); }
+.m-responsive-sm { margin: var(--space-responsive-sm); }
+.m-responsive-lg { margin: var(--space-responsive-lg); }
+.m-responsive-xl { margin: var(--space-responsive-xl); }
+
+.gap-responsive { gap: var(--space-responsive-md); }
+.gap-responsive-sm { gap: var(--space-responsive-sm); }
+.gap-responsive-lg { gap: var(--space-responsive-lg); }
+
+/* ===== 响应式显示控制 ===== */
+.hidden-xs { display: none; }
+.hidden-sm { display: none; }
+.hidden-md { display: none; }
+.hidden-lg { display: none; }
+.hidden-xl { display: none; }
+
+@media (min-width: 576px) {
+  .hidden-xs { display: initial; }
+  .show-sm-up { display: initial; }
+  .hidden-sm-up { display: none; }
+}
+
+@media (min-width: 768px) {
+  .hidden-sm { display: initial; }
+  .show-md-up { display: initial; }
+  .hidden-md-up { display: none; }
+}
+
+@media (min-width: 992px) {
+  .hidden-md { display: initial; }
+  .show-lg-up { display: initial; }
+  .hidden-lg-up { display: none; }
+}
+
+@media (min-width: 1200px) {
+  .hidden-lg { display: initial; }
+  .show-xl-up { display: initial; }
+  .hidden-xl-up { display: none; }
+}
+
+/* ===== 响应式Flex布局 ===== */
+.flex-responsive {
+  display: flex;
+  gap: var(--space-responsive-md);
+}
+
+.flex-responsive-column {
+  flex-direction: column;
+}
+
+@media (max-width: 767px) {
+  .flex-responsive-mobile-column {
+    flex-direction: column;
+  }
+  
+  .flex-responsive-mobile-wrap {
+    flex-wrap: wrap;
+  }
+}
+
+/* ===== 响应式表格优化 ===== */
+.table-responsive-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table-responsive {
+  min-width: 600px;
+}
+
+@media (max-width: 767px) {
+  .table-responsive {
+    font-size: var(--font-sm);
+  }
+  
+  .table-responsive th,
+  .table-responsive td {
+    padding: var(--space-responsive-sm);
+    min-height: var(--table-row-height);
+  }
+}

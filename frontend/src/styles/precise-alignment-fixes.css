@@ -1,0 +1,504 @@
+/**
+ * iFlytek 星火大模型智能面试系统 - 精确对齐修复
+ * Precise Alignment Fixes for Specific UI Elements
+ *
+ * 版本: 4.0
+ * 更新: 2025-07-20
+ * 优先级: 终极精确 (!important)
+ *
+ * 针对三个具体问题区域的精确修复：
+ * 1. 主页快速开始按钮图标对齐
+ * 2. 技术特性卡片图标对齐  
+ * 3. 面试页面元数据图标对齐
+ */
+
+/* ===== 问题1: 主页快速开始按钮图标对齐修复 ===== */
+
+/* 快速开始区域按钮容器 */
+.quick-start-actions {
+  display: flex !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* 快速开始区域的所有按钮 */
+.quick-start-actions .el-button,
+.start-btn,
+.demo-btn,
+.report-btn {
+  /* 强制flex布局 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+
+  /* 文本对齐 */
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+
+  /* 防止换行 */
+  white-space: nowrap !important;
+
+  /* 盒模型 */
+  box-sizing: border-box !important;
+
+  /* 最小高度确保一致性 */
+  min-height: 48px !important;
+  padding: 16px 24px !important;
+}
+
+/* 快速开始按钮内的图标 - 精确选择器 */
+.quick-start-actions .el-button .el-icon,
+.quick-start-actions .el-button .btn-icon,
+.start-btn .el-icon,
+.start-btn .btn-icon,
+.demo-btn .el-icon,
+.demo-btn .btn-icon,
+.report-btn .el-icon,
+.report-btn .btn-icon,
+.iflytek-btn-primary .el-icon,
+.iflytek-btn-primary .btn-icon,
+.iflytek-btn-secondary .el-icon,
+.iflytek-btn-secondary .btn-icon {
+  /* 强制对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+  
+  /* 间距控制 */
+  margin-right: 8px !important;
+  margin-left: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  
+  /* 尺寸控制 */
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  
+  /* 基线微调 - 关键修复 */
+  position: relative !important;
+  top: -0.05em !important;
+  
+  /* 重置可能影响对齐的属性 */
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+}
+
+/* 快速开始按钮内的文本 */
+.quick-start-actions .el-button span,
+.start-btn span,
+.demo-btn span,
+.report-btn span,
+.iflytek-btn-primary span,
+.iflytek-btn-secondary span {
+  /* 文本对齐 */
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+  
+  /* 中文字体微调 */
+  position: relative !important;
+  top: 0.02em !important;
+  
+  /* 字体设置 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 500 !important;
+}
+
+/* 主页按钮的额外强制修复 - 覆盖自定义样式 */
+.quick-start-actions .el-button.start-btn,
+.quick-start-actions .el-button.demo-btn,
+.quick-start-actions .el-button.report-btn,
+.el-button.iflytek-btn-primary,
+.el-button.iflytek-btn-secondary {
+  /* 强制覆盖所有可能的自定义样式 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex-direction: row !important;
+
+  /* 重置可能影响对齐的属性 */
+  text-align: center !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+  white-space: nowrap !important;
+
+  /* 确保padding不影响对齐 */
+  padding: 16px 24px !important;
+  box-sizing: border-box !important;
+}
+
+/* 主页按钮图标的额外强制修复 */
+.quick-start-actions .el-button.start-btn .el-icon,
+.quick-start-actions .el-button.start-btn .btn-icon,
+.quick-start-actions .el-button.demo-btn .el-icon,
+.quick-start-actions .el-button.demo-btn .btn-icon,
+.quick-start-actions .el-button.report-btn .el-icon,
+.quick-start-actions .el-button.report-btn .btn-icon,
+.el-button.iflytek-btn-primary .el-icon,
+.el-button.iflytek-btn-primary .btn-icon,
+.el-button.iflytek-btn-secondary .el-icon,
+.el-button.iflytek-btn-secondary .btn-icon {
+  /* 强制图标对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  vertical-align: middle !important;
+
+  /* 强制间距 */
+  margin: 0 8px 0 0 !important;
+
+  /* 强制尺寸 */
+  font-size: 16px !important;
+  width: 16px !important;
+  height: 16px !important;
+
+  /* 强制位置调整 */
+  position: relative !important;
+  top: -0.05em !important;
+
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+
+  /* 重置所有可能影响对齐的属性 */
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  transform: none !important;
+  float: none !important;
+}
+
+/* 主页按钮文本的额外强制修复 */
+.quick-start-actions .el-button.start-btn span,
+.quick-start-actions .el-button.demo-btn span,
+.quick-start-actions .el-button.report-btn span,
+.el-button.iflytek-btn-primary span,
+.el-button.iflytek-btn-secondary span {
+  /* 强制文本对齐 */
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  display: inline-block !important;
+
+  /* 中文字体微调 */
+  position: relative !important;
+  top: 0.02em !important;
+
+  /* 字体强制设置 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  font-size: 16px !important;
+  font-weight: 600 !important;
+
+  /* 重置可能影响对齐的属性 */
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+  transform: none !important;
+  float: none !important;
+}
+
+/* ===== 问题2: 技术特性卡片图标对齐修复 ===== */
+
+/* 技术特性卡片容器 */
+.feature-card {
+  /* 强制flex布局 */
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  text-align: center !important;
+  
+  /* 间距 */
+  padding: 20px !important;
+  gap: 12px !important;
+  
+  /* 盒模型 */
+  box-sizing: border-box !important;
+}
+
+/* 技术特性卡片图标容器 */
+.feature-card .card-icon {
+  /* 强制居中对齐 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 固定尺寸 */
+  width: 40px !important;
+  height: 40px !important;
+  
+  /* 间距 */
+  margin: 0 auto 8px auto !important;
+  
+  /* 形状 */
+  border-radius: 8px !important;
+  
+  /* 背景 */
+  background: var(--iflytek-gradient-hero) !important;
+}
+
+/* 技术特性卡片内的图标元素 */
+.feature-card .card-icon .el-icon,
+.feature-card .card-icon svg,
+.feature-card .card-icon i {
+  /* 强制居中 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 尺寸 */
+  font-size: 18px !important;
+  width: 18px !important;
+  height: 18px !important;
+  
+  /* 颜色 */
+  color: white !important;
+  
+  /* 位置重置 */
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+}
+
+/* 技术特性卡片文本 */
+.feature-card span {
+  /* 文本对齐 */
+  display: block !important;
+  text-align: center !important;
+  line-height: 1.3 !important;
+  
+  /* 字体设置 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--text-primary) !important;
+  
+  /* 间距 */
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+/* ===== 问题3: 面试页面元数据图标对齐修复 ===== */
+
+/* 面试元数据容器 */
+.interview-meta.offermore-meta {
+  display: flex !important;
+  align-items: center !important;
+  gap: 16px !important;
+  flex-wrap: wrap !important;
+}
+
+/* 面试元数据项 */
+.interview-meta .meta-item {
+  /* 强制flex布局 */
+  display: flex !important;
+  align-items: center !important;
+  justify-content: flex-start !important;
+  
+  /* 间距控制 */
+  gap: 6px !important;
+  padding: 8px 12px !important;
+  
+  /* 高度控制 */
+  min-height: 36px !important;
+  
+  /* 盒模型 */
+  box-sizing: border-box !important;
+  
+  /* 背景和边框 */
+  background: rgba(255, 255, 255, 0.9) !important;
+  border-radius: 6px !important;
+  border: 1px solid rgba(24, 144, 255, 0.1) !important;
+}
+
+/* 面试元数据图标 - 精确选择器 */
+.interview-meta .meta-item .el-icon,
+.interview-meta .meta-item .meta-icon,
+.offermore-meta .meta-item .el-icon,
+.offermore-meta .meta-item .meta-icon {
+  /* 强制尺寸和对齐 */
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  
+  /* 固定尺寸 */
+  width: 14px !important;
+  height: 14px !important;
+  font-size: 14px !important;
+  
+  /* 颜色 */
+  color: #1890ff !important;
+  
+  /* 防止变形 */
+  flex-shrink: 0 !important;
+  flex-grow: 0 !important;
+  
+  /* 位置重置 - 关键修复 */
+  position: relative !important;
+  top: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  /* 重置可能影响对齐的属性 */
+  border: none !important;
+  background: transparent !important;
+  outline: none !important;
+  vertical-align: middle !important;
+  line-height: 1 !important;
+}
+
+/* 面试元数据标签 */
+.interview-meta .meta-item .meta-label {
+  /* 文本对齐 */
+  font-size: 12px !important;
+  color: #666 !important;
+  line-height: 1.2 !important;
+  
+  /* 间距 */
+  margin: 0 4px 0 0 !important;
+  padding: 0 !important;
+  
+  /* 字体 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  font-weight: 400 !important;
+  
+  /* 防止换行 */
+  white-space: nowrap !important;
+  
+  /* 垂直对齐 */
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* 面试元数据值 */
+.interview-meta .meta-item .meta-value {
+  /* 文本对齐 */
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: #333 !important;
+  line-height: 1.2 !important;
+  
+  /* 间距 */
+  margin: 0 !important;
+  padding: 0 !important;
+  
+  /* 字体 */
+  font-family: 'Microsoft YaHei', 'PingFang SC', sans-serif !important;
+  
+  /* 防止换行 */
+  white-space: nowrap !important;
+  
+  /* 垂直对齐 */
+  display: inline-block !important;
+  vertical-align: middle !important;
+}
+
+/* ===== 响应式精确修复 ===== */
+
+/* 平板端精确修复 */
+@media (max-width: 768px) {
+  /* 快速开始按钮 */
+  .quick-start-actions .el-button {
+    min-height: 44px !important;
+    padding: 10px 20px !important;
+  }
+  
+  .quick-start-actions .el-button .el-icon,
+  .quick-start-actions .el-button .btn-icon {
+    font-size: 14px !important;
+    width: 14px !important;
+    height: 14px !important;
+    margin-right: 6px !important;
+  }
+  
+  /* 技术特性卡片 */
+  .feature-card .card-icon {
+    width: 36px !important;
+    height: 36px !important;
+  }
+  
+  .feature-card .card-icon .el-icon {
+    font-size: 16px !important;
+    width: 16px !important;
+    height: 16px !important;
+  }
+  
+  /* 面试元数据 */
+  .interview-meta .meta-item {
+    padding: 6px 10px !important;
+    gap: 4px !important;
+  }
+  
+  .interview-meta .meta-item .el-icon,
+  .interview-meta .meta-item .meta-icon {
+    width: 12px !important;
+    height: 12px !important;
+    font-size: 12px !important;
+  }
+}
+
+/* 手机端精确修复 */
+@media (max-width: 480px) {
+  /* 快速开始按钮 */
+  .quick-start-actions {
+    flex-direction: column !important;
+    gap: 12px !important;
+  }
+  
+  .quick-start-actions .el-button {
+    width: 100% !important;
+    min-height: 40px !important;
+    padding: 8px 16px !important;
+  }
+  
+  .quick-start-actions .el-button .el-icon,
+  .quick-start-actions .el-button .btn-icon {
+    font-size: 12px !important;
+    width: 12px !important;
+    height: 12px !important;
+    margin-right: 4px !important;
+  }
+  
+  /* 技术特性卡片 */
+  .feature-card .card-icon {
+    width: 32px !important;
+    height: 32px !important;
+  }
+  
+  .feature-card .card-icon .el-icon {
+    font-size: 14px !important;
+    width: 14px !important;
+    height: 14px !important;
+  }
+  
+  /* 面试元数据 */
+  .interview-meta .meta-item {
+    padding: 4px 8px !important;
+    gap: 3px !important;
+  }
+  
+  .interview-meta .meta-item .el-icon,
+  .interview-meta .meta-item .meta-icon {
+    width: 11px !important;
+    height: 11px !important;
+    font-size: 11px !important;
+  }
+}

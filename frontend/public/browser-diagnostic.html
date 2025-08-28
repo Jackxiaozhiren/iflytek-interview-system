@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>浏览器诊断工具</title>
+    <style>
+        body {
+            font-family: 'Microsoft YaHei', sans-serif;
+            margin: 20px;
+            background: #f5f5f5;
+        }
+        .diagnostic-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 4px;
+            border-left: 4px solid #ccc;
+        }
+        .status-success {
+            background: #f0f9ff;
+            border-left-color: #10b981;
+            color: #065f46;
+        }
+        .status-error {
+            background: #fef2f2;
+            border-left-color: #ef4444;
+            color: #991b1b;
+        }
+        .status-warning {
+            background: #fffbeb;
+            border-left-color: #f59e0b;
+            color: #92400e;
+        }
+        .test-button {
+            background: #3b82f6;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        .test-button:hover {
+            background: #2563eb;
+        }
+        #console-output {
+            background: #1f2937;
+            color: #f9fafb;
+            padding: 15px;
+            border-radius: 4px;
+            font-family: 'Consolas', monospace;
+            max-height: 300px;
+            overflow-y: auto;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="diagnostic-container">
+        <h1>🔍 iFlytek Spark 面试系统 - 浏览器诊断工具</h1>
+        
+        <div id="diagnostic-results">
+            <h2>系统检查结果</h2>
+            <div id="status-container"></div>
+        </div>
+
+        <div>
+            <h2>测试功能</h2>
+            <button class="test-button" onclick="testVueApp()">测试Vue应用</button>
+            <button class="test-button" onclick="testElementPlus()">测试Element Plus</button>
+            <button class="test-button" onclick="testRouter()">测试路由</button>
+            <button class="test-button" onclick="testAPI()">测试API连接</button>
+            <button class="test-button" onclick="clearConsole()">清空控制台</button>
+        </div>
+
+        <div id="console-output"></div>
+    </div>
+
+    <script>
+        const statusContainer = document.getElementById('status-container');
+        const consoleOutput = document.getElementById('console-output');
+
+        function addStatus(message, type = 'success') {
+            const div = document.createElement('div');
+            div.className = `status-item status-${type}`;
+            div.textContent = message;
+            statusContainer.appendChild(div);
+        }
+
+        function log(message) {
+            const timestamp = new Date().toLocaleTimeString();
+            consoleOutput.innerHTML += `[${timestamp}] ${message}\n`;
+            consoleOutput.scrollTop = consoleOutput.scrollHeight;
+        }
+
+        function clearConsole() {
+            consoleOutput.innerHTML = '';
+        }
+
+        // 基础环境检查
+        function runBasicChecks() {
+            log('🔍 开始基础环境检查...');
+
+            // 检查浏览器支持
+            if (typeof fetch !== 'undefined') {
+                addStatus('✅ Fetch API 支持正常', 'success');
+                log('✅ Fetch API 支持正常');
+            } else {
+                addStatus('❌ Fetch API 不支持', 'error');
+                log('❌ Fetch API 不支持');
+            }
+
+            // 检查ES6支持
+            try {
+                eval('const test = () => {}');
+                addStatus('✅ ES6 箭头函数支持正常', 'success');
+                log('✅ ES6 箭头函数支持正常');
+            } catch (e) {
+                addStatus('❌ ES6 支持有问题', 'error');
+                log('❌ ES6 支持有问题: ' + e.message);
+            }
+
+            // 检查本地存储
+            try {
+                localStorage.setItem('test', 'test');
+                localStorage.removeItem('test');
+                addStatus('✅ LocalStorage 支持正常', 'success');
+                log('✅ LocalStorage 支持正常');
+            } catch (e) {
+                addStatus('❌ LocalStorage 不可用', 'error');
+                log('❌ LocalStorage 不可用: ' + e.message);
+            }
+
+            // 检查控制台错误
+            const originalError = console.error;
+            let errorCount = 0;
+            console.error = function(...args) {
+                errorCount++;
+                log('❌ 控制台错误: ' + args.join(' '));
+                originalError.apply(console, args);
+            };
+
+            setTimeout(() => {
+                if (errorCount === 0) {
+                    addStatus('✅ 无控制台错误', 'success');
+                    log('✅ 无控制台错误');
+                } else {
+                    addStatus(`⚠️ 发现 ${errorCount} 个控制台错误`, 'warning');
+                    log(`⚠️ 发现 ${errorCount} 个控制台错误`);
+                }
+            }, 2000);
+        }
+
+        function testVueApp() {
+            log('🧪 测试Vue应用连接...');
+            
+            fetch('http://localhost:5173/')
+                .then(response => {
+                    if (response.ok) {
+                        addStatus('✅ Vue应用服务器响应正常', 'success');
+                        log('✅ Vue应用服务器响应正常');
+                        return response.text();
+                    } else {
+                        throw new Error(`HTTP ${response.status}`);
+                    }
+                })
+                .then(html => {
+                    if (html.includes('Vue') || html.includes('app')) {
+                        addStatus('✅ Vue应用HTML内容正常', 'success');
+                        log('✅ Vue应用HTML内容正常');
+                    } else {
+                        addStatus('⚠️ Vue应用HTML内容可能有问题', 'warning');
+                        log('⚠️ Vue应用HTML内容可能有问题');
+                    }
+                })
+                .catch(error => {
+                    addStatus('❌ Vue应用连接失败: ' + error.message, 'error');
+                    log('❌ Vue应用连接失败: ' + error.message);
+                });
+        }
+
+        function testElementPlus() {
+            log('🧪 测试Element Plus资源...');
+            
+            // 测试Element Plus CSS
+            const link = document.createElement('link');
+            link.rel = 'stylesheet';
+            link.href = 'http://localhost:5173/node_modules/element-plus/dist/index.css';
+            link.onload = () => {
+                addStatus('✅ Element Plus CSS 加载成功', 'success');
+                log('✅ Element Plus CSS 加载成功');
+            };
+            link.onerror = () => {
+                addStatus('❌ Element Plus CSS 加载失败', 'error');
+                log('❌ Element Plus CSS 加载失败');
+            };
+            document.head.appendChild(link);
+        }
+
+        function testRouter() {
+            log('🧪 测试路由功能...');
+            
+            const routes = ['/', '/enterprise', '/candidate', '/reports'];
+            
+            routes.forEach(route => {
+                fetch(`http://localhost:5173${route}`)
+                    .then(response => {
+                        if (response.ok) {
+                            addStatus(`✅ 路由 ${route} 响应正常`, 'success');
+                            log(`✅ 路由 ${route} 响应正常`);
+                        } else {
+                            addStatus(`❌ 路由 ${route} 响应异常: ${response.status}`, 'error');
+                            log(`❌ 路由 ${route} 响应异常: ${response.status}`);
+                        }
+                    })
+                    .catch(error => {
+                        addStatus(`❌ 路由 ${route} 连接失败: ${error.message}`, 'error');
+                        log(`❌ 路由 ${route} 连接失败: ${error.message}`);
+                    });
+            });
+        }
+
+        function testAPI() {
+            log('🧪 测试API连接...');
+            
+            // 测试开发服务器API
+            fetch('http://localhost:5173/api/health')
+                .then(response => {
+                    if (response.ok) {
+                        addStatus('✅ API健康检查通过', 'success');
+                        log('✅ API健康检查通过');
+                    } else {
+                        addStatus('⚠️ API健康检查返回非200状态', 'warning');
+                        log('⚠️ API健康检查返回非200状态: ' + response.status);
+                    }
+                })
+                .catch(error => {
+                    addStatus('⚠️ API健康检查失败（这是正常的，如果没有后端API）', 'warning');
+                    log('⚠️ API健康检查失败: ' + error.message);
+                });
+        }
+
+        // 页面加载时自动运行基础检查
+        window.addEventListener('load', () => {
+            log('🚀 浏览器诊断工具已启动');
+            runBasicChecks();
+        });
+
+        // 捕获未处理的错误
+        window.addEventListener('error', (event) => {
+            addStatus('❌ JavaScript错误: ' + event.message, 'error');
+            log('❌ JavaScript错误: ' + event.message + ' 在 ' + event.filename + ':' + event.lineno);
+        });
+
+        // 捕获Promise拒绝
+        window.addEventListener('unhandledrejection', (event) => {
+            addStatus('❌ 未处理的Promise拒绝: ' + event.reason, 'error');
+            log('❌ 未处理的Promise拒绝: ' + event.reason);
+        });
+    </script>
+</body>
+</html>

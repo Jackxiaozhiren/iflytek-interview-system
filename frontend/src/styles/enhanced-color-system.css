@@ -1,0 +1,381 @@
+/* 增强色彩系统 - iFlytek 多模态面试评估系统 */
+
+/* WCAG 2.1 AA 合规色彩变量 */
+:root {
+  /* iFlytek 主色调 - 高对比度版本 */
+  --iflytek-primary-contrast: #0066cc;
+  --iflytek-primary-light-contrast: #3385d6;
+  --iflytek-primary-dark-contrast: #004499;
+
+  /* 技术领域主题色 */
+  --ai-theme-primary: #0066cc;
+  --ai-theme-secondary: #4c51bf;
+  --ai-theme-accent: #667eea;
+  --ai-theme-bg: linear-gradient(135deg, #0066cc 0%, #4c51bf 100%);
+
+  --bigdata-theme-primary: #059669;
+  --bigdata-theme-secondary: #047857;
+  --bigdata-theme-accent: #10b981;
+  --bigdata-theme-bg: linear-gradient(135deg, #059669 0%, #047857 100%);
+
+  --iot-theme-primary: #dc2626;
+  --iot-theme-secondary: #b91c1c;
+  --iot-theme-accent: #ef4444;
+  --iot-theme-bg: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+
+  --cloud-theme-primary: #7c3aed;
+  --cloud-theme-secondary: #6d28d9;
+  --cloud-theme-accent: #8b5cf6;
+  --cloud-theme-bg: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+
+  /* 高对比度文本色 */
+  --text-high-contrast: #000000;
+  --text-medium-contrast: #262626;
+  --text-low-contrast: #595959;
+  --text-on-dark: #ffffff;
+  --text-on-primary: #ffffff;
+
+  /* 高对比度背景色 */
+  --bg-high-contrast: #ffffff;
+  --bg-medium-contrast: #f8f9fa;
+  --bg-low-contrast: #f1f3f4;
+  --bg-dark: #1a1a1a;
+  --bg-primary: var(--iflytek-primary-contrast);
+
+  /* 状态色 - 高对比度 */
+  --success-contrast: #047857;
+  --warning-contrast: #d97706;
+  --error-contrast: #dc2626;
+  --info-contrast: #0066cc;
+
+  /* 边框色 - 高对比度 */
+  --border-high-contrast: #000000;
+  --border-medium-contrast: #6b7280;
+  --border-low-contrast: #d1d5db;
+
+  /* 阴影 - 增强版 */
+  --shadow-high-contrast: 0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-medium-contrast: 0 2px 8px rgba(0, 0, 0, 0.2);
+  --shadow-low-contrast: 0 1px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* 暗色主题 - 高对比度 */
+[data-theme="dark"] {
+  --text-high-contrast: #ffffff;
+  --text-medium-contrast: #e5e7eb;
+  --text-low-contrast: #9ca3af;
+  --text-on-dark: #000000;
+  
+  --bg-high-contrast: #000000;
+  --bg-medium-contrast: #111827;
+  --bg-low-contrast: #1f2937;
+  
+  --border-high-contrast: #ffffff;
+  --border-medium-contrast: #6b7280;
+  --border-low-contrast: #374151;
+}
+
+/* 色彩对比度工具类 */
+.high-contrast {
+  color: var(--text-high-contrast) !important;
+  background: var(--bg-high-contrast) !important;
+  border-color: var(--border-high-contrast) !important;
+}
+
+.medium-contrast {
+  color: var(--text-medium-contrast) !important;
+  background: var(--bg-medium-contrast) !important;
+  border-color: var(--border-medium-contrast) !important;
+}
+
+.low-contrast {
+  color: var(--text-low-contrast) !important;
+  background: var(--bg-low-contrast) !important;
+  border-color: var(--border-low-contrast) !important;
+}
+
+/* 技术领域主题类 */
+.ai-theme {
+  --theme-primary: var(--ai-theme-primary);
+  --theme-secondary: var(--ai-theme-secondary);
+  --theme-accent: var(--ai-theme-accent);
+  --theme-bg: var(--ai-theme-bg);
+}
+
+.bigdata-theme {
+  --theme-primary: var(--bigdata-theme-primary);
+  --theme-secondary: var(--bigdata-theme-secondary);
+  --theme-accent: var(--bigdata-theme-accent);
+  --theme-bg: var(--bigdata-theme-bg);
+}
+
+.iot-theme {
+  --theme-primary: var(--iot-theme-primary);
+  --theme-secondary: var(--iot-theme-secondary);
+  --theme-accent: var(--iot-theme-accent);
+  --theme-bg: var(--iot-theme-bg);
+}
+
+.cloud-theme {
+  --theme-primary: var(--cloud-theme-primary);
+  --theme-secondary: var(--cloud-theme-secondary);
+  --theme-accent: var(--cloud-theme-accent);
+  --theme-bg: var(--cloud-theme-bg);
+}
+
+/* 主题应用类 */
+.theme-card {
+  background: var(--theme-bg);
+  color: var(--text-on-primary);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow-medium-contrast);
+}
+
+.theme-button {
+  background: var(--theme-primary);
+  color: var(--text-on-primary);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.theme-button:hover {
+  background: var(--theme-secondary);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-high-contrast);
+}
+
+.theme-badge {
+  background: var(--theme-accent);
+  color: var(--text-on-primary);
+  padding: 4px 12px;
+  border-radius: 16px;
+  font-size: 12px;
+  font-weight: 500;
+}
+
+.theme-border {
+  border: 2px solid var(--theme-primary);
+}
+
+.theme-text {
+  color: var(--theme-primary);
+}
+
+.theme-bg {
+  background: var(--theme-bg);
+  color: var(--text-on-primary);
+}
+
+/* 渐变增强 */
+.gradient-ai {
+  background: var(--ai-theme-bg);
+  color: var(--text-on-primary);
+}
+
+.gradient-bigdata {
+  background: var(--bigdata-theme-bg);
+  color: var(--text-on-primary);
+}
+
+.gradient-iot {
+  background: var(--iot-theme-bg);
+  color: var(--text-on-primary);
+}
+
+.gradient-cloud {
+  background: var(--cloud-theme-bg);
+  color: var(--text-on-primary);
+}
+
+/* 状态色增强 */
+.status-success {
+  color: var(--success-contrast);
+  background: rgba(4, 120, 87, 0.1);
+  border: 1px solid var(--success-contrast);
+}
+
+.status-warning {
+  color: var(--warning-contrast);
+  background: rgba(217, 119, 6, 0.1);
+  border: 1px solid var(--warning-contrast);
+}
+
+.status-error {
+  color: var(--error-contrast);
+  background: rgba(220, 38, 38, 0.1);
+  border: 1px solid var(--error-contrast);
+}
+
+.status-info {
+  color: var(--info-contrast);
+  background: rgba(0, 102, 204, 0.1);
+  border: 1px solid var(--info-contrast);
+}
+
+/* 交互状态增强 */
+.interactive-element {
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.interactive-element:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-high-contrast);
+}
+
+.interactive-element:active {
+  transform: translateY(0);
+  box-shadow: var(--shadow-low-contrast);
+}
+
+.interactive-element:focus {
+  outline: 3px solid var(--iflytek-primary-contrast);
+  outline-offset: 2px;
+}
+
+/* 可访问性增强 */
+.accessible-focus:focus {
+  outline: 3px solid var(--iflytek-primary-contrast);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 6px rgba(0, 102, 204, 0.2);
+}
+
+.accessible-text {
+  color: var(--text-high-contrast);
+  font-weight: 500;
+  line-height: 1.6;
+}
+
+.accessible-link {
+  color: var(--iflytek-primary-contrast);
+  text-decoration: underline;
+  font-weight: 500;
+}
+
+.accessible-link:hover {
+  color: var(--iflytek-primary-dark-contrast);
+  text-decoration: none;
+}
+
+.accessible-button {
+  background: var(--iflytek-primary-contrast);
+  color: var(--text-on-primary);
+  border: 2px solid var(--iflytek-primary-contrast);
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  min-height: 44px;
+  min-width: 44px;
+  transition: all 0.3s ease;
+}
+
+.accessible-button:hover {
+  background: var(--iflytek-primary-dark-contrast);
+  border-color: var(--iflytek-primary-dark-contrast);
+}
+
+.accessible-button:focus {
+  outline: 3px solid var(--iflytek-primary-light-contrast);
+  outline-offset: 2px;
+}
+
+/* 对比度检查工具类 */
+.contrast-check-pass {
+  position: relative;
+}
+
+.contrast-check-pass::after {
+  content: '✓ WCAG AA';
+  position: absolute;
+  top: -20px;
+  right: 0;
+  background: var(--success-contrast);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+.contrast-check-fail {
+  position: relative;
+}
+
+.contrast-check-fail::after {
+  content: '✗ 对比度不足';
+  position: absolute;
+  top: -20px;
+  right: 0;
+  background: var(--error-contrast);
+  color: white;
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 10px;
+  font-weight: bold;
+}
+
+/* 色盲友好色彩 */
+.colorblind-friendly {
+  --red-safe: #d73027;
+  --orange-safe: #fc8d59;
+  --yellow-safe: #fee08b;
+  --green-safe: #91bfdb;
+  --blue-safe: #4575b4;
+  --purple-safe: #762a83;
+}
+
+.colorblind-red { color: var(--red-safe); }
+.colorblind-orange { color: var(--orange-safe); }
+.colorblind-yellow { color: var(--yellow-safe); }
+.colorblind-green { color: var(--green-safe); }
+.colorblind-blue { color: var(--blue-safe); }
+.colorblind-purple { color: var(--purple-safe); }
+
+/* 打印友好色彩 */
+@media print {
+  * {
+    color: #000000 !important;
+    background: #ffffff !important;
+    box-shadow: none !important;
+  }
+  
+  .theme-card,
+  .theme-bg,
+  .gradient-ai,
+  .gradient-bigdata,
+  .gradient-iot,
+  .gradient-cloud {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #000000 !important;
+  }
+}
+
+/* 高对比度模式 */
+@media (prefers-contrast: high) {
+  :root {
+    --iflytek-primary: var(--iflytek-primary-contrast);
+    --text-primary: var(--text-high-contrast);
+    --bg-primary: var(--bg-high-contrast);
+    --border-primary: var(--border-high-contrast);
+  }
+}
+
+/* 减少动画模式 */
+@media (prefers-reduced-motion: reduce) {
+  .interactive-element,
+  .theme-button,
+  .accessible-button {
+    transition: none !important;
+  }
+  
+  .interactive-element:hover,
+  .theme-button:hover,
+  .accessible-button:hover {
+    transform: none !important;
+  }
+}

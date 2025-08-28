@@ -1,0 +1,249 @@
+/* Element Plus 选择框组件中文显示优化 - iFlytek 多模态面试评估系统 */
+
+/* ===== 全局选择框样式优化 ===== */
+.el-select {
+  min-width: 140px !important;
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+}
+
+/* 选择框输入容器 */
+.el-select .el-input__wrapper {
+  min-height: 36px !important;
+  padding: 0 12px !important;
+  border-radius: 6px !important;
+  transition: all 0.3s ease !important;
+  background-color: #ffffff !important;
+  border: 1px solid #d9d9d9 !important;
+}
+
+.el-select .el-input__wrapper:hover {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+.el-select .el-input__wrapper.is-focus {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 选择框内部输入框 */
+.el-select .el-input__inner {
+  height: 34px !important;
+  line-height: 34px !important;
+  font-size: 14px !important;
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+  color: #333333 !important;
+  text-align: left !important;
+  padding: 0 !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+}
+
+/* 选择框后缀图标 */
+.el-select .el-input__suffix {
+  height: 34px !important;
+  line-height: 34px !important;
+}
+
+.el-select .el-select__caret {
+  color: #666666 !important;
+  font-size: 14px !important;
+}
+
+/* ===== 下拉选项样式优化 ===== */
+.el-select-dropdown {
+  border-radius: 6px !important;
+  margin-top: 4px !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15) !important;
+  border: 1px solid #e6e6e6 !important;
+}
+
+.el-select-dropdown__item {
+  font-size: 14px !important;
+  font-family: 'Microsoft YaHei', 'SimHei', sans-serif !important;
+  padding: 8px 12px !important;
+  min-height: 36px !important;
+  line-height: 20px !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  color: #333333 !important;
+}
+
+.el-select-dropdown__item:hover {
+  background-color: #f5f5f5 !important;
+  color: #1890ff !important;
+}
+
+.el-select-dropdown__item.selected {
+  background-color: #e6f7ff !important;
+  color: #1890ff !important;
+  font-weight: 600 !important;
+}
+
+.el-select-dropdown__item.is-disabled {
+  color: #cccccc !important;
+  cursor: not-allowed !important;
+}
+
+/* ===== 特定页面选择框优化 ===== */
+/* 候选人等级和面试岗位选择框 */
+.config-selectors .el-select {
+  width: 140px !important;
+  min-width: 140px !important;
+}
+
+.config-selectors .el-select .el-input__wrapper {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.config-selectors .el-select .el-input__wrapper:hover {
+  border-color: #1890ff !important;
+  box-shadow: 0 0 0 2px rgba(24, 144, 255, 0.2) !important;
+}
+
+/* 表单中的选择框 */
+.el-form-item .el-select {
+  width: 100% !important;
+  min-width: 140px !important;
+}
+
+/* ===== 响应式设计 ===== */
+@media (max-width: 768px) {
+  .el-select {
+    min-width: 120px !important;
+  }
+  
+  .el-select .el-input__inner {
+    font-size: 13px !important;
+  }
+  
+  .el-select-dropdown__item {
+    font-size: 13px !important;
+    padding: 6px 10px !important;
+    min-height: 32px !important;
+  }
+  
+  .config-selectors {
+    flex-direction: column !important;
+    gap: 16px !important;
+  }
+  
+  .config-selectors .el-select {
+    width: 120px !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .el-select {
+    min-width: 100px !important;
+  }
+  
+  .el-select .el-input__inner {
+    font-size: 12px !important;
+  }
+  
+  .el-select-dropdown__item {
+    font-size: 12px !important;
+    padding: 5px 8px !important;
+    min-height: 30px !important;
+  }
+}
+
+/* ===== 高对比度模式支持 ===== */
+@media (prefers-contrast: high) {
+  .el-select .el-input__wrapper {
+    border: 2px solid #000000 !important;
+    background-color: #ffffff !important;
+  }
+  
+  .el-select .el-input__inner {
+    color: #000000 !important;
+  }
+  
+  .el-select-dropdown {
+    border: 2px solid #000000 !important;
+  }
+  
+  .el-select-dropdown__item {
+    color: #000000 !important;
+  }
+  
+  .el-select-dropdown__item:hover {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ===== 暗色主题支持 ===== */
+@media (prefers-color-scheme: dark) {
+  .el-select .el-input__wrapper {
+    background-color: #2d2d2d !important;
+    border-color: #555555 !important;
+  }
+  
+  .el-select .el-input__inner {
+    color: #ffffff !important;
+  }
+  
+  .el-select-dropdown {
+    background-color: #2d2d2d !important;
+    border-color: #555555 !important;
+  }
+  
+  .el-select-dropdown__item {
+    color: #ffffff !important;
+  }
+  
+  .el-select-dropdown__item:hover {
+    background-color: #404040 !important;
+  }
+  
+  .el-select-dropdown__item.selected {
+    background-color: #1890ff !important;
+    color: #ffffff !important;
+  }
+}
+
+/* ===== 无障碍访问优化 ===== */
+.el-select:focus-within {
+  outline: 2px solid #1890ff !important;
+  outline-offset: 2px !important;
+}
+
+.el-select-dropdown__item:focus {
+  outline: 2px solid #1890ff !important;
+  outline-offset: -2px !important;
+}
+
+/* ===== 动画效果优化 ===== */
+.el-select-dropdown {
+  animation: selectDropdownFadeIn 0.2s ease-out !important;
+}
+
+@keyframes selectDropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* ===== 加载状态优化 ===== */
+.el-select.is-loading .el-input__suffix {
+  animation: selectLoading 1s linear infinite !important;
+}
+
+@keyframes selectLoading {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
